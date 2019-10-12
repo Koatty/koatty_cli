@@ -1,0 +1,38 @@
+{
+    "name": "koatty_cli",
+    "version": "0.0.1",
+    "description": "Koatty command line tool.",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "bin": {
+        "koatty": "./lib/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thinkkoa/koatty_cli.git"
+    },
+    "engines": {
+        "node": ">10.0.0"
+    },
+    "author": {
+        "name": "richenlin",
+        "email": "richenlin@gmail.com"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/thinkkoa/koatty_cli/issues"
+    },
+    "homepage": "https://github.com/thinkkoa/koatty_cli",
+    "dependencies": {
+        "commander": "^3.0.2",
+        "think_lib": "^2.x.x",
+        "update-notifier": "^3.0.1"
+    },
+    "maintainers": [
+        {
+            "name": "richenlin",
+            "email": "richenlin@gmail.com"
+        }
+    ]
+}
