@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-12 15:39:32
+ * @ version: 2019-10-12 16:26:07
  */
-import { Controller, BaseController, All } from 'koatty';
+import { Controller, BaseController, All } from "koatty";
 
 @Controller()
 export class index extends BaseController {
@@ -12,7 +12,7 @@ export class index extends BaseController {
         //...
     }
 
-    @All('/')
+    @All("/")
     default() {
         return this.ok('Hello, Koatty!');
     }

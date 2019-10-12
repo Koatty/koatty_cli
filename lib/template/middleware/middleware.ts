@@ -2,10 +2,10 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-12 15:49:14
+ * @ version: 2019-10-12 16:25:11
  */
-import * as Koa from 'koa';
-import { Middleware, helper } from 'koatty';
+import * as Koa from "koa";
+import { Middleware, helper } from "koatty";
 const defaultOpt = {
     //默认配置项
 };
