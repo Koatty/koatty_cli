@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-16 20:18:03
+ * @ version: 2019-10-17 13:48:27
  */
 import * as Koa from "koa";
 import { Middleware, helper, logger } from "koatty";
@@ -29,10 +29,10 @@ export class TypeormMid {
         const conn = function () {
             createConnection(options).then((connection: Connection) => {
                 helper.define(app, 'connection', connection);
-            }).catch(err => {
+            }).catch((err) => {
                 logger.error(err);
             });
-        }
+        };
         //应用启动执行一次
         app.once('appReady', () => {
             conn();
