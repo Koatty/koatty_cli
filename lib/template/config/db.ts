@@ -6,16 +6,16 @@
  */
 export default {
     /*database config*/
-    // database: {
-    //     db_type: 'mysql', //support  postgresql,mysql...
-    //     db_host: '127.0.0.1',
-    //     db_port: 3306,
-    //     db_name: 'test',
-    //     db_user: 'root',
-    //     db_pwd: '',
-    //     db_prefix: '',
-    //     db_charset: 'utf8'
-    // },
+    database: {
+        db_type: 'mysql', //support  postgresql,mysql...
+        db_host: '127.0.0.1',
+        db_port: 3306,
+        db_name: 'test',
+        db_user: 'root',
+        db_pwd: '',
+        db_prefix: '',
+        db_charset: 'utf8'
+    },
 
     // redis: {
     //     type: 'redis', //数据缓存类型 file,redis,memcache

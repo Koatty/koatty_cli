@@ -12,7 +12,7 @@
   "author": "",
   "license": "Apache License 2.0",
   "dependencies": {
-    "koatty": "^0.0.10"
+    "koatty": "^1.*.*"
   },
   "devDependencies": {
     "@types/koa": "^2.0.50",
