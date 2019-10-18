@@ -2,14 +2,12 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-18 14:42:24
+ * @ version: 2019-10-18 17:43:44
  */
-import { App } from "../App";
 import { Controller, BaseController, GetMaping, PathVariable, RequestBody } from "koatty";
 
 @Controller()
 export class IndexController extends BaseController {
-    app: App;
 
     init() {
         //...

@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-18 14:39:10
+ * @ version: 2019-10-18 19:24:10
  */
 import { Middleware, helper } from "koatty";
 const defaultOpt = {

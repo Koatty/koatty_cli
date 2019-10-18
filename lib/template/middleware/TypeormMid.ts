@@ -2,11 +2,10 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-17 13:48:27
+ * @ version: 2019-10-18 19:40:23
  */
-import * as Koa from "koa";
 import { Middleware, helper, logger } from "koatty";
-import { createConnection, Connection } from "typeorm";
+import { createConnection, Connection, BaseApp } from "typeorm";
 
 const defaultOpt = {
     //默认配置项
@@ -24,7 +23,7 @@ const defaultOpt = {
 
 @Middleware()
 export class TypeormMid {
-    run(options: any, app: any) {
+    run(options: any, app: BaseApp) {
         options = helper.extend(defaultOpt, options);
         const conn = function () {
             createConnection(options).then((connection: Connection) => {
@@ -37,7 +36,7 @@ export class TypeormMid {
         app.once('appReady', () => {
             conn();
         });
-        return async function (ctx: Koa.Context, next: any) {
+        return async function (ctx: any, next: any) {
             if (!app.connection) {
                 await conn();
             }
