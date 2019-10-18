@@ -10,7 +10,7 @@
     "start": "supervisor -w src -x ts-node -q ./src/App.ts"
   },
   "author": "",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "dependencies": {
     "koatty": "^1.*.*"
   },
