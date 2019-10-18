@@ -2,23 +2,21 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-17 11:04:01
+ * @ version: 2019-10-18 14:42:24
  */
-import * as Koa from "Koa";
 import { App } from "../App";
-import { Controller, BaseController, All } from "koatty";
+import { Controller, BaseController, GetMaping, PathVariable, RequestBody } from "koatty";
 
 @Controller()
 export class IndexController extends BaseController {
     app: App;
-    protected ctx: Koa.BaseContext;
 
     init() {
         //...
     }
 
-    @All("/")
-    default() {
+    @GetMaping("/")
+    index(@PathVariable("path") path: string) {
         return this.ok('Hello, Koatty!');
     }
 }

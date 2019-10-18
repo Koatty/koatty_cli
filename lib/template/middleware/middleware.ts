@@ -2,10 +2,8 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-16 18:32:32
+ * @ version: 2019-10-18 14:39:10
  */
-import * as Koa from "koa";
-import { App } from "../App";
 import { Middleware, helper } from "koatty";
 const defaultOpt = {
     //默认配置项
@@ -14,12 +12,12 @@ const defaultOpt = {
 
 @Middleware()
 export class <Middleware> {
-    run(options: any, app: App) {
+    run(options: any, app: any) {
         options = helper.extend(defaultOpt, options);
         //应用启动执行一次
         // app.once('appReady', () => { });
 
-        return function (ctx: Koa.Context, next: any) {
+        return function (ctx: any, next: any) {
             return next();
         };
     }
