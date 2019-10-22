@@ -4,10 +4,11 @@
   "description": "application created by koatty",
   "main": "dist/index.js",
   "scripts": {
-    "doc": "apidoc -i src/controller/ -o static/doc/",
-    "test": "tslint 'src/**/*.ts'",
     "build": "rm -rf ./dist && tsc",
-    "start": "supervisor -w src -x ts-node -q ./src/App.ts"
+    "dev": "supervisor -w src -x ts-node -q ./src/App.ts",
+    "doc": "apidoc -i src/controller/ -o static/doc/",
+    "start": "npm run build && node ./dist/App.js",
+    "test": "tslint 'src/**/*.ts'"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -20,10 +21,8 @@
     "@types/lodash": "^4.x.x",
     "@types/node": "^12.x.x",
     "@typescript-eslint/parser": "^2.x.x",
+    "@typescript-eslint/eslint-plugin": "^2.x.x",
     "apidoc": "^0.17.7",
-    "eslint": "^6.5.1",
-    "eslint-config-alloy": "^3.0.0",
-    "eslint-plugin-typescript": "^0.14.0",
     "reflect-metadata": "^0.1.13",
     "supervisor": "^0.12.0",
     "ts-node": "^8.4.1",
