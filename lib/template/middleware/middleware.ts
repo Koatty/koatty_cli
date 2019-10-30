@@ -2,9 +2,12 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-18 19:24:10
+ * @ version: 2019-10-30 15:28:37
  */
 import { Middleware, helper } from "koatty";
+import { App } from '<Path>/App';
+
+
 const defaultOpt = {
     //默认配置项
 };
@@ -12,7 +15,7 @@ const defaultOpt = {
 
 @Middleware()
 export class <Middleware> {
-    run(options: any, app: any) {
+    run(options: any, app: App) {
         options = helper.extend(defaultOpt, options);
         //应用启动执行一次
         // app.once('appReady', () => { });
