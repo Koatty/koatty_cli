@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-10-16 18:55:16
+ * @ version: 2019-11-05 11:14:26
  */
 import { BaseModel } from "thinkorm";
 import { Component, Value } from 'koatty';
@@ -20,9 +20,9 @@ export class <ClassName> extends BaseModel {
         // 数据表字段信息
         this.fields = {
             id: { //用户ID
-                type: 'string',
+                type: 'integer',
                 pk: true,
-                size: 50
+                size: 11
             }
         };
     }
