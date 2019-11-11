@@ -72,6 +72,7 @@
         "no-magic-numbers": false,
         "only-arrow-functions": false,
         "no-parameter-reassignment": false,
+        "no-angle-bracket-type-assertion": false,
         "member-access": false,
         "member-ordering": false
     }
