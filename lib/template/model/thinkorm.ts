@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-11-05 11:14:26
+ * @ version: 2019-12-18 09:48:40
  */
 import { BaseModel } from "thinkorm";
 import { Component, Value } from 'koatty';
@@ -14,6 +14,10 @@ export class <ClassName> extends BaseModel {
     modelName: string;
     fields: any;
 
+    /**
+     * Custom constructor
+     *
+     */
     init() {
         // 模型名称
         this.modelName = '<ModelName>';
