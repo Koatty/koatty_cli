@@ -4,7 +4,7 @@
   "description": "application created by koatty",
   "main": "dist/index.js",
   "scripts": {
-    "build": "trash ./dist && tsc",
+    "build": "del-cli --force dist && tsc",
     "dev": "supervisor -w src -x ts-node -q ./src/App.ts",
     "doc": "apidoc -i src/controller/ -o static/doc/",
     "start": "npm run build && node ./dist/App.js",
@@ -22,15 +22,15 @@
     "@types/node": "^12.x.x",
     "@typescript-eslint/eslint-plugin": "^2.x.x",
     "@typescript-eslint/parser": "^2.x.x",
-    "apidoc": "^0.19.1",
+    "apidoc": "^0.20.0",
     "apidoc-plugin-class-validator": "^0.0.3",
+    "del-cli": "^3.0.0",
     "eslint": "^6.8.0",
     "reflect-metadata": "^0.1.13",
     "supervisor": "^0.12.0",
-    "trash-cli": "^3.0.0",
-    "ts-node": "^8.5.4",
-    "tslint": "^5.20.1",
+    "ts-node": "^8.6.2",
+    "tslint": "^6.0.0",
     "tslint-config-alloy": "^0.2.1",
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   }
 }

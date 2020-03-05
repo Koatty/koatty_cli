@@ -2,21 +2,21 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-12-18 09:47:14
+ * @ version: 2020-03-05 11:46:54
  */
 import { Koatty, Bootstrap } from "koatty";
 // import * as path from "path";
 
 @Bootstrap(
     //bootstrap function
-    // (app: any) => {
-    //调整libuv线程池大小
-    // process.env.UV_THREADPOOL_SIZE = "128";
-    //忽略https自签名验证
-    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    //运行环境
-    // process.env.RUN_TIME = 'development';
-    // }
+    (app: any) => {
+        //调整libuv线程池大小
+        process.env.UV_THREADPOOL_SIZE = "128";
+        //忽略https自签名验证
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+        //运行环境
+        process.env.KOATTY_ENV = 'dev';
+    }
 )
 // @ComponentScan('./')
 // @ConfiguationScan('./config')

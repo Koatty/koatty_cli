@@ -2,10 +2,11 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-11-14 17:26:48
+ * @ version: 2020-03-05 11:42:44
  */
 import { Middleware, Helper } from "koatty";
-import { createConnection, Connection, BaseApp } from "typeorm";
+import { createConnection, Connection } from "typeorm";
+import { App } from '<Path>/App';
 
 const defaultOpt = {
     //默认配置项
@@ -23,18 +24,18 @@ const defaultOpt = {
 
 @Middleware()
 export class TypeormMid {
-    run(options: any, app: BaseApp) {
+    run(options: any, app: App) {
         options = Helper.extend(defaultOpt, options);
         const conn = function () {
-            createConnection(options).then((connection: Connection) => {
+            return createConnection(options).then((connection: Connection) => {
                 Helper.define(app, 'connection', connection);
             }).catch((err) => {
                 Helper.error(err);
             });
         };
         //应用启动执行一次
-        app.once('appReady', () => {
-            conn();
+        app.once('appReady', async () => {
+            await conn();
         });
         return async function (ctx: any, next: any) {
             if (!app.connection) {

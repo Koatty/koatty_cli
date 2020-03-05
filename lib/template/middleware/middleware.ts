@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-11-14 17:26:12
+ * @ version: 2020-03-05 11:45:45
  */
 import { Middleware, Helper } from "koatty";
 import { App } from '<Path>/App';
