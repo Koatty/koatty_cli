@@ -4,8 +4,7 @@
     "apps": [
         {
             "name": "<APP_NAME>",
-            "script": "index.js",
-            "cwd": "./dist",
+            "script": "./dist/App.js",
             "max_memory_restart": "300M",
             "instances": 2,
             "exec_interpreter": "",
