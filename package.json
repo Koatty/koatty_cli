@@ -1,6 +1,6 @@
 {
   "name": "koatty_cli",
-  "version": "1.15.3",
+  "version": "1.17.0",
   "description": "Koatty command line tool.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
