@@ -2,7 +2,7 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-05 11:46:54
+ * @ version: 2020-03-26 09:26:40
  */
 import { Koatty, Bootstrap } from "koatty";
 // import * as path from "path";
@@ -13,7 +13,7 @@ import { Koatty, Bootstrap } from "koatty";
         //调整libuv线程池大小
         process.env.UV_THREADPOOL_SIZE = "128";
         //忽略https自签名验证
-        process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+        // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
         //运行环境
         process.env.KOATTY_ENV = 'dev';
     }

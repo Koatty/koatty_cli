@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-12-18 09:48:56
+ * @ version: 2020-03-25 15:42:32
  */
-import { Controller, BaseController, GetMaping } from "koatty";
+import { Controller, BaseController, GetMapping } from "koatty";
 import { App } from '<Path>/App';
 
 @Controller("/<New>")
@@ -19,7 +19,7 @@ export class <NewController> extends BaseController {
         //...
     }
 
-    @GetMaping("/")
+    @GetMapping("/")
     index() {
         return this.ok('Hello, Koatty!');
     }

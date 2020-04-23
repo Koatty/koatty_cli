@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2019-12-18 09:49:09
+ * @ version: 2020-03-25 15:42:10
  */
-import { Controller, BaseController, GetMaping, PathVariable, RequestBody } from "koatty";
+import { Controller, BaseController, GetMapping, PathVariable, RequestBody } from "koatty";
 import { App } from '../App';
 
 @Controller()
@@ -19,7 +19,7 @@ export class IndexController extends BaseController {
         //...
     }
 
-    @GetMaping("/")
+    @GetMapping("/")
     index(@PathVariable("path") path: string) {
         return this.ok('Hello, Koatty!');
     }

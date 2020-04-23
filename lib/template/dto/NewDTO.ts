@@ -2,10 +2,11 @@
  * @ author: richen
  * @ copyright: Copyright (c) - <richenlin(at)gmail.com>
  * @ license: MIT
- * @ version: 2019-12-31 11:20:09
+ * @ version: 2020-03-20 12:16:07
  */
-import { IsNotEmpty } from "koatty";
+import { Component, IsNotEmpty } from "koatty";
 
+@Component()
 export class <DTO> {
     // @IsNotEmpty()
     // name: string;
