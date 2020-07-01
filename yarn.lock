@@ -604,10 +604,10 @@ think_lib@^2.x.x:
     lodash "^4.17.15"
     moment "^2.24.0"
 
-think_loader@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/think_loader/-/think_loader-2.0.2.tgz#9eb27117132125df363d14947737d57ff6862503"
-  integrity sha512-HkueaC2UiEXIP+4oVCetj9ZWFfs7+tvU1s0wbZnxw06iis0ZON5z+BL9ITkS4b9Jh8ItmOXciNQYFrYenX/kdw==
+think_loader@^2.x.x:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/think_loader/-/think_loader-2.0.3.tgz#6e9451749337b315a61197381b632248faa19582"
+  integrity sha512-cjPYbXK7e90zl7Et1+52kcIIrq8V6CWPlGMw9AJNl3/byGZjx9NBHC/7QWMI2dRvZE/zY/uPrIP5XQG8bgmlLw==
   dependencies:
     think_lib "^2.x.x"
 

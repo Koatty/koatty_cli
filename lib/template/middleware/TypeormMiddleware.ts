@@ -2,9 +2,9 @@
  * @ author: xxx
  * @ copyright: Copyright (c)
  * @ license: Apache License 2.0
- * @ version: 2020-03-05 11:42:44
+ * @ version: 2020-05-18 11:36:36
  */
-import { Middleware, Helper } from "koatty";
+import { Middleware, IMiddleware, Helper } from "koatty";
 import { createConnection, Connection } from "typeorm";
 import { App } from '<Path>/App';
 
@@ -23,7 +23,7 @@ const defaultOpt = {
 
 
 @Middleware()
-export class TypeormMid {
+export class TypeormMiddleware implements IMiddleware {
     run(options: any, app: App) {
         options = Helper.extend(defaultOpt, options);
         const conn = function () {
