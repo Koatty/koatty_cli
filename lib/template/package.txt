@@ -20,14 +20,15 @@
     "@types/koa": "^2.x.x",
     "@types/koa__router": "^8.x.x",
     "@types/node": "^12.x.x",
-    "apidoc": "^0.20.0",
+    "apidoc": "^0.24.0",
     "apidoc-plugin-class-validator": "^0.0.3",
-    "del-cli": "^3.0.0",
+    "del-cli": "^3.0.1",
+    "eslint": "^7.5.0",
     "reflect-metadata": "^0.1.13",
     "supervisor": "^0.12.0",
-    "ts-node": "^8.10.1",
+    "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
     "tslint-config-alloy": "^0.2.1",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.7"
   }
 }
