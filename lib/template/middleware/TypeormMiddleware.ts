@@ -4,7 +4,7 @@
  * @ license: Apache License 2.0
  * @ version: 2020-05-18 11:36:36
  */
-import { Middleware, IMiddleware, Helper } from "koatty";
+import { Middleware, IMiddleware, KoattyContext, Helper } from "koatty";
 import { createConnection, Connection } from "typeorm";
 import { App } from '<Path>/App';
 
@@ -34,10 +34,9 @@ export class TypeormMiddleware implements IMiddleware {
             });
         };
         //应用启动执行一次
-        app.once('appReady', async () => {
-            await conn();
-        });
-        return async function (ctx: any, next: any) {
+        await conn();
+
+        return async function (ctx: KoattyContext, next: Function) {
             if (!app.connection) {
                 await conn();
             }
