@@ -1,6 +1,6 @@
 {
   "name": "koatty_cli",
-  "version": "2.5.1",
+  "version": "3.0.0",
   "description": "Koatty command line tool.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/thinkkoa/koatty_cli",
   "dependencies": {
+    "cli-spinner": "^0.2.10",
     "commander": "^3.0.2",
+    "replace": "^1.2.0",
     "think_lib": "^2.x.x",
     "think_loader": "^2.x.x",
     "update-notifier": "^3.0.1"
