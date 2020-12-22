@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2020-12-22 19:07:48
+ * @LastEditTime: 2020-12-22 20:39:42
  */
 
 const path = require('path');
@@ -63,6 +63,19 @@ const create = async (projectName, options) => {
 
         log.log();
         log.success(`Create project [${projectName}] success!`);
+        log.log();
+
+        log.log('  Enter path:');
+        log.log('  $ cd ' + projectRootPath);
+        log.log();
+
+        log.log('  Install dependencies:');
+        log.log('  $ npm install');
+        log.log();
+
+        log.log('  Run the app:');
+        log.log('  $ npm start');
+
         log.log();
     });
 };
