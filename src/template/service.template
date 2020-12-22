@@ -1,0 +1,27 @@
+/*
+ * @Description: 逻辑层
+ * @Usage: 
+ * @Author: xxx
+ * @Date: 2020-12-22 15:24:25
+ * @LastEditTime: 2020-12-22 19:57:53
+ */
+
+import { Service, BaseService } from "koatty";
+import { App } from '<Path>/App';
+
+@Service()
+export class <ClassName> extends BaseService {
+    app: App;
+
+    /**
+     * constructor
+     *
+     */
+    init() {
+        //property
+    }
+
+    test() {
+        //todo
+    }
+}

@@ -1,15 +1,16 @@
-/**
- * @ author: xxx
- * @ copyright: Copyright (c)
- * @ license: Apache License 2.0
- * @ version: 2020-01-07 09:56:04
+/*
+ * @Description: 数据持久层
+ * @Usage: 
+ * @Author: xxx
+ * @Date: 2020-12-22 15:24:25
+ * @LastEditTime: 2020-12-22 20:01:59
  */
 import { BaseModel, Entity, PrimaryColumn, Column } from "thinkorm";
 import { Component, Value } from 'koatty';
 import { App } from '<Path>/App';
 
 @Component()
-@Entity('<ModelName>')
+@Entity('<New>')
 export class <ClassName> extends BaseModel {
     app: App;
 
