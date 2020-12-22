@@ -2,7 +2,7 @@
  * @Author: richen
  * @Date: 2020-12-08 10:42:52
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-12-22 19:43:35
+ * @LastEditTime: 2020-12-22 20:26:03
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -28,7 +28,7 @@ exports.isExist = (path) => {
  * @param {string} source file source path
  * @param {string} dest file destination
  */
-const copyFile = (source, dest) => new Promise((resolve) => {
+exports.copyFile = (source, dest) => new Promise((resolve) => {
     exec(`cp ${source} ${dest}`, (err) => {
         if (err) {
             log.error(err.message);

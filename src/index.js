@@ -2,7 +2,7 @@
  * @Author: richen
  * @Date: 2020-12-08 10:35:52
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-12-22 19:04:14
+ * @LastEditTime: 2020-12-22 20:21:50
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -54,13 +54,13 @@ program
     .command('controller <controllerName>')
     .description('add controller class')
     .action((controllerName) => {
-        require('./command/create-module')(controllerName, 'controller');
+        require('./command/create_module')(controllerName, 'controller');
     });
 program
     .command('ctl <controllerName>')
     .description('add controller class')
     .action((controllerName) => {
-        require('./command/create-module')(controllerName, 'controller');
+        require('./command/create_module')(controllerName, 'controller');
     });
 
 // create middleware
@@ -68,13 +68,13 @@ program
     .command('middleware <middlewareName>')
     .description('add middleware class')
     .action((middlewareName) => {
-        require('./command/create-module')(middlewareName, 'middleware');
+        require('./command/create_module')(middlewareName, 'middleware');
     });
 program
     .command('mid <middlewareName>')
     .description('add middleware class')
     .action((middlewareName) => {
-        require('./command/create-module')(middlewareName, 'middleware');
+        require('./command/create_module')(middlewareName, 'middleware');
     });
 
 
@@ -83,13 +83,13 @@ program
     .command('service <serviceName>')
     .description('add service class')
     .action((serviceName) => {
-        require('./command/create-module')(serviceName, 'service');
+        require('./command/create_module')(serviceName, 'service');
     });
 program
     .command('svc <serviceName>')
     .description('add service class')
     .action((serviceName) => {
-        require('./command/create-module')(serviceName, 'service');
+        require('./command/create_module')(serviceName, 'service');
     });
 
 // create plugin
@@ -97,13 +97,13 @@ program
     .command('plugin <pluginName>')
     .description('add plugin class')
     .action((pluginName) => {
-        require('./command/create-module')(pluginName, 'plugin');
+        require('./command/create_module')(pluginName, 'plugin');
     });
 program
     .command('plg <pluginName>')
     .description('add plugin class')
     .action((pluginName) => {
-        require('./command/create-module')(pluginName, 'plugin');
+        require('./command/create_module')(pluginName, 'plugin');
     });
 
 
@@ -112,13 +112,13 @@ program
     .command('aspect <aspectName>')
     .description('add aspect class')
     .action((aspectName) => {
-        require('./command/create-module')(aspectName, 'aspect');
+        require('./command/create_module')(aspectName, 'aspect');
     });
 program
     .command('asp <aspectName>')
     .description('add aspect class')
     .action((aspectName) => {
-        require('./command/create-module')(aspectName, 'aspect');
+        require('./command/create_module')(aspectName, 'aspect');
     });
 
 
