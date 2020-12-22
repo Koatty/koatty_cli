@@ -31,8 +31,6 @@
     "download-git-repo": "^3.0.2",
     "koatty_lib": "^1.2.3",
     "replace": "^1.2.0",
-    "think_lib": "^2.x.x",
-    "think_loader": "^2.x.x",
     "update-notifier": "^3.0.1"
   },
   "maintainers": [

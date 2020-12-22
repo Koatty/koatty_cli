@@ -884,11 +884,6 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash@^4.17.19:
-  version "4.17.19"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
-  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
-
 lodash@^4.17.20:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
@@ -946,20 +941,10 @@ minimist@^1.2.0:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
   integrity sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
 
-moment@^2.27.0:
-  version "2.27.0"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
-  integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
-
 moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
-
-murmurhash@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/murmurhash/-/murmurhash-1.0.0.tgz#d0e4556892317d984af632b6a88d5605beef26a7"
-  integrity sha512-u/NfpXS+viMWAupgU6IkwAVWkVnpvzS+D9bDxNuNRUoQ0BRMZ1DK/dPH6Qrknn7RxMHVQBpYBQQigUt7of6RiQ==
 
 murmurhash@^2.0.0:
   version "2.0.0"
@@ -1423,23 +1408,6 @@ term-size@^1.2.0:
   integrity sha1-RYuDiH8oj8Vtb/+/rSYuJmOO+mk=
   dependencies:
     execa "^0.7.0"
-
-think_lib@^2.x.x:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/think_lib/-/think_lib-2.6.2.tgz#9daf07fe9f28304c6e3f3ccf2b7b457f1e1705ce"
-  integrity sha512-ZYI1hrrwe9/3WmWYVwfeEgMAPoLPX16jR8qHpcwXQV/FsQF0G5UUV67VKFcoaSbNrzqvwUos+juZHJX6IiSeDQ==
-  dependencies:
-    co "^4.6.0"
-    lodash "^4.17.19"
-    moment "^2.27.0"
-    murmurhash "^1.0.0"
-
-think_loader@^2.x.x:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/think_loader/-/think_loader-2.0.3.tgz#6e9451749337b315a61197381b632248faa19582"
-  integrity sha512-cjPYbXK7e90zl7Et1+52kcIIrq8V6CWPlGMw9AJNl3/byGZjx9NBHC/7QWMI2dRvZE/zY/uPrIP5XQG8bgmlLw==
-  dependencies:
-    think_lib "^2.x.x"
 
 through@^2.3.8:
   version "2.3.8"
