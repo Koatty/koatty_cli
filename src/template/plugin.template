@@ -1,0 +1,17 @@
+/*
+ * @Description: 插件扩展
+ * @Usage: 
+ * @Author: xxx
+ * @Date: 2020-12-22 15:24:25
+ * @LastEditTime: 2020-12-22 19:57:46
+ */
+
+import { Plugin, IPlugin, Helper } from "koatty";
+import { App } from '<Path>/App';
+
+@Plugin()
+export class <ClassName> implements IPlugin {
+    run(options: any, app: App) {
+        // todo...
+    }
+}

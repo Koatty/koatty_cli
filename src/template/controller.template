@@ -1,0 +1,36 @@
+/*
+ * @Description: 业务层
+ * @Usage: 接收处理路由参数
+ * @Author: xxx
+ * @Date: 2020-12-22 15:24:25
+ * @LastEditTime: 2020-12-22 19:57:03
+ */
+
+import { KoattyContext, Controller, BaseController, Autowired, GetMapping } from 'koatty';
+import { App } from '<Path>/App';
+// import { TestService } from '<Path>/service/TestService';
+
+@Controller('<New>')
+export class <ClassName> extends BaseController {
+  app: App;
+  ctx: KoattyContext;
+
+  // @Autowired()
+  // protected TestService: TestService;
+
+  async __before(): Promise<any> {
+    
+  }
+
+  /**
+   * index 接口
+   *
+   * @returns
+   * @memberof <ClassName>
+   */
+  @GetMapping('/')
+  index(): Promise<any> {
+    return this.ok('Hi Koatty');
+  }
+
+}

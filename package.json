@@ -1,12 +1,13 @@
 {
   "name": "koatty_cli",
-  "version": "2.5.1",
+  "version": "3.0.10",
   "description": "Koatty command line tool.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "koatty": "./lib/index.js"
+    "kt": "./src/index.js",
+    "koatty": "./src/index.js"
   },
   "repository": {
     "type": "git",
@@ -25,10 +26,13 @@
   },
   "homepage": "https://github.com/thinkkoa/koatty_cli",
   "dependencies": {
+    "chalk": "^4.1.0",
+    "cli-spinner": "^0.2.10",
     "commander": "^3.0.2",
-    "think_lib": "^2.x.x",
-    "think_loader": "^2.x.x",
-    "update-notifier": "^3.0.1"
+    "download-git-repo": "^3.0.2",
+    "koatty_lib": "^1.2.3",
+    "replace": "^1.2.0",
+    "update-notifier": "^5.0.1"
   },
   "maintainers": [
     {
