@@ -1,11 +1,5 @@
-/*
- * @Author: richen
- * @Date: 2020-12-08 10:35:52
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-12-22 20:21:50
- * @License: BSD (3-Clause)
- * @Copyright (c) - <richenlin(at)gmail.com>
- */
+#!/usr/bin/env node
+
 const program = require('commander');
 const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
@@ -119,6 +113,21 @@ program
     .description('add aspect class')
     .action((aspectName) => {
         require('./command/create_module')(aspectName, 'aspect');
+    });
+
+
+// create model
+program
+    .command('model <modelName>')
+    .description('add model class')
+    .action((modelName) => {
+        require('./command/create_module')(modelName, 'model');
+    });
+program
+    .command('asp <modelName>')
+    .description('add model class')
+    .action((modelName) => {
+        require('./command/create_module')(modelName, 'model');
     });
 
 
