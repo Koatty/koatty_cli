@@ -35,7 +35,7 @@ program
         require('./command/create_project')(projectName, cleanArgs(cmdObj));
     });
 program
-    .command('create <projectName>')
+    .command('new <projectName>')
     .description('create project')
     .option('-t, --template <template>', 'create project use custom template')
     .action((projectName, cmdObj) => {
@@ -124,7 +124,7 @@ program
         require('./command/create_module')(modelName, 'model');
     });
 program
-    .command('asp <modelName>')
+    .command('mod <modelName>')
     .description('add model class')
     .action((modelName) => {
         require('./command/create_module')(modelName, 'model');

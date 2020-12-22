@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2020-12-22 20:39:42
+ * @LastEditTime: 2020-12-22 23:05:34
  */
 
 const path = require('path');
@@ -66,7 +66,7 @@ const create = async (projectName, options) => {
         log.log();
 
         log.log('  Enter path:');
-        log.log('  $ cd ' + projectRootPath);
+        log.log('  $ cd ' + projectDir);
         log.log();
 
         log.log('  Install dependencies:');
@@ -81,6 +81,3 @@ const create = async (projectName, options) => {
 };
 
 module.exports = create;
-
-
-create('test1')
