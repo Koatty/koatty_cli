@@ -3,18 +3,21 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2020-12-22 21:14:20
+ * @LastEditTime: 2020-12-22 21:23:25
  */
 const path = require('path');
 const replace = require('replace');
 const helper = require('koatty_lib');
+const updateNotifier = require('update-notifier');
 const { exec } = require('child_process');
 const string = require('../utils/sting');
 const log = require('../utils/log');
 const fileSystem = require('../utils/fs');
 const { LOGO } = require('./config');
+const pkg = require('../../package.json');
 
 const cwd = process.cwd();
+const notifier = updateNotifier({ pkg });
 const templatePath = path.resolve('./src/template');
 /**
  * check app
@@ -22,6 +25,7 @@ const templatePath = path.resolve('./src/template');
  * @return {Boolean}             []
  */
 const isKoattyApp = function (path) {
+    notifier.notify();
     if (fileSystem.isExist(path + '.koattysrc')) {
         return true;
     }
@@ -100,11 +104,11 @@ module.exports = async function (name, type) {
 function parseArgs(name, type) {
     let targetDir = path.resolve(`${getAppPath()}/${type}/`);
     // check is TKoatty project root directory
-    // if (!isKoattyApp('./')) {
-    //     log.error('Current project is not a Koatty project.');
-    //     log.error(`Please execute "koatty ${type} ${name}Name" after enter Koatty project root directory.`);
-    //     return;
-    // }
+    if (!isKoattyApp('./')) {
+        log.error('Current project is not a Koatty project.');
+        log.error(`Please execute "koatty ${type} ${name}Name" after enter Koatty project root directory.`);
+        return;
+    }
     const sourcePath = path.resolve(templatePath, `${type}.template`);
     if (!fileSystem.isExist(sourcePath)) {
         log.error(`Type ${type} is not supported currently.`);
