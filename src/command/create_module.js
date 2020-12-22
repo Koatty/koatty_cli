@@ -3,21 +3,18 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2020-12-22 21:23:25
+ * @LastEditTime: 2020-12-22 21:25:36
  */
 const path = require('path');
 const replace = require('replace');
 const helper = require('koatty_lib');
-const updateNotifier = require('update-notifier');
 const { exec } = require('child_process');
 const string = require('../utils/sting');
 const log = require('../utils/log');
 const fileSystem = require('../utils/fs');
 const { LOGO } = require('./config');
-const pkg = require('../../package.json');
 
 const cwd = process.cwd();
-const notifier = updateNotifier({ pkg });
 const templatePath = path.resolve('./src/template');
 /**
  * check app
@@ -25,7 +22,6 @@ const templatePath = path.resolve('./src/template');
  * @return {Boolean}             []
  */
 const isKoattyApp = function (path) {
-    notifier.notify();
     if (fileSystem.isExist(path + '.koattysrc')) {
         return true;
     }
