@@ -23,7 +23,8 @@ const cleanArgs = (cmd) => {
     return args;
 };
 
-program.version(pkg.version).usage('[command] <options ...>');
+program.version(pkg.version).usage('[command] <options ...>')
+    .option('-o, --orm <value>', 'used orm module (thinkorm, typeorm), default is thinkorm');
 
 
 // create project
@@ -115,19 +116,27 @@ program
         require('./command/create_module')(aspectName, 'aspect');
     });
 
+// create dto class
+program
+    .command('dto <dtoName>')
+    .description('add dto class')
+    .action((dtoName) => {
+        require('./command/create_module')(dtoName, 'dto');
+    });
+
 
 // create model
 program
     .command('model <modelName>')
     .description('add model class')
     .action((modelName) => {
-        require('./command/create_module')(modelName, 'model');
+        require('./command/create_module')(modelName, 'model', { orm: program.orm });
     });
 program
     .command('mod <modelName>')
     .description('add model class')
     .action((modelName) => {
-        require('./command/create_module')(modelName, 'model');
+        require('./command/create_module')(modelName, 'model', { orm: program.orm });
     });
 
 

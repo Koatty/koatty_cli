@@ -1,0 +1,28 @@
+/*
+ * @Description: 数据持久层
+ * @Usage: 
+ * @Author: xxx
+ * @Date: 2020-12-22 15:24:25
+ * @LastEditTime: 2020-12-23 11:16:58
+ */
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Component } from 'koatty';
+import { App } from '<Path>/App';
+
+@Component()
+@Entity('<New>')
+export class <ClassName> extends BaseEntity {
+    app: App;
+
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    firstName: string;
+
+    @Column()
+    lastName: string;
+
+    @Column()
+    age: number;
+}

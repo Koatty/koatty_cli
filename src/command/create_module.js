@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2020-12-22 21:25:36
+ * @LastEditTime: 2020-12-23 11:48:24
  */
 const path = require('path');
 const replace = require('replace');
@@ -15,7 +15,7 @@ const fileSystem = require('../utils/fs');
 const { LOGO } = require('./config');
 
 const cwd = process.cwd();
-const templatePath = path.resolve('./src/template');
+const templatePath = path.dirname(__dirname) + '/template';
 /**
  * check app
  * @param  {String}  path []
@@ -38,27 +38,38 @@ const getAppPath = function () {
 }
 
 /**
- *
+ * create module
  *
  * @param {*} name
  * @param {*} type
+ * @param {*} opt
  * @returns {*}  
  */
-module.exports = async function (name, type) {
+module.exports = async function (name, type, opt) {
     log.info('\n Welcome to use Koatty!');
     log.info(LOGO);
     log.info('Start create module...');
 
+    // check is TKoatty project root directory
+    if (!isKoattyApp('./')) {
+        log.error('Current project is not a Koatty project.');
+        log.error(`Please execute "koatty ${type} ${name}Name" after enter Koatty project root directory.`);
+        return;
+    }
+
     let args = {};
     switch (type) {
         case 'controller':
-            args = createController(name, type);
+            args = createController(name, type, opt);
             break;
         case 'middleware':
-            args = createMiddleware(name, type);
+            args = createMiddleware(name, type, opt);
+            break;
+        case 'model':
+            args = createModel(name, type, opt);
             break;
         default:
-            args = createDefault(name, type);
+            args = createDefault(name, type, opt);
             break;
     }
 
@@ -99,12 +110,7 @@ module.exports = async function (name, type) {
  */
 function parseArgs(name, type) {
     let targetDir = path.resolve(`${getAppPath()}/${type}/`);
-    // check is TKoatty project root directory
-    if (!isKoattyApp('./')) {
-        log.error('Current project is not a Koatty project.');
-        log.error(`Please execute "koatty ${type} ${name}Name" after enter Koatty project root directory.`);
-        return;
-    }
+
     const sourcePath = path.resolve(templatePath, `${type}.template`);
     if (!fileSystem.isExist(sourcePath)) {
         log.error(`Type ${type} is not supported currently.`);
@@ -134,18 +140,18 @@ function parseArgs(name, type) {
         log.error('Module existed' + ' : ' + destPath);
         return;
     }
-    console.log('================================');
     return { sourceName, newName, subModule, targetDir, sourcePath, destPath, replaceMap };
 }
 
 /**
- * 
+ *
  *
  * @param {*} name
  * @param {*} type
+ * @param {*} opt
  * @returns {*}  
  */
-function createController(name, type) {
+function createController(name, type, opt) {
     const args = parseArgs(name, type);
     if (!args) {
         process.exit(0);
@@ -162,10 +168,12 @@ function createController(name, type) {
 /**
  *
  *
- * @param {*} params
+ * @param {*} name
+ * @param {*} type
+ * @param {*} opt
  * @returns {*}  
  */
-function createMiddleware(name, type) {
+function createMiddleware(name, type, opt) {
     const args = parseArgs(name, type);
     if (!args) {
         process.exit(0);
@@ -189,9 +197,44 @@ function createMiddleware(name, type) {
  *
  * @param {*} name
  * @param {*} type
+ * @param {*} opt
  * @returns {*}  
  */
-function createDefault(name, type) {
+function createModel(name, type, opt) {
+    const args = parseArgs(name, type);
+    if (!args) {
+        process.exit(0);
+    }
+    const orm = opt.orm || 'thinkorm';
+    if (orm === 'typeorm') {
+        args.sourcePath = path.resolve(templatePath, `${type}.typeorm.template`);
+
+        args.callBack = function () {
+            log.log();
+            log.warning('TypeORM needs to use the koatty_typeorm plugin:');
+            log.log();
+            log.log('https://github.com/Koatty/koatty_typeorm');
+
+            log.log();
+        };
+    }
+    if (!fileSystem.isExist(args.sourcePath)) {
+        log.error(`Type ${type} is not supported currently.`);
+        process.exit(0);
+    }
+
+    return args;
+}
+
+/**
+ *
+ *
+ * @param {*} name
+ * @param {*} type
+ * @param {*} opt
+ * @returns {*}  
+ */
+function createDefault(name, type, opt) {
     const args = parseArgs(name, type);
     if (!args) {
         process.exit(0);
