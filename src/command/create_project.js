@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2020-12-22 23:05:34
+ * @LastEditTime: 2020-12-24 11:26:16
  */
 
 const path = require('path');
@@ -15,8 +15,29 @@ const template = require('../utils/template');
 const {
     TEMPLATE_URL,
     TEMPLATE_NAME,
+    COMP_TEMPLATE_NAME,
+    COMP_TEMPLATE_URL,
     LOGO,
 } = require('./config');
+
+const defaultOptions = {
+    template: 'project',
+};
+
+const supportMap = {
+    project: {
+        fullName: TEMPLATE_NAME,
+        url: TEMPLATE_URL,
+    },
+    middleware: {
+        fullName: COMP_TEMPLATE_NAME,
+        url: COMP_TEMPLATE_URL,
+    },
+    plugin: {
+        fullName: COMP_TEMPLATE_NAME,
+        url: COMP_TEMPLATE_URL,
+    },
+};
 
 
 const create = async (projectName, options) => {
@@ -32,16 +53,17 @@ const create = async (projectName, options) => {
         return;
     }
 
-    const opt = {
-        ...{
-            url: TEMPLATE_URL,
-            fullName: TEMPLATE_NAME
-        }, ...options
-    };
-    const templateDir = await template.loadAndUpdateTemplate(opt.url, opt.fullName);
+    const opts = { ...defaultOptions, ...options };
+    const temp = supportMap[opts.template];
+    if (!temp) {
+        log.error(`Can't find template [${opts.template}], please check the template name, [project]、[middleware] and [plugin] is supported currently.`);
+        return;
+    }
+
+    const templateDir = await template.loadAndUpdateTemplate(temp.url, temp.fullName);
 
     if (!templateDir) {
-        log.error(`Create project fail, can't find template [${opt.fullName}], please check network!`);
+        log.error(`Create project fail, can't find template [${temp.url}], please check network!`);
         return;
     }
 
@@ -52,6 +74,15 @@ const create = async (projectName, options) => {
         }
 
         await template.copyTemplate(templateDir, projectDir);
+
+        if (opts.template === 'middleware') {
+            await fileSystem.rmFile(`${projectDir}/src/plugin.ts`);
+            await fileSystem.moveFile(`${projectDir}/src/middleware.ts`, `${projectDir}/src/index.ts`);
+        }
+        if (opts.template === 'plugin') {
+            await fileSystem.rmFile(`${projectDir}/src/middleware.ts`);
+            await fileSystem.moveFile(`${projectDir}/src/plugin.ts`, `${projectDir}/src/index.ts`);
+        }
 
         replace({
             regex: '<projectName>',

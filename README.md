@@ -1,41 +1,43 @@
 # koatty_cli
 Koatty command line tool.
 
-## Usage
+# Usage
 
-### 1.Create Project
+## Create koatty project
 
 ```shell
 koatty new projectName
 
 cd ./projectName
 
-yarn install
+yarn install  // or npm i
 
 npm start
 ```
 
-### 2.Create a Controller
+## Create a module in the koatty project
+
+* 1.Create a Controller
 ```shell
 koatty controller test
 
 ```
 
-### 3.Create a Service
+* 2.Create a Service
 
 ```shell
 koatty service test
 
 ```
 
-### 3.Create a Middleware
+* 3.Create a Middleware
 
 ```shell
 koatty middleware test
 
 ```
 
-### 4.Create a Model
+* 4.Create a Model
 
 ```shell
 
@@ -48,7 +50,7 @@ koatty model -o typeorm test
 
 ```
 
-### 5.Create a Aspect
+* 5.Create a Aspect
 
 定义切面类:
 
@@ -76,7 +78,7 @@ export class TestController extends BaseController {
 
 ```
 
-### 5.Create a DTO class
+* 6.Create a DTO class
 
 定义数据验证类:
 
@@ -114,4 +116,30 @@ export class TestController extends BaseController {
 
 }
 
+```
+
+## Create Koatty Extension Project
+
+* 1、Create a Middleware Project
+
+```shell
+koatty new projectName -t middleware
+
+cd ./projectName
+
+yarn install  // or npm i
+
+npm start
+```
+
+* 2、Create a Plugin Project
+
+```shell
+koatty new projectName -t plugin
+
+cd ./projectName
+
+yarn install  // or npm i
+
+npm start
 ```

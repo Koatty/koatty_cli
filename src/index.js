@@ -23,8 +23,7 @@ const cleanArgs = (cmd) => {
     return args;
 };
 
-program.version(pkg.version).usage('[command] <options ...>')
-    .option('-o, --orm <value>', 'used orm module (thinkorm, typeorm), default is thinkorm');
+program.version(pkg.version).usage('[command] <options ...>');
 
 
 // create project
@@ -129,14 +128,16 @@ program
 program
     .command('model <modelName>')
     .description('add model class')
-    .action((modelName) => {
-        require('./command/create_module')(modelName, 'model', { orm: program.orm });
+    .option('-o, --orm <orm>', 'used orm module (thinkorm, typeorm), default is thinkorm')
+    .action((modelName, cmdObj) => {
+        require('./command/create_module')(modelName, 'model', cleanArgs(cmdObj));
     });
 program
     .command('mod <modelName>')
     .description('add model class')
-    .action((modelName) => {
-        require('./command/create_module')(modelName, 'model', { orm: program.orm });
+    .option('-o, --orm <orm>', 'used orm module (thinkorm, typeorm), default is thinkorm')
+    .action((modelName, cmdObj) => {
+        require('./command/create_module')(modelName, 'model', cleanArgs(cmdObj));
     });
 
 
