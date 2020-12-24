@@ -3,12 +3,13 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2020-12-24 11:26:16
+ * @LastEditTime: 2020-12-24 15:01:00
  */
 
 const path = require('path');
 const replace = require('replace');
 const { exec } = require('child_process');
+const string = require('../utils/sting');
 const log = require('../utils/log');
 const fileSystem = require('../utils/fs');
 const template = require('../utils/template');
@@ -75,22 +76,26 @@ const create = async (projectName, options) => {
 
         await template.copyTemplate(templateDir, projectDir);
 
-        if (opts.template === 'middleware') {
-            await fileSystem.rmFile(`${projectDir}/src/plugin.ts`);
-            await fileSystem.moveFile(`${projectDir}/src/middleware.ts`, `${projectDir}/src/index.ts`);
+        if (opts.template !== 'project') {
+            await fileSystem.moveFile(`${projectDir}/src/${opts.template}.ts`, `${projectDir}/index.ts`);
+            await fileSystem.rmFile(`${projectDir}/src/*.ts`);
+            await fileSystem.moveFile(`${projectDir}/index.ts`, `${projectDir}/src/index.ts`);
         }
-        if (opts.template === 'plugin') {
-            await fileSystem.rmFile(`${projectDir}/src/middleware.ts`);
-            await fileSystem.moveFile(`${projectDir}/src/plugin.ts`, `${projectDir}/src/index.ts`);
-        }
+        const newName = string.toPascal(projectName);
+        const replaceMap = {
+            '<projectName>': projectName,
+            '<ClassName>': newName
+        };
 
-        replace({
-            regex: '<projectName>',
-            replacement: projectName,
-            paths: [projectDir],
-            recursive: true,
-            silent: true,
-        });
+        for (let key in replaceMap) {
+            replace({
+                regex: key,
+                replacement: replaceMap[key],
+                paths: [projectDir],
+                recursive: true,
+                silent: true,
+            });
+        }
 
         log.log();
         log.success(`Create project [${projectName}] success!`);
