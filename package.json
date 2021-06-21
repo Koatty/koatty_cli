@@ -26,13 +26,13 @@
   },
   "homepage": "https://github.com/thinkkoa/koatty_cli",
   "dependencies": {
-    "chalk": "^4.1.0",
+    "chalk": "^4.1.1",
     "cli-spinner": "^0.2.10",
     "commander": "^3.0.2",
     "download-git-repo": "^3.0.2",
     "koatty_lib": "^1.2.3",
-    "replace": "^1.2.0",
-    "update-notifier": "^5.0.1"
+    "replace": "^1.2.1",
+    "update-notifier": "^5.1.0"
   },
   "maintainers": [
     {
