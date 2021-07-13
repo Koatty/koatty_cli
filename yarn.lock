@@ -847,17 +847,17 @@ keyv@^3.0.0:
   dependencies:
     json-buffer "3.0.0"
 
-koatty_lib@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.npm.taobao.org/koatty_lib/download/koatty_lib-1.2.3.tgz#b653586c19828c31e586dd2df83312d87d6cdf72"
-  integrity sha1-tlNYbBmCjDHlht0t+DMS2H1s33I=
+koatty_lib@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/koatty_lib/-/koatty_lib-1.2.6.tgz#4a164c55eba87126cad981e23d811c1134eec258"
+  integrity sha512-aciq/4qMpVN3quBMbUszD1wKnjOTeFgAQ9hVcZOvHYvK75ZFPSUKhXI0k2Eb7jpz7RO3myr9RzkC2W8URdEHiQ==
   dependencies:
     "@types/lodash" "^4.x.x"
     co "^4.6.0"
-    lodash "^4.17.20"
+    lodash "^4.17.21"
     moment "^2.29.1"
     murmurhash "^2.0.0"
-    tslib "^2.0.3"
+    tslib "^2.3.0"
 
 latest-version@^5.1.0:
   version "5.1.0"
@@ -873,7 +873,7 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash@^4.17.20:
+lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -1373,10 +1373,10 @@ trim-repeated@^1.0.0:
   dependencies:
     escape-string-regexp "^1.0.2"
 
-tslib@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.npm.taobao.org/tslib/download/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
-  integrity sha1-jgdBrEX8DCJuWKF7/D5kubxsphw=
+tslib@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+  integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
