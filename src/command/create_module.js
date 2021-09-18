@@ -3,15 +3,14 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2020-12-23 11:48:24
+ * @LastEditTime: 2021-09-18 17:17:42
  */
 const path = require('path');
 const replace = require('replace');
 const helper = require('koatty_lib');
-const { exec } = require('child_process');
 const string = require('../utils/sting');
 const log = require('../utils/log');
-const fileSystem = require('../utils/fs');
+const ufs = require('../utils/fs');
 const { LOGO } = require('./config');
 
 const cwd = process.cwd();
@@ -22,7 +21,7 @@ const templatePath = path.dirname(__dirname) + '/template';
  * @return {Boolean}             []
  */
 const isKoattyApp = function (path) {
-    if (fileSystem.isExist(path + '.koattysrc')) {
+    if (ufs.isExist(path + '.koattysrc')) {
         return true;
     }
     return false;
@@ -68,37 +67,47 @@ module.exports = async function (name, type, opt) {
         case 'model':
             args = createModel(name, type, opt);
             break;
+        case 'plugin':
+            args = createPlugin(name, type, opt);
+            break;
         default:
             args = createDefault(name, type, opt);
             break;
     }
 
-    const { newName, targetDir, sourcePath, destPath, replaceMap, callBack } = args;
-
-    exec(`mkdir -p ${targetDir}`, async (err) => {
-        if (err) {
-            log.error(err && err.message);
-            return;
+    const { newName, destMap, replaceMap, callBack } = args;
+    try {
+        const targetDir = [];
+        for (const key in destMap) {
+            if (Object.hasOwnProperty.call(destMap, key)) {
+                const element = destMap[key];
+                if (element) {
+                    targetDir.push(path.dirname(element));
+                    await ufs.copyFile(key, element);
+                }
+            }
         }
-
-        await fileSystem.copyFile(sourcePath, destPath);
 
         for (let key in replaceMap) {
             replace({
                 regex: key,
                 replacement: replaceMap[key],
-                paths: [targetDir],
+                paths: targetDir,
                 recursive: true,
                 silent: true,
             });
         }
+    } catch (error) {
+        log.error(`Create module [${newName}] error: ${error.message}`);
+        return;
+    }
 
-        log.log();
-        log.success(`Create module [${newName}] success!`);
-        log.log();
 
-        callBack && callBack();
-    });
+    log.log();
+    log.success(`Create module [${newName}] success!`);
+    log.log();
+
+    callBack && callBack();
 };
 
 /**
@@ -112,7 +121,7 @@ function parseArgs(name, type) {
     let targetDir = path.resolve(`${getAppPath()}/${type}/`);
 
     const sourcePath = path.resolve(templatePath, `${type}.template`);
-    if (!fileSystem.isExist(sourcePath)) {
+    if (!ufs.isExist(sourcePath)) {
         log.error(`Type ${type} is not supported currently.`);
         return;
     }
@@ -140,7 +149,11 @@ function parseArgs(name, type) {
         log.error('Module existed' + ' : ' + destPath);
         return;
     }
-    return { sourceName, newName, subModule, targetDir, sourcePath, destPath, replaceMap };
+
+    const destMap = {
+        [sourcePath]: destPath,
+    };
+    return { sourceName, sourcePath, newName, subModule, destMap, replaceMap };
 }
 
 /**
@@ -162,6 +175,7 @@ function createController(name, type, opt) {
     } else {
         args.replaceMap['<New>'] = `/${args.sourceName}`;
     }
+
     return args;
 }
 
@@ -191,6 +205,32 @@ function createMiddleware(name, type, opt) {
     };
     return args;
 }
+/**
+ *
+ *
+ * @param {*} name
+ * @param {*} type
+ * @param {*} opt
+ * @returns {*}  
+ */
+function createPlugin(name, type, opt) {
+    const args = parseArgs(name, type);
+    if (!args) {
+        process.exit(0);
+    }
+    args.callBack = function () {
+        log.log();
+        log.log('please modify /app/config/plugin.ts file:');
+        log.log();
+        log.log(`list: [..., "${args.newName}"] //加载的插件列表,执行顺序按照数组元素顺序`);
+        log.log('config: { //插件配置 ');
+        log.log(`   "${args.newName}":{ //todo }`);
+        log.log('}');
+
+        log.log();
+    };
+    return args;
+}
 
 /**
  *
@@ -205,20 +245,25 @@ function createModel(name, type, opt) {
     if (!args) {
         process.exit(0);
     }
-    const orm = opt.orm || 'thinkorm';
+    const orm = opt.orm || 'typeorm';
     if (orm === 'typeorm') {
-        args.sourcePath = path.resolve(templatePath, `${type}.typeorm.template`);
+        const sourcePath = path.resolve(templatePath, `model.typeorm.template`);
+        args.destMap[sourcePath] = args.destMap[args.sourcePath];
+        args.destMap[args.sourcePath] = "";
 
+        const tplPath = path.resolve(templatePath, `plugin.typeorm.template`);
+        args.destMap[tplPath] = path.resolve(`${getAppPath()}/plugin/`, "TypeormPlugin.ts");
         args.callBack = function () {
+
             log.log();
-            log.warning('TypeORM needs to use the koatty_typeorm plugin:');
+            log.warning('TypeORM used the koatty_typeorm plugin:');
             log.log();
             log.log('https://github.com/Koatty/koatty_typeorm');
 
             log.log();
         };
     }
-    if (!fileSystem.isExist(args.sourcePath)) {
+    if (!ufs.isExist(args.sourcePath)) {
         log.error(`Type ${type} is not supported currently.`);
         process.exit(0);
     }

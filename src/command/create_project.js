@@ -3,15 +3,14 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2020-12-24 15:01:00
+ * @LastEditTime: 2021-09-18 17:04:59
  */
 
 const path = require('path');
 const replace = require('replace');
-const { exec } = require('child_process');
 const string = require('../utils/sting');
 const log = require('../utils/log');
-const fileSystem = require('../utils/fs');
+const ufs = require('../utils/fs');
 const template = require('../utils/template');
 const {
     TEMPLATE_URL,
@@ -49,7 +48,7 @@ const create = async (projectName, options) => {
     const projectDir = path.resolve('./', projectName);
 
     // check project name
-    if (fileSystem.isExist(projectDir)) {
+    if (ufs.isExist(projectDir)) {
         log.error(`Project [${projectName}] has existed, please change the project name!`);
         return;
     }
@@ -68,18 +67,13 @@ const create = async (projectName, options) => {
         return;
     }
 
-    exec(`mkdir ${projectDir}`, async (err) => {
-        if (err) {
-            log.error(err && err.message);
-            return;
-        }
-
+    try {
         await template.copyTemplate(templateDir, projectDir);
 
         if (opts.template !== 'project') {
-            await fileSystem.moveFile(`${projectDir}/src/${opts.template}.ts`, `${projectDir}/index.ts`);
-            await fileSystem.rmFile(`${projectDir}/src/*.ts`);
-            await fileSystem.moveFile(`${projectDir}/index.ts`, `${projectDir}/src/index.ts`);
+            await ufs.moveFile(`${projectDir}/src/${opts.template}.ts`, `${projectDir}/index.ts`);
+            await ufs.rmFile(`${projectDir}/src/*.ts`);
+            await ufs.moveFile(`${projectDir}/index.ts`, `${projectDir}/src/index.ts`);
         }
         const newName = string.toPascal(projectName);
         const replaceMap = {
@@ -96,24 +90,27 @@ const create = async (projectName, options) => {
                 silent: true,
             });
         }
+    } catch (error) {
+        log.error(err && err.message);
+        return;
+    }
 
-        log.log();
-        log.success(`Create project [${projectName}] success!`);
-        log.log();
+    log.log();
+    log.success(`Create project [${projectName}] success!`);
+    log.log();
 
-        log.log('  Enter path:');
-        log.log('  $ cd ' + projectDir);
-        log.log();
+    log.log('  Enter path:');
+    log.log('  $ cd ' + projectDir);
+    log.log();
 
-        log.log('  Install dependencies:');
-        log.log('  $ npm install');
-        log.log();
+    log.log('  Install dependencies:');
+    log.log('  $ npm install');
+    log.log();
 
-        log.log('  Run the app:');
-        log.log('  $ npm start');
+    log.log('  Run the app:');
+    log.log('  $ npm start');
 
-        log.log();
-    });
+    log.log();
 };
 
 module.exports = create;

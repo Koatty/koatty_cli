@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2020-12-23 11:16:58
+ * @LastEditTime: 2021-09-18 10:52:37
  */
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import { Component } from 'koatty';
@@ -17,12 +17,9 @@ export class <ClassName> extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    firstName: string;
+    @CreateDateColumn()
+    createdDate: Date;
 
-    @Column()
-    lastName: string;
-
-    @Column()
-    age: number;
+    @UpdateDateColumn()
+    updatedDate: Date;
 }

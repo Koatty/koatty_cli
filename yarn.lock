@@ -849,8 +849,8 @@ keyv@^3.0.0:
 
 koatty_lib@^1.2.6:
   version "1.2.6"
-  resolved "https://registry.yarnpkg.com/koatty_lib/-/koatty_lib-1.2.6.tgz#4a164c55eba87126cad981e23d811c1134eec258"
-  integrity sha512-aciq/4qMpVN3quBMbUszD1wKnjOTeFgAQ9hVcZOvHYvK75ZFPSUKhXI0k2Eb7jpz7RO3myr9RzkC2W8URdEHiQ==
+  resolved "https://registry.nlark.com/koatty_lib/download/koatty_lib-1.2.6.tgz#4a164c55eba87126cad981e23d811c1134eec258"
+  integrity sha1-ShZMVeuocSbK2YHiPYEcETTuwlg=
   dependencies:
     "@types/lodash" "^4.x.x"
     co "^4.6.0"

@@ -3,6 +3,8 @@
 const program = require('commander');
 const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
+const create_project = require('./command/create_project');
+const create_module = require('./command/create_module');
 
 updateNotifier({ pkg }).notify();
 
@@ -28,116 +30,71 @@ program.version(pkg.version).usage('[command] <options ...>');
 
 // create project
 program
-    .command('init <projectName>')
-    .description('create project')
-    .option('-t, --template <template>', 'create project use custom template')
-    .action((projectName, cmdObj) => {
-        require('./command/create_project')(projectName, cleanArgs(cmdObj));
-    });
-program
     .command('new <projectName>')
     .description('create project')
     .option('-t, --template <template>', 'create project use custom template')
     .action((projectName, cmdObj) => {
-        require('./command/create_project')(projectName, cleanArgs(cmdObj));
+        create_project(projectName, cleanArgs(cmdObj));
     });
-
 
 // create controller
 program
     .command('controller <controllerName>')
-    .description('add controller class')
+    .description('create controller class')
     .action((controllerName) => {
-        require('./command/create_module')(controllerName, 'controller');
-    });
-program
-    .command('ctl <controllerName>')
-    .description('add controller class')
-    .action((controllerName) => {
-        require('./command/create_module')(controllerName, 'controller');
+        create_module(controllerName, 'controller');
     });
 
 // create middleware
 program
     .command('middleware <middlewareName>')
-    .description('add middleware class')
+    .description('create middleware class')
     .action((middlewareName) => {
-        require('./command/create_module')(middlewareName, 'middleware');
-    });
-program
-    .command('mid <middlewareName>')
-    .description('add middleware class')
-    .action((middlewareName) => {
-        require('./command/create_module')(middlewareName, 'middleware');
+        create_module(middlewareName, 'middleware');
     });
 
 
 // create service
 program
     .command('service <serviceName>')
-    .description('add service class')
+    .description('create service class')
     .action((serviceName) => {
-        require('./command/create_module')(serviceName, 'service');
-    });
-program
-    .command('svc <serviceName>')
-    .description('add service class')
-    .action((serviceName) => {
-        require('./command/create_module')(serviceName, 'service');
+        create_module(serviceName, 'service');
     });
 
 // create plugin
 program
     .command('plugin <pluginName>')
-    .description('add plugin class')
+    .description('create plugin class')
     .action((pluginName) => {
-        require('./command/create_module')(pluginName, 'plugin');
-    });
-program
-    .command('plg <pluginName>')
-    .description('add plugin class')
-    .action((pluginName) => {
-        require('./command/create_module')(pluginName, 'plugin');
+        create_module(pluginName, 'plugin');
     });
 
 
 // create aspect
 program
     .command('aspect <aspectName>')
-    .description('add aspect class')
+    .description('create aspect class')
     .action((aspectName) => {
-        require('./command/create_module')(aspectName, 'aspect');
-    });
-program
-    .command('asp <aspectName>')
-    .description('add aspect class')
-    .action((aspectName) => {
-        require('./command/create_module')(aspectName, 'aspect');
+        create_module(aspectName, 'aspect');
     });
 
 // create dto class
 program
     .command('dto <dtoName>')
-    .description('add dto class')
+    .description('create dto class')
     .action((dtoName) => {
-        require('./command/create_module')(dtoName, 'dto');
+        create_module(dtoName, 'dto');
     });
 
 
 // create model
 program
     .command('model <modelName>')
-    .description('add model class')
+    .description('create model class')
     .option('-o, --orm <orm>', 'used orm module (thinkorm, typeorm), default is thinkorm')
     .action((modelName, cmdObj) => {
-        require('./command/create_module')(modelName, 'model', cleanArgs(cmdObj));
-    });
-program
-    .command('mod <modelName>')
-    .description('add model class')
-    .option('-o, --orm <orm>', 'used orm module (thinkorm, typeorm), default is thinkorm')
-    .action((modelName, cmdObj) => {
-        require('./command/create_module')(modelName, 'model', cleanArgs(cmdObj));
+        create_module(modelName, 'model', cleanArgs(cmdObj));
     });
 
 
