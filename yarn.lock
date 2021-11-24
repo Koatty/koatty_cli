@@ -899,10 +899,10 @@ koatty_lib@^1.2.6:
     murmurhash "^2.0.0"
     tslib "^2.3.0"
 
-koatty_proto@^1.0.6:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/koatty_proto/-/koatty_proto-1.0.10.tgz#4d0b6fde9080a4bdd2b312679652207eeb4ba536"
-  integrity sha512-oLCo4cADzPyhH5llNDpkgCtrGJIuj+xrIqf18b0cO+KB6iok7WGZZh9n59dDZOXCBdxto7QLQjhVBMHDcN20Aw==
+koatty_proto@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/koatty_proto/-/koatty_proto-1.0.12.tgz#ebe2eba0b3cf1652910af0bd68172bc17b8b7917"
+  integrity sha512-m0xGuliWUCkU55wV/OsCWFdCuLy41PQeZGar0gUr3JBQYH0rl4Urnd1xwwTtbU27BSwTvsvr3U9wWRbhNisBJQ==
   dependencies:
     protobufjs "^6.11.2"
 

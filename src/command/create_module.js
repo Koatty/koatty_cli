@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2021-11-24 17:35:48
+ * @LastEditTime: 2021-11-24 23:05:25
  */
 const path = require('path');
 const replace = require('replace');
@@ -117,7 +117,7 @@ module.exports = async function (name, type, opt) {
 
         callBack && callBack();
     } catch (error) {
-        log.error(`Create module error: ${error.message} ${error.stack}`);
+        log.error(`Create module error: ${error.message}`);
         return;
     }
 };
@@ -179,15 +179,13 @@ function parseGrpcArgs(args) {
     const pascalName = string.toPascal(args.sourceName);
     const protoFile = `${getAppPath()}/proto/${pascalName}.proto`
     if (!ufs.isExist(protoFile)) {
-        log.error(`proto file : ${protoFile} does not exist. Please use the \'koatty proto ${args.sourceName}\' command to create.`);
-        return {};
+        throw Error(`proto file : ${protoFile} does not exist. Please use the \'koatty proto ${args.sourceName}\' command to create.`);
     }
     const source = ufs.readFile(protoFile)
     const res = parseProto(source);
     const methods = parseMethods(res);
     if (!Object.hasOwnProperty.call(methods, pascalName)) {
-        log.error('The proto file does not contain the service' + ' : ' + pascalName);
-        return {};
+        throw Error('The proto file does not contain the service' + ' : ' + pascalName);
     }
     const service = methods[pascalName];
     const methodArr = [];
@@ -231,7 +229,14 @@ function parseGrpcArgs(args) {
             const it = fields[key];
             if (it) {
                 const name = `${destPath}/${it.name}Dto.ts`;
-                args.createMap[name] = dtoContent.replace(/_CLASS_NAME/g, `${it.name}Dto`).replace(/\/\/_FIELDS/g, (it.fields || []).join("\n"));
+                let props = [...(it.fields || [])];
+                props = props.map(elem => {
+                    if (elem != '') {
+                        return `    @IsDefined()\n  ${elem}`;
+                    }
+                    return '';
+                });
+                args.createMap[name] = dtoContent.replace(/_CLASS_NAME/g, `${it.name}Dto`).replace(/\/\/_FIELDS/g, props.join("\n"));
             }
         }
     });
@@ -243,7 +248,8 @@ function parseGrpcArgs(args) {
             const it = values[key];
             if (it) {
                 const name = `${destPath}/${it.name}.ts`;
-                args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, (it.fields || []).join("\n"));
+                let props = [...(it.fields || [])];
+                args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, props.join("\n"));
             }
         }
     });
