@@ -3,13 +3,16 @@
  * @Usage: 
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2020-12-22 19:57:16
+ * @LastEditTime: 2021-11-24 17:02:51
  */
 
-import { Component, IsNotEmpty } from "koatty";
+import { Component } from "koatty";
+import { IsNotEmpty } from "koatty_validation";
 
 @Component()
-export class <ClassName> {
+export class _CLASS_NAME {
     // @IsNotEmpty()
     // name: string;
+
+    //_FIELDS
 }

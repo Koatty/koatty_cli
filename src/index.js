@@ -41,8 +41,9 @@ program
 program
     .command('controller <controllerName>')
     .description('create controller class')
-    .action((controllerName) => {
-        create_module(controllerName, 'controller');
+    .option('-t, --type <type>', 'create controller\'s type, http|grpc|websocket, default is http controller.')
+    .action((controllerName, cmdObj) => {
+        create_module(controllerName, 'controller', cleanArgs(cmdObj));
     });
 
 // create middleware
@@ -87,12 +88,20 @@ program
         create_module(dtoName, 'dto');
     });
 
+// create protobuf file
+program
+    .command('proto <protoName>')
+    .description('create proto file')
+    .action((protoName) => {
+        create_module(protoName, 'proto');
+    });
+
 
 // create model
 program
     .command('model <modelName>')
     .description('create model class')
-    .option('-o, --orm <orm>', 'used orm module (thinkorm, typeorm), default is thinkorm')
+    .option('-o, --orm <orm>', 'used orm module (thinkorm, typeorm), default is typeorm')
     .action((modelName, cmdObj) => {
         create_module(modelName, 'model', cleanArgs(cmdObj));
     });

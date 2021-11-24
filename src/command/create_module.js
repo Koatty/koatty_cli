@@ -3,15 +3,15 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2021-09-18 17:17:42
+ * @LastEditTime: 2021-11-24 17:35:48
  */
 const path = require('path');
 const replace = require('replace');
-const helper = require('koatty_lib');
 const string = require('../utils/sting');
 const log = require('../utils/log');
 const ufs = require('../utils/fs');
 const { LOGO } = require('./config');
+const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
 
 const cwd = process.cwd();
 const templatePath = path.dirname(__dirname) + '/template';
@@ -42,7 +42,7 @@ const getAppPath = function () {
  * @param {*} name
  * @param {*} type
  * @param {*} opt
- * @returns {*}  
+ * @returns {Promise<any>}  
  */
 module.exports = async function (name, type, opt) {
     log.info('\n Welcome to use Koatty!');
@@ -57,26 +57,30 @@ module.exports = async function (name, type, opt) {
     }
 
     let args = {};
-    switch (type) {
-        case 'controller':
-            args = createController(name, type, opt);
-            break;
-        case 'middleware':
-            args = createMiddleware(name, type, opt);
-            break;
-        case 'model':
-            args = createModel(name, type, opt);
-            break;
-        case 'plugin':
-            args = createPlugin(name, type, opt);
-            break;
-        default:
-            args = createDefault(name, type, opt);
-            break;
-    }
-
-    const { newName, destMap, replaceMap, callBack } = args;
     try {
+        switch (type) {
+            case 'controller':
+                args = createController(name, type, opt);
+                break;
+            case 'middleware':
+                args = createMiddleware(name, type, opt);
+                break;
+            case 'model':
+                args = createModel(name, type, opt);
+                break;
+            case 'plugin':
+                args = createPlugin(name, type, opt);
+                break;
+            case 'proto':
+                args = createProto(name, type, opt);
+                break;
+            default:
+                args = createDefault(name, type, opt);
+                break;
+        }
+
+        const { newName, destMap, createMap, replaceMap, callBack } = args;
+
         const targetDir = [];
         for (const key in destMap) {
             if (Object.hasOwnProperty.call(destMap, key)) {
@@ -84,6 +88,15 @@ module.exports = async function (name, type, opt) {
                 if (element) {
                     targetDir.push(path.dirname(element));
                     await ufs.copyFile(key, element);
+                }
+            }
+        }
+        for (const key in createMap) {
+            if (Object.hasOwnProperty.call(createMap, key)) {
+                const element = createMap[key];
+                if (element) {
+                    targetDir.push(path.dirname(key));
+                    await ufs.writeFile(key, element);
                 }
             }
         }
@@ -97,17 +110,16 @@ module.exports = async function (name, type, opt) {
                 silent: true,
             });
         }
+
+        log.log();
+        log.success(`Create module [${newName}] success!`);
+        log.log();
+
+        callBack && callBack();
     } catch (error) {
-        log.error(`Create module [${newName}] error: ${error.message}`);
+        log.error(`Create module error: ${error.message} ${error.stack}`);
         return;
     }
-
-
-    log.log();
-    log.success(`Create module [${newName}] success!`);
-    log.log();
-
-    callBack && callBack();
 };
 
 /**
@@ -139,13 +151,13 @@ function parseArgs(name, type) {
 
     // replace map
     const replaceMap = {
-        '<Path>': subModule ? '../..' : '..',
-        '<New>': sourceName,
-        '<ClassName>': newName
+        '_SUB_PATH': subModule ? '../..' : '..',
+        '_NEW': sourceName,
+        '_CLASS_NAME': newName
     };
 
     //if target file is exist, ignore it
-    if (helper.isFile(destPath)) {
+    if (ufs.isExist(destPath)) {
         log.error('Module existed' + ' : ' + destPath);
         return;
     }
@@ -153,8 +165,93 @@ function parseArgs(name, type) {
     const destMap = {
         [sourcePath]: destPath,
     };
-    return { sourceName, sourcePath, newName, subModule, destMap, replaceMap };
+    return { sourceName, sourcePath, newName, subModule, destMap, replaceMap, destPath };
 }
+
+/**
+ * 处理gRPC控制器
+ *
+ * @param {*} args
+ * @returns {*}  
+ */
+function parseGrpcArgs(args) {
+    // 根据控制器名自动寻找proto文件
+    const pascalName = string.toPascal(args.sourceName);
+    const protoFile = `${getAppPath()}/proto/${pascalName}.proto`
+    if (!ufs.isExist(protoFile)) {
+        log.error(`proto file : ${protoFile} does not exist. Please use the \'koatty proto ${args.sourceName}\' command to create.`);
+        return {};
+    }
+    const source = ufs.readFile(protoFile)
+    const res = parseProto(source);
+    const methods = parseMethods(res);
+    if (!Object.hasOwnProperty.call(methods, pascalName)) {
+        log.error('The proto file does not contain the service' + ' : ' + pascalName);
+        return {};
+    }
+    const service = methods[pascalName];
+    const methodArr = [];
+    const importArr = [];
+    let methodStr = ufs.readFile(path.resolve(templatePath, `controller_grpc_method.template`));
+    let importStr = ufs.readFile(path.resolve(templatePath, `controller_grpc_import.template`));
+    Object.keys(service).map(key => {
+        if (Object.hasOwnProperty.call(service, key)) {
+            const it = service[key];
+            if (it) {
+                methodStr = methodStr.replace(/_METHOD_NAME/g, it.name);
+                let requestType = 'any';
+                if (it.requestType != "") {
+                    requestType = `${it.requestType}Dto`;
+                    importArr.push(importStr.replace(/_DTO_NAME/g, requestType).replace(/_SUB_PATH/g, args.subModule ? '../..' : '..'));
+                }
+
+                let responseType = 'any';
+                if (it.responseType != 'any') {
+                    responseType = `${it.responseType}Dto`;
+                    importArr.push(importStr.replace(/_DTO_NAME/g, responseType).replace(/_SUB_PATH/g, args.subModule ? '../..' : '..'));
+                }
+
+                methodStr = methodStr.replace(/_REQUEST_TYPE/g, requestType);
+                methodStr = methodStr.replace(/_RESPONSE_TYPE/g, responseType);
+                methodStr = methodStr.replace(/_RESPONSE_RETURN/g, it.responseType == 'any' ? '{}' : `new ${responseType}();`);
+                methodArr.push(methodStr);
+            }
+        }
+    });
+
+    args.createMap = {};
+    const ctlContent = ufs.readFile(path.resolve(templatePath, `controller_grpc.template`));
+    args.createMap[args.destPath] = ctlContent.replace(/\/\/_METHOD_LIST/g, methodArr.join("\n")).replace(/\/\/_IMPORT_LIST/g, importArr.join("\n"));
+
+    const fields = parseFields(res);
+    const destPath = path.resolve(`${getAppPath()}/dto/`);
+    const dtoContent = ufs.readFile(path.resolve(templatePath, `dto.template`));
+    Object.keys(fields).map(key => {
+        if (Object.hasOwnProperty.call(fields, key)) {
+            const it = fields[key];
+            if (it) {
+                const name = `${destPath}/${it.name}Dto.ts`;
+                args.createMap[name] = dtoContent.replace(/_CLASS_NAME/g, `${it.name}Dto`).replace(/\/\/_FIELDS/g, (it.fields || []).join("\n"));
+            }
+        }
+    });
+
+    const values = parseValues(res);
+    const enumContent = ufs.readFile(path.resolve(templatePath, `enum.template`));
+    Object.keys(values).map(key => {
+        if (Object.hasOwnProperty.call(values, key)) {
+            const it = values[key];
+            if (it) {
+                const name = `${destPath}/${it.name}.ts`;
+                args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, (it.fields || []).join("\n"));
+            }
+        }
+    });
+
+    return args;
+
+}
+
 
 /**
  *
@@ -170,10 +267,20 @@ function createController(name, type, opt) {
         process.exit(0);
     }
 
+    const protocol = opt.type || 'http';
+    if (protocol === "grpc") {
+        parseGrpcArgs(args);
+        args.destMap = {};
+    } else if (protocol === "websocket") {
+        const sourcePath = path.resolve(templatePath, `controller_ws.template`);
+        args.destMap[sourcePath] = args.destMap[args.sourcePath];
+        args.destMap[args.sourcePath] = "";
+    }
+
     if (args.subModule) {
-        args.replaceMap['<New>'] = `/${args.subModule}/${args.sourceName}`;
+        args.replaceMap['_NEW'] = `/${args.subModule}/${args.sourceName}`;
     } else {
-        args.replaceMap['<New>'] = `/${args.sourceName}`;
+        args.replaceMap['_NEW'] = `/${args.sourceName}`;
     }
 
     return args;
@@ -211,7 +318,7 @@ function createMiddleware(name, type, opt) {
  * @param {*} name
  * @param {*} type
  * @param {*} opt
- * @returns {*}  
+ * @returns {*}
  */
 function createPlugin(name, type, opt) {
     const args = parseArgs(name, type);
@@ -247,19 +354,29 @@ function createModel(name, type, opt) {
     }
     const orm = opt.orm || 'typeorm';
     if (orm === 'typeorm') {
-        const sourcePath = path.resolve(templatePath, `model.typeorm.template`);
+        const sourcePath = path.resolve(templatePath, `model.${orm}.template`);
         args.destMap[sourcePath] = args.destMap[args.sourcePath];
         args.destMap[args.sourcePath] = "";
 
-        const tplPath = path.resolve(templatePath, `plugin.typeorm.template`);
-        args.destMap[tplPath] = path.resolve(`${getAppPath()}/plugin/`, "TypeormPlugin.ts");
-        args.callBack = function () {
+        const tplPath = path.resolve(templatePath, `plugin.${orm}.template`);
+        const newName = `${string.toPascal(orm)}Plugin.ts`
+        const destPath = path.resolve(`${getAppPath()}/plugin/${newName}`);
+        if (!ufs.isExist(destPath)) {
+            args.destMap[tplPath] = path.resolve(`${getAppPath()}/plugin/`, newName);
+        }
 
+        args.callBack = function () {
             log.log();
             log.warning('TypeORM used the koatty_typeorm plugin:');
             log.log();
             log.log('https://github.com/Koatty/koatty_typeorm');
-
+            log.log();
+            log.log('please modify /app/config/plugin.ts file:');
+            log.log();
+            log.log(`list: [..., "TypeormPlugin"] //加载的插件列表,执行顺序按照数组元素顺序`);
+            log.log('config: { //插件配置 ');
+            log.log(`   "TypeormPlugin":{ //todo }`);
+            log.log('}');
             log.log();
         };
     }
@@ -268,6 +385,36 @@ function createModel(name, type, opt) {
         process.exit(0);
     }
 
+    return args;
+}
+
+/**
+ *
+ *
+ * @param {*} name
+ * @param {*} type
+ * @param {*} opt
+ * @returns {*}  
+ */
+function createProto(name, type, opt) {
+    const args = parseArgs(name, type);
+    if (!args) {
+        process.exit(0);
+    }
+    args.newName = string.toPascal(name);
+    args.destMap[args.sourcePath] = path.resolve(`${getAppPath()}/proto/`, `${args.newName}.proto`);
+    args.destPath = "";
+
+    args.replaceMap['_CLASS_NAME'] = args.newName;
+
+    args.callBack = function () {
+        log.log();
+        log.log(`You can use koatty 'controller -t grpc ${name}' to create the controller`);
+        log.log();
+        log.warning(`Note: the service '${args.newName}' must be included in the ${args.newName}.proto file`);
+        log.log();
+        log.log();
+    };
     return args;
 }
 

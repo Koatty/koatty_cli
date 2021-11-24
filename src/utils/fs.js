@@ -2,7 +2,7 @@
  * @Author: richen
  * @Date: 2020-12-08 10:42:52
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-09-18 16:57:40
+ * @LastEditTime: 2021-11-24 16:21:39
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -60,6 +60,21 @@ const rmFile = (dest) => new Promise((resolve) => {
 });
 
 /**
+ * write file
+ *
+ * @param {*} filename
+ * @param {*} data
+ */
+const writeFile = (filename, data) => lib.writeFile(filename, data);
+
+/**
+ * read file
+ *
+ * @param {*} filename
+ */
+const readFile = (filename) => fs.readFileSync(filename).toString();
+
+/**
  * create dir
  * @param {string} path dir
  */
@@ -68,10 +83,14 @@ const mkDir = (path) => new Promise((resolve) => {
 });
 
 
+
+
 module.exports = {
     isExist,
     copyFile,
     moveFile,
+    readFile,
+    writeFile,
     rmFile,
     mkDir,
 }

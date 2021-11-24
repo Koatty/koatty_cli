@@ -3,11 +3,11 @@
  * @Usage: 
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2020-12-22 19:57:33
+ * @LastEditTime: 2021-11-21 00:27:00
  */
 
 import { KoattyContext, Middleware, IMiddleware } from 'koatty';
-import { App } from '<Path>/App';
+import { App } from '_SUB_PATH/App';
 
 const defaultOpt = {
     //默认配置项
@@ -15,7 +15,7 @@ const defaultOpt = {
 
 
 @Middleware()
-export class <ClassName> implements IMiddleware {
+export class _CLASS_NAME implements IMiddleware {
     run(options: any, app: App) {
         options = {...defaultOpt, ...options};
         //应用启动执行一次

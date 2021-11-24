@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2021-09-18 17:04:59
+ * @LastEditTime: 2021-11-21 00:27:54
  */
 
 const path = require('path');
@@ -77,8 +77,8 @@ const create = async (projectName, options) => {
         }
         const newName = string.toPascal(projectName);
         const replaceMap = {
-            '<projectName>': projectName,
-            '<ClassName>': newName
+            '_PROJECT_NAME': projectName,
+            '_CLASS_NAME': newName
         };
 
         for (let key in replaceMap) {
