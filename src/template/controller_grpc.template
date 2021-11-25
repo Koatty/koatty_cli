@@ -3,14 +3,14 @@
  * @Usage: 接收处理路由参数
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2021-11-24 17:34:43
+ * @LastEditTime: 2021-11-25 12:56:34
  */
 
 import { KoattyContext, Controller, BaseController, Autowired, RequestMapping, RequestBody } from 'koatty';
 import { App } from '_SUB_PATH/App';
 //_IMPORT_LIST
 
-@Controller('_CLASS_NAME') // Consistent with proto.service name
+@Controller('_NEW') // Consistent with proto.service name
 export class _CLASS_NAME extends BaseController {
   app: App;
   ctx: KoattyContext;

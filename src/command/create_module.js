@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2021-11-24 23:05:25
+ * @LastEditTime: 2021-11-25 12:55:40
  */
 const path = require('path');
 const replace = require('replace');
@@ -236,7 +236,7 @@ function parseGrpcArgs(args) {
                     }
                     return '';
                 });
-                args.createMap[name] = dtoContent.replace(/_CLASS_NAME/g, `${it.name}Dto`).replace(/\/\/_FIELDS/g, props.join("\n"));
+                args.createMap[name] = dtoContent.replace(/_CLASS_NAME/g, `${it.name}Dto`).replace(/\/\/_FIELDS/g, props.join("\n\n"));
             }
         }
     });
@@ -249,7 +249,7 @@ function parseGrpcArgs(args) {
             if (it) {
                 const name = `${destPath}/${it.name}.ts`;
                 let props = [...(it.fields || [])];
-                args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, props.join("\n"));
+                args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, props.join("\n\n"));
             }
         }
     });
@@ -277,6 +277,13 @@ function createController(name, type, opt) {
     if (protocol === "grpc") {
         parseGrpcArgs(args);
         args.destMap = {};
+        if (args.subModule) {
+            args.replaceMap['_NEW'] = `/${string.toPascal(args.subModule)}/${string.toPascal(args.sourceName)}`;
+        } else {
+            args.replaceMap['_NEW'] = `/${string.toPascal(args.sourceName)}`;
+        }
+
+        return args;
     } else if (protocol === "websocket") {
         const sourcePath = path.resolve(templatePath, `controller_ws.template`);
         args.destMap[sourcePath] = args.destMap[args.sourcePath];
