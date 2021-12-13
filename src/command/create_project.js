@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2021-11-21 00:27:54
+ * @LastEditTime: 2021-12-13 16:19:35
  */
 
 const path = require('path');
@@ -90,7 +90,7 @@ const create = async (projectName, options) => {
                 silent: true,
             });
         }
-    } catch (error) {
+    } catch (err) {
         log.error(err && err.message);
         return;
     }

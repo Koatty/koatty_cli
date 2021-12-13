@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2021-11-25 12:55:40
+ * @LastEditTime: 2021-12-13 16:19:15
  */
 const path = require('path');
 const replace = require('replace');
@@ -179,7 +179,7 @@ function parseGrpcArgs(args) {
     const pascalName = string.toPascal(args.sourceName);
     const protoFile = `${getAppPath()}/proto/${pascalName}.proto`
     if (!ufs.isExist(protoFile)) {
-        throw Error(`proto file : ${protoFile} does not exist. Please use the \'koatty proto ${args.sourceName}\' command to create.`);
+        throw Error(`proto file : ${protoFile} does not exist. Please use the 'koatty proto ${args.sourceName}' command to create.`);
     }
     const source = ufs.readFile(protoFile)
     const res = parseProto(source);
