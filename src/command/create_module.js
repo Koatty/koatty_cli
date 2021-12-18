@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2021-12-13 16:19:15
+ * @LastEditTime: 2021-12-18 12:45:15
  */
 const path = require('path');
 const replace = require('replace');
@@ -221,8 +221,24 @@ function parseGrpcArgs(args) {
     const ctlContent = ufs.readFile(path.resolve(templatePath, `controller_grpc.template`));
     args.createMap[args.destPath] = ctlContent.replace(/\/\/_METHOD_LIST/g, methodArr.join("\n")).replace(/\/\/_IMPORT_LIST/g, importArr.join("\n"));
 
-    const fields = parseFields(res);
     const destPath = path.resolve(`${getAppPath()}/dto/`);
+    // enum
+    const values = parseValues(res);
+    const enumContent = ufs.readFile(path.resolve(templatePath, `enum.template`));
+    let enumImports = "";
+    Object.keys(values).map(key => {
+        if (Object.hasOwnProperty.call(values, key)) {
+            const it = values[key];
+            if (it) {
+                const name = `${destPath}/${it.name}.ts`;
+                let props = [...(it.fields || [])];
+                enumImports = `${enumImports}import { ${it.name} } from "./${it.name}";\n`;
+                args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, props.join("\n\n"));
+            }
+        }
+    });
+    // request & reply
+    const fields = parseFields(res);
     const dtoContent = ufs.readFile(path.resolve(templatePath, `dto.template`));
     Object.keys(fields).map(key => {
         if (Object.hasOwnProperty.call(fields, key)) {
@@ -236,23 +252,14 @@ function parseGrpcArgs(args) {
                     }
                     return '';
                 });
-                args.createMap[name] = dtoContent.replace(/_CLASS_NAME/g, `${it.name}Dto`).replace(/\/\/_FIELDS/g, props.join("\n\n"));
+                args.createMap[name] = dtoContent.replace(/_CLASS_NAME/g, `${it.name}Dto`)
+                    .replace(/\/\/_FIELDS/g, props.join("\n\n")
+                        .replace(/\/\/_ENUM_IMPORT/g, enumImports));
             }
         }
     });
 
-    const values = parseValues(res);
-    const enumContent = ufs.readFile(path.resolve(templatePath, `enum.template`));
-    Object.keys(values).map(key => {
-        if (Object.hasOwnProperty.call(values, key)) {
-            const it = values[key];
-            if (it) {
-                const name = `${destPath}/${it.name}.ts`;
-                let props = [...(it.fields || [])];
-                args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, props.join("\n\n"));
-            }
-        }
-    });
+
 
     return args;
 
