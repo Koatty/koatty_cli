@@ -32,7 +32,7 @@ program.version(pkg.version).usage('[command] <options ...>');
 program
     .command('new <projectName>')
     .description('create project')
-    .option('-t, --template <template>', 'create project use custom template')
+    .option('-t, --template <template>', 'create project use custom template: project|middleware|plugin')
     .action((projectName, cmdObj) => {
         create_project(projectName, cleanArgs(cmdObj));
     });

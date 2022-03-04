@@ -3,18 +3,20 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2021-12-18 12:45:15
+ * @LastEditTime: 2022-03-04 12:14:20
  */
 const path = require('path');
 const replace = require('replace');
 const string = require('../utils/sting');
 const log = require('../utils/log');
 const ufs = require('../utils/fs');
-const { LOGO } = require('./config');
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME } = require('./config');
+const template = require('../utils/template');
 const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
 
 const cwd = process.cwd();
-const templatePath = path.dirname(__dirname) + '/template';
+let templatePath = '';
+// const templatePath = path.dirname(__dirname) + '/template';
 /**
  * check app
  * @param  {String}  path []
@@ -55,6 +57,14 @@ module.exports = async function (name, type, opt) {
         log.error(`Please execute "koatty ${type} ${name}Name" after enter Koatty project root directory.`);
         return;
     }
+    // template dir
+    templatePath = await template.loadAndUpdateTemplate(CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME);
+    if (!templatePath) {
+        log.error(`Create module fail, can't find template [${CLI_TEMPLATE_URL}], please check network!`);
+        return;
+    }
+    // add prefix
+    templatePath = path.resolve(templatePath, "src");
 
     let args = {};
     try {

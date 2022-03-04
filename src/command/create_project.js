@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2021-12-13 16:19:35
+ * @LastEditTime: 2022-03-04 10:18:12
  */
 
 const path = require('path');
@@ -15,8 +15,8 @@ const template = require('../utils/template');
 const {
     TEMPLATE_URL,
     TEMPLATE_NAME,
-    COMP_TEMPLATE_NAME,
-    COMP_TEMPLATE_URL,
+    COM_TEMPLATE_NAME,
+    COM_TEMPLATE_URL,
     LOGO,
 } = require('./config');
 
@@ -30,12 +30,12 @@ const supportMap = {
         url: TEMPLATE_URL,
     },
     middleware: {
-        fullName: COMP_TEMPLATE_NAME,
-        url: COMP_TEMPLATE_URL,
+        fullName: COM_TEMPLATE_NAME,
+        url: COM_TEMPLATE_URL,
     },
     plugin: {
-        fullName: COMP_TEMPLATE_NAME,
-        url: COMP_TEMPLATE_URL,
+        fullName: COM_TEMPLATE_NAME,
+        url: COM_TEMPLATE_URL,
     },
 };
 
