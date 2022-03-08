@@ -2,7 +2,7 @@
  * @Author: richen
  * @Date: 2020-12-08 10:48:45
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-03-04 17:44:34
+ * @LastEditTime: 2022-03-08 15:01:36
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -82,6 +82,7 @@ const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = ""
     log.log(`Start download template [${templateName}]`);
     try {
         loading.start();
+        let flag = false;
         // check local template
         if (isExist(templateDir)) {
             // update local template
@@ -93,9 +94,12 @@ const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = ""
                 await pullTemplate(templateUrl, branchName, templateDir).then(() => {
                     log.info(`Update template [${templateName}] success!`);
                 }).catch(err => {
-                    log.error(`Update template [${templateName}] fail: ${err.stack}`);
+                    flag = true;
+                    // log.error(`Update template [${templateName}] fail: ${err.stack}`);
                 });
-                return templateDir;
+                if (!flag) {
+                    return templateDir;
+                }
             }
         }
 

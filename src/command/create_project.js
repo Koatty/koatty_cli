@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2022-03-04 18:13:27
+ * @LastEditTime: 2022-03-08 14:52:56
  */
 
 const path = require('path');
@@ -59,7 +59,6 @@ const create = async (projectName, options) => {
         log.error(`Can't find template [${opts.template}], please check the template name, [project]、[middleware] and [plugin] is supported currently.`);
         return;
     }
-
     const templateDir = await template.loadAndUpdateTemplate(temp.url, temp.fullName);
 
     if (!templateDir) {
