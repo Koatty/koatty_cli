@@ -1,11 +1,12 @@
 {
   "name": "koatty_cli",
-  "version": "3.6.2",
+  "version": "3.7.0",
   "description": "Koatty command line tool.",
   "scripts": {
     "eslint": "eslint --ext .js ./src",
     "prepublishOnly": "npm test",
     "release": "npm run prepublishOnly && standard-version",
+    "release:minor": "npm run release -- --release-as minor",
     "pub": "git push --follow-tags origin && npm publish",
     "test": "npm run eslint && jest --rootDir ./test --passWithNoTests"
   },
