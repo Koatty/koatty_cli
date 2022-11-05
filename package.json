@@ -32,7 +32,7 @@
   "devDependencies": {
     "eslint": "^8.x.x",
     "eslint-plugin-jest": "^25.x.x",
-    "jest": "^27.x.x",
+    "jest": "^29.x.x",
     "standard-version": "^9.x.x"
   },
   "dependencies": {
@@ -40,9 +40,9 @@
     "cli-spinner": "^0.2.10",
     "commander": "^3.0.2",
     "del": "^6.1.1",
-    "isomorphic-git": "^1.17.2",
+    "isomorphic-git": "^1.21.0",
     "koatty_lib": "^1.2.11",
-    "koatty_proto": "^1.1.8",
+    "koatty_proto": "^1.1.9",
     "ncp": "^2.0.0",
     "replace": "^1.2.1",
     "update-notifier": "^5.1.0"

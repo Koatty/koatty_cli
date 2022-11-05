@@ -2,7 +2,7 @@
  * @Author: richen
  * @Date: 2020-12-08 10:42:52
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-03-04 18:08:02
+ * @LastEditTime: 2022-11-04 14:48:30
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -17,12 +17,12 @@ const lib = require('koatty_lib');
  * @param {string} path 
  */
 const isExist = (path) => {
-    try {
-        fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
-        return true;
-    } catch (err) {
-        return false;
-    }
+  try {
+    fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
 
 /**
@@ -31,15 +31,15 @@ const isExist = (path) => {
  * @param {string} dest file destination
  */
 const copyFile = async function (source, dest) {
-    const destDir = path.dirname(dest);
-    if (!isExist(destDir)) {
-        await lib.mkDir(destDir);
-    }
-    return new Promise(function (fulfill, reject) {
-        fs.copyFile(source, dest, COPYFILE_EXCL, (e) => {
-            return e ? reject(e) : fulfill(null);
-        });
+  const destDir = path.dirname(dest);
+  if (!isExist(destDir)) {
+    await lib.mkDir(destDir);
+  }
+  return new Promise(function (fulfill, reject) {
+    fs.copyFile(source, dest, COPYFILE_EXCL, (e) => {
+      return e ? reject(e) : fulfill(null);
     });
+  });
 };
 
 /**
@@ -48,11 +48,11 @@ const copyFile = async function (source, dest) {
  * @param {string} dest file destination
  */
 const moveFile = async (source, dest) => {
-    const destDir = path.dirname(dest);
-    if (!isExist(destDir)) {
-        await mkDir(destDir);
-    }
-    return lib.reFile(source, dest);
+  const destDir = path.dirname(dest);
+  if (!isExist(destDir)) {
+    await mkDir(destDir);
+  }
+  return lib.reFile(source, dest);
 };
 
 /**
@@ -91,12 +91,12 @@ const rmDir = (path) => lib.rmDir(path, true);
 
 
 module.exports = {
-    isExist,
-    copyFile,
-    moveFile,
-    readFile,
-    writeFile,
-    rmFile,
-    mkDir,
-    rmDir,
+  isExist,
+  copyFile,
+  moveFile,
+  readFile,
+  writeFile,
+  rmFile,
+  mkDir,
+  rmDir,
 }

@@ -2,7 +2,7 @@
  * @Author: richen
  * @Date: 2020-12-08 10:48:45
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-03-08 15:01:36
+ * @LastEditTime: 2022-11-04 14:49:02
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -27,9 +27,9 @@ const osTempDir = os.tmpdir();
  * @returns {promise}
  */
 const pullTemplate = (url, ref, dir) => git.fastForward({
-    fs, http, url, dir, ref,
-    gitdir: path.join(dir, '.git'),
-    singleBranch: true,
+  fs, http, url, dir, ref,
+  gitdir: path.join(dir, '.git'),
+  singleBranch: true,
 });
 
 /**
@@ -40,8 +40,8 @@ const pullTemplate = (url, ref, dir) => git.fastForward({
  * @returns {promise}
  */
 const cloneTemplate = (url, ref, dir) => git.clone({
-    fs, http, url, dir, ref,
-    singleBranch: true,
+  fs, http, url, dir, ref,
+  singleBranch: true,
 });
 
 /**
@@ -52,10 +52,10 @@ const cloneTemplate = (url, ref, dir) => git.clone({
  */
 // @ts-ignore
 const copyTemplate = (templatePath, destPath) => new Promise((resolve, reject) =>
-    cpy(templatePath, destPath, (err) => {
-        if (err) reject(err);
-        resolve();
-    }));
+  cpy(templatePath, destPath, (err) => {
+    if (err) reject(err);
+    resolve();
+  }));
 
 /**
  * load remote template and update local template
@@ -65,57 +65,57 @@ const copyTemplate = (templatePath, destPath) => new Promise((resolve, reject) =
  * @returns {Promise<any>} local template path
  */
 const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = "") => {
-    if (templateDir == "") {
-        templateDir = path.join(osTempDir, templateName);
-    }
+  if (templateDir == "") {
+    templateDir = path.join(osTempDir, templateName);
+  }
 
-    let branchName = "main";
-    if (templateUrl.includes("#")) {
-        const urlArr = templateUrl.split('#');
-        if (urlArr.length == 2) {
-            templateUrl = urlArr[0] || "";
-            branchName = urlArr[1] || "main";
+  let branchName = "main";
+  if (templateUrl.includes("#")) {
+    const urlArr = templateUrl.split('#');
+    if (urlArr.length == 2) {
+      templateUrl = urlArr[0] || "";
+      branchName = urlArr[1] || "main";
+    }
+  }
+
+  // download template
+  log.log(`Start download template [${templateName}]`);
+  try {
+    loading.start();
+    let flag = false;
+    // check local template
+    if (isExist(templateDir)) {
+      // update local template
+      // execSync(`rm -rf ${templateDir}`);
+      // execSync(`mv ${newTemplateDir} ${templateDir}`);
+      if (!isExist(path.join(templateDir, '.git'))) {
+        await del(templateDir, { force: true });
+      } else {
+        await pullTemplate(templateUrl, branchName, templateDir).then(() => {
+          log.info(`Update template [${templateName}] success!`);
+        }).catch(err => {
+          flag = true;
+          // log.error(`Update template [${templateName}] fail: ${err.stack}`);
+        });
+        if (!flag) {
+          return templateDir;
         }
+      }
     }
 
-    // download template
-    log.log(`Start download template [${templateName}]`);
-    try {
-        loading.start();
-        let flag = false;
-        // check local template
-        if (isExist(templateDir)) {
-            // update local template
-            // execSync(`rm -rf ${templateDir}`);
-            // execSync(`mv ${newTemplateDir} ${templateDir}`);
-            if (!isExist(path.join(templateDir, '.git'))) {
-                await del(templateDir, { force: true });
-            } else {
-                await pullTemplate(templateUrl, branchName, templateDir).then(() => {
-                    log.info(`Update template [${templateName}] success!`);
-                }).catch(err => {
-                    flag = true;
-                    // log.error(`Update template [${templateName}] fail: ${err.stack}`);
-                });
-                if (!flag) {
-                    return templateDir;
-                }
-            }
-        }
-
-        // clone template
-        await cloneTemplate(templateUrl, branchName, templateDir);
-        log.info(`Download template [${templateName}] success!`);
-        return templateDir;
-    } catch (error) {
-        log.error(`Download template [${templateName}] fail: ${error.stack}`);
-    } finally {
-        loading.stop();
-    }
+    // clone template
+    await cloneTemplate(templateUrl, branchName, templateDir);
+    log.info(`Download template [${templateName}] success!`);
+    return templateDir;
+  } catch (error) {
+    log.error(`Download template [${templateName}] fail: ${error.stack}`);
+  } finally {
+    loading.stop();
+  }
 };
 
 module.exports = {
-    pullTemplate,
-    copyTemplate,
-    loadAndUpdateTemplate,
+  pullTemplate,
+  copyTemplate,
+  loadAndUpdateTemplate,
 };
