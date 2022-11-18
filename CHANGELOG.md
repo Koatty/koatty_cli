@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.7.1](https://github.com/koatty/koatty_cli/compare/v3.7.0...v3.7.1) (2022-11-18)
+
+
+### Bug Fixes
+
+* change logo ([d1ed827](https://github.com/koatty/koatty_cli/commit/d1ed827cc4603cd410081907155e4c0fc726881e))
+
 ## [3.7.0](https://github.com/koatty/koatty_cli/compare/v3.6.2...v3.7.0) (2022-11-05)
 
 
