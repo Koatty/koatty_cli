@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2022-11-05 11:41:49
+ * @LastEditTime: 2023-01-06 15:07:50
  */
 const path = require('path');
 const replace = require('replace');
@@ -158,8 +158,11 @@ function parseArgs(name, type) {
   } else {
     sourceName = subNames[0];
   }
-  const newName = `${string.toPascal(sourceName)}${string.toPascal(type)}`;
-  const destPath = path.resolve(targetDir, `${newName}.ts`);
+  let newName = `${string.toPascal(sourceName)}${string.toPascal(type)}.ts`;
+  if (type == "proto") {
+    newName = `${string.toPascal(sourceName)}.proto`;
+  }
+  const destPath = path.resolve(targetDir, `${newName}`);
 
   // replace map
   const replaceMap = {
@@ -168,8 +171,9 @@ function parseArgs(name, type) {
     '_CLASS_NAME': newName
   };
 
+
   //if target file is exist, ignore it
-  if (ufs.isExist(destPath) && type != "controller") {
+  if (ufs.isExist(destPath)) {
     log.error('Module existed' + ' : ' + destPath);
     return;
   }
@@ -464,3 +468,4 @@ function createDefault(name, type, opt) {
   }
   return args;
 }
+
