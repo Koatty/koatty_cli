@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.7.2](https://github.com/koatty/koatty_cli/compare/v3.7.1...v3.7.2) (2023-01-06)
+
+
+### Bug Fixes
+
+* 修复proto扩展名错误 ([a32ebe6](https://github.com/koatty/koatty_cli/commit/a32ebe6cbba5d3d77a6a7b86d0ad41494aea00b0))
+* 修复proto文件命名 ([3189a4d](https://github.com/koatty/koatty_cli/commit/3189a4d9203f910bda671bb68b06dfec1ccec509))
+
 ### [3.7.1](https://github.com/koatty/koatty_cli/compare/v3.7.0...v3.7.1) (2022-11-18)
 
 
