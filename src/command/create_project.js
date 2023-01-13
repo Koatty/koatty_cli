@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2022-11-05 11:51:07
+ * @LastEditTime: 2023-01-13 16:57:20
  */
 
 const path = require('path');
@@ -94,6 +94,8 @@ const create = async (projectName, options) => {
     ufs.writeFile(`${projectDir}/.koattysrc`, JSON.stringify({
       projectName,
     }));
+    console.log(`${projectDir}/.git`);
+    await ufs.rmDir(`${projectDir}/.git`);
   } catch (err) {
     log.error(err && err.message);
     return;
@@ -108,7 +110,7 @@ const create = async (projectName, options) => {
   log.log();
 
   log.log('  Install dependencies:');
-  log.log('  $ yarn or npm install');
+  log.log('  $ npm install');
   log.log();
 
   if (opts.template == 'project') {
