@@ -278,24 +278,14 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@grpc/grpc-js@^1.5.5":
+"@grpc/grpc-js@^1.8.11":
   version "1.8.17"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.8.17.tgz#a3a2f826fc033eae7d2f5ee41e0ab39cee948838"
   dependencies:
     "@grpc/proto-loader" "^0.7.0"
     "@types/node" ">=12.12.47"
 
-"@grpc/proto-loader@^0.6.9":
-  version "0.6.9"
-  resolved "https://mirrors.tencent.com/npm/@grpc%2fproto-loader/-/proto-loader-0.6.9.tgz"
-  dependencies:
-    "@types/long" "^4.0.1"
-    lodash.camelcase "^4.3.0"
-    long "^4.0.0"
-    protobufjs "^6.10.0"
-    yargs "^16.2.0"
-
-"@grpc/proto-loader@^0.7.0":
+"@grpc/proto-loader@^0.7.0", "@grpc/proto-loader@^0.7.5":
   version "0.7.7"
   resolved "https://registry.yarnpkg.com/@grpc/proto-loader/-/proto-loader-0.7.7.tgz#d33677a77eea8407f7c66e2abd97589b60eb4b21"
   dependencies:
@@ -2989,13 +2979,13 @@ koatty_lib@^1.2.10, koatty_lib@^1.x.x:
     tslib "^2.3.1"
 
 koatty_proto@^1.1.6:
-  version "1.1.6"
-  resolved "https://mirrors.tencent.com/npm/koatty_proto/-/koatty_proto-1.1.6.tgz"
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/koatty_proto/-/koatty_proto-1.1.11.tgz#4348a241bec17686b873b53fe315f234d4a1a7c0"
   dependencies:
-    "@grpc/grpc-js" "^1.5.5"
-    "@grpc/proto-loader" "^0.6.9"
+    "@grpc/grpc-js" "^1.8.11"
+    "@grpc/proto-loader" "^0.7.5"
     koatty_lib "^1.x.x"
-    protobufjs "^6.11.2"
+    protobufjs "^7.2.2"
 
 latest-version@^5.1.0:
   version "5.1.0"
@@ -3557,25 +3547,7 @@ proto-list@~1.2.1:
   version "1.2.4"
   resolved "https://registry.npmjs.org/proto-list/-/proto-list-1.2.4.tgz"
 
-protobufjs@^6.10.0, protobufjs@^6.11.2:
-  version "6.11.3"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.3.tgz#637a527205a35caa4f3e2a9a4a13ddffe0e7af74"
-  dependencies:
-    "@protobufjs/aspromise" "^1.1.2"
-    "@protobufjs/base64" "^1.1.2"
-    "@protobufjs/codegen" "^2.0.4"
-    "@protobufjs/eventemitter" "^1.1.0"
-    "@protobufjs/fetch" "^1.1.0"
-    "@protobufjs/float" "^1.0.2"
-    "@protobufjs/inquire" "^1.1.0"
-    "@protobufjs/path" "^1.1.2"
-    "@protobufjs/pool" "^1.1.0"
-    "@protobufjs/utf8" "^1.1.0"
-    "@types/long" "^4.0.1"
-    "@types/node" ">=13.7.0"
-    long "^4.0.0"
-
-protobufjs@^7.0.0:
+protobufjs@^7.0.0, protobufjs@^7.2.2:
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.2.4.tgz#3fc1ec0cdc89dd91aef9ba6037ba07408485c3ae"
   dependencies:
