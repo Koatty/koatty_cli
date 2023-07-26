@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.2](https://github.com/koatty/koatty_cli/compare/v3.8.1...v3.8.2) (2023-07-26)
+
+
+### Bug Fixes
+
+* deps ([9c5944b](https://github.com/koatty/koatty_cli/commit/9c5944b14447d5ba8c8d12b296488b8208aa3025))
+* upgrade ver ([25cc731](https://github.com/koatty/koatty_cli/commit/25cc7311fcc67b0bb5d60cd654b1ae967569ae89))
+
 ### [3.6.1](https://github.com/koatty/koatty_cli/compare/v3.8.1...v3.6.1) (2023-07-26)
 
 
