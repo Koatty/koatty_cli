@@ -51,7 +51,7 @@ program
   .command('middleware <middlewareName>')
   .description('create middleware class')
   .action((middlewareName) => {
-    create_module(middlewareName, 'middleware');
+    create_module(middlewareName, 'middleware', undefined);
   });
 
 
@@ -60,7 +60,7 @@ program
   .command('service <serviceName>')
   .description('create service class')
   .action((serviceName) => {
-    create_module(serviceName, 'service');
+    create_module(serviceName, 'service', undefined);
   });
 
 // create plugin
@@ -68,7 +68,7 @@ program
   .command('plugin <pluginName>')
   .description('create plugin class')
   .action((pluginName) => {
-    create_module(pluginName, 'plugin');
+    create_module(pluginName, 'plugin', undefined);
   });
 
 
@@ -77,7 +77,7 @@ program
   .command('aspect <aspectName>')
   .description('create aspect class')
   .action((aspectName) => {
-    create_module(aspectName, 'aspect');
+    create_module(aspectName, 'aspect', undefined);
   });
 
 // create dto class
@@ -85,7 +85,7 @@ program
   .command('dto <dtoName>')
   .description('create dto class')
   .action((dtoName) => {
-    create_module(dtoName, 'dto');
+    create_module(dtoName, 'dto', undefined);
   });
 
 // create protobuf file
@@ -93,7 +93,7 @@ program
   .command('proto <protoName>')
   .description('create proto file')
   .action((protoName) => {
-    create_module(protoName, 'proto');
+    create_module(protoName, 'proto', undefined);
   });
 
 
