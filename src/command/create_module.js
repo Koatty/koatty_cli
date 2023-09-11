@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2023-01-06 17:11:46
+ * @LastEditTime: 2023-09-11 11:26:33
  */
 const path = require('path');
 const replace = require('replace');
@@ -82,6 +82,9 @@ module.exports = async function (name, type, opt) {
       case 'plugin':
         args = createPlugin(name, type, opt);
         break;
+      case 'service':
+        args = createService(name, type, opt);
+        break;
       default:
         args = createDefault(name, type, opt);
         break;
@@ -142,7 +145,7 @@ module.exports = async function (name, type, opt) {
  * @returns {*}  
  */
 function parseArgs(name, type) {
-  let targetDir = path.resolve(`${getAppPath()}/${type}/`);
+  let destPath = path.resolve(`${getAppPath()}/${type}/`);
 
   const sourcePath = path.resolve(templatePath, `${type}.template`);
   if (!ufs.isExist(sourcePath)) {
@@ -154,36 +157,39 @@ function parseArgs(name, type) {
   if (subNames.length > 1) {
     subModule = subNames[0];
     sourceName = subNames[1];
-    targetDir = `${targetDir}/${subModule}`;
+    destPath = `${destPath}/${subModule}`;
   } else {
     sourceName = subNames[0];
   }
   let subFix = ".ts"
   let newName = `${string.toPascal(sourceName)}${string.toPascal(type)}`;
+  let camelName = `${sourceName}${string.toPascal(type)}`;
   if (type == "proto") {
     subFix = ".proto"
     newName = `${string.toPascal(sourceName)}`;
+    camelName = `${string.toPascal(sourceName)}`;
   }
-  const destPath = path.resolve(targetDir, `${newName}${subFix}`);
+  const destFile = path.resolve(destPath, `${newName}${subFix}`);
 
   // replace map
   const replaceMap = {
     '_SUB_PATH': subModule ? '../..' : '..',
     '_NEW': sourceName,
-    '_CLASS_NAME': newName
+    '_CLASS_NAME': newName,
+    '_CAMEL_NAME': camelName
   };
 
 
   //if target file is exist, ignore it
-  if (ufs.isExist(destPath) && type != "controller") {
-    log.error('Module existed' + ' : ' + destPath);
+  if (ufs.isExist(destFile) && type != "controller") {
+    log.error('Module existed' + ' : ' + destFile);
     return;
   }
 
   const destMap = {
-    [sourcePath]: destPath,
+    [sourcePath]: destFile,
   };
-  return { sourceName, sourcePath, newName, subModule, destMap, replaceMap, destPath };
+  return { sourceName, sourcePath, newName, subModule, destMap, replaceMap, destPath, destFile };
 }
 
 /**
@@ -212,8 +218,8 @@ function parseGrpcArgs(args) {
   let methodStr = ufs.readFile(path.resolve(templatePath, `controller_grpc_method.template`));
   let importStr = ufs.readFile(path.resolve(templatePath, `controller_grpc_import.template`));
   let exCtlContent = "";
-  if (ufs.isExist(args.destPath)) {
-    exCtlContent = ufs.readFile(args.destPath);
+  if (ufs.isExist(args.destFile)) {
+    exCtlContent = ufs.readFile(args.destFile);
   }
   Object.keys(service).map(key => {
     if (Object.hasOwnProperty.call(service, key)) {
@@ -262,7 +268,7 @@ function parseGrpcArgs(args) {
     exCtlContent = exCtlContent.replace(new RegExp(GRPC_METHOD, "g"), methodArr.join("\n"));
   }
 
-  args.createMap[args.destPath] = exCtlContent;
+  args.createMap[args.destFile] = exCtlContent;
 
   const destPath = path.resolve(`${getAppPath()}/dto/`);
   // enum
@@ -429,7 +435,7 @@ function createModel(name, type, opt) {
     const newName = `${string.toPascal(orm)}Plugin.ts`
     const destPath = path.resolve(`${getAppPath()}/plugin/${newName}`);
     if (!ufs.isExist(destPath)) {
-      args.destMap[tplPath] = path.resolve(`${getAppPath()}/plugin/`, newName);
+      args.destMap[tplPath] = destPath;
     }
 
     args.callBack = function () {
@@ -454,6 +460,40 @@ function createModel(name, type, opt) {
 
   return args;
 }
+
+/**
+ *
+ *
+ * @param {*} name
+ * @param {*} type
+ * @param {*} opt
+ * @returns {*}  
+ */
+function createService(name, type, opt) {
+  const args = parseArgs(name, type);
+  if (!args) {
+    process.exit(0);
+  }
+
+  const sourcePath = path.resolve(templatePath, `service.template`);
+  const serviceName = `${args.newName}.ts`;
+  const serviceDest = path.resolve(`${args.destPath}/impl`, serviceName);
+  if (!ufs.isExist(serviceDest)) {
+    args.destMap[sourcePath] = serviceDest;
+  }
+  // args.destMap[args.sourcePath] = "";
+
+  const tplPath = path.resolve(templatePath, `service.interface.template`);
+  const newName = `I${args.newName}.ts`;
+  const destPath = path.resolve(args.destPath, newName);
+  if (!ufs.isExist(destPath)) {
+    args.destMap[tplPath] = destPath;
+  }
+
+
+  return args;
+}
+
 
 /**
  *
