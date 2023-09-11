@@ -88,6 +88,14 @@ program
     create_module(dtoName, 'dto', undefined);
   });
 
+// create exception class
+program
+  .command('exception <dtoName>')
+  .description('create exception class')
+  .action((dtoName) => {
+    create_module(dtoName, 'exception', undefined);
+  });
+
 // create protobuf file
 program
   .command('proto <protoName>')
