@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2023-09-11 11:26:33
+ * @LastEditTime: 2023-09-11 11:46:30
  */
 const path = require('path');
 const replace = require('replace');
@@ -157,7 +157,7 @@ function parseArgs(name, type) {
   if (subNames.length > 1) {
     subModule = subNames[0];
     sourceName = subNames[1];
-    destPath = `${destPath}/${subModule}`;
+    destPath = `${destPath}/${subModule.toLowerCase()}`;
   } else {
     sourceName = subNames[0];
   }
@@ -178,6 +178,9 @@ function parseArgs(name, type) {
     '_CLASS_NAME': newName,
     '_CAMEL_NAME': camelName
   };
+  if (type == "service") {
+    replaceMap['_SUB_PATH'] = subModule ? '../../..' : '../..';
+  }
 
 
   //if target file is exist, ignore it
