@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.10.0](https://github.com/koatty/koatty_cli/compare/v3.9.4...v3.10.0) (2023-11-10)
+
+
+### Bug Fixes
+
+* add exception ([db5d435](https://github.com/koatty/koatty_cli/commit/db5d4351674a4dc929fa06b54ace3a69a3ec8c38))
+
 ### [3.9.4](https://github.com/koatty/koatty_cli/compare/v3.9.3...v3.9.4) (2023-09-11)
 
 
