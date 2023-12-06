@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2023-09-11 11:46:30
+ * @LastEditTime: 2023-12-06 20:58:26
  */
 const path = require('path');
 const replace = require('replace');
@@ -430,26 +430,36 @@ function createModel(name, type, opt) {
   }
   const orm = opt.orm || 'typeorm';
   if (orm === 'typeorm') {
-    const sourcePath = path.resolve(templatePath, `model.${orm}.template`);
+    const sourcePath = path.resolve(templatePath, `model.${orm}.new.template`);
     args.destMap[sourcePath] = args.destMap[args.sourcePath];
     args.destMap[args.sourcePath] = "";
 
-    const tplPath = path.resolve(templatePath, `plugin.${orm}.template`);
-    const newName = `${string.toPascal(orm)}Plugin.ts`
-    const destPath = path.resolve(`${getAppPath()}/plugin/${newName}`);
+    const entityPath = path.resolve(templatePath, `entity.${orm}.template`);
+    const entityName = `${string.toPascal(args.sourceName)}Entity`;
+    const entityFile = `${entityName}.ts`;
+    const entityDest = path.resolve(`${args.destPath}`, entityFile);
+    if (!ufs.isExist(entityDest)) {
+      args.destMap[entityPath] = entityDest;
+    }
+    args.replaceMap['_ENTITY_NAME'] = entityName;
+
+    const pluginPath = path.resolve(templatePath, `plugin.${orm}.template`);
+    const pluginName = `${string.toPascal(orm)}Plugin`;
+    const pluginFile = `${pluginName}.ts`;
+    const destPath = path.resolve(`${getAppPath()}/plugin/${pluginFile}`);
     if (!ufs.isExist(destPath)) {
-      args.destMap[tplPath] = destPath;
+      args.destMap[pluginPath] = destPath;
     }
 
     args.callBack = function () {
       log.log();
-      log.warning('TypeORM used the koatty_typeorm plugin:');
+      log.warning('to used the koatty_typeorm plugin:');
       log.log();
       log.log('https://github.com/Koatty/koatty_typeorm');
       log.log();
       log.log('please modify /app/config/plugin.ts file:');
       log.log();
-      log.log(`list: [..., "TypeormPlugin"] //加载的插件列表,执行顺序按照数组元素顺序`);
+      log.log(`list: [..., "TypeormPlugin"]`);
       log.log('config: { //插件配置 ');
       log.log(`   "TypeormPlugin":{ //todo }`);
       log.log('}');
