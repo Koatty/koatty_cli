@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2023-12-06 21:07:53
+ * @LastEditTime: 2023-12-29 07:52:01
  */
 const path = require('path');
 const replace = require('replace');
@@ -437,7 +437,7 @@ function createModel(name, type, opt) {
     const entityPath = path.resolve(templatePath, `entity.${orm}.template`);
     const entityName = `${string.toPascal(args.sourceName)}Entity`;
     const entityFile = `${entityName}.ts`;
-    const entityDest = path.resolve(`${args.destPath}`, entityFile);
+    const entityDest = path.resolve(`${args.destPath}/entity`, entityFile);
     if (!ufs.isExist(entityDest)) {
       args.destMap[entityPath] = entityDest;
     }
