@@ -2,7 +2,7 @@
  * @Author: richen
  * @Date: 2020-12-08 10:48:45
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-11-04 14:49:02
+ * @LastEditTime: 2024-01-04 05:31:56
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
@@ -54,7 +54,7 @@ const cloneTemplate = (url, ref, dir) => git.clone({
 const copyTemplate = (templatePath, destPath) => new Promise((resolve, reject) =>
   cpy(templatePath, destPath, (err) => {
     if (err) reject(err);
-    resolve();
+    resolve(null);
   }));
 
 /**

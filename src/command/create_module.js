@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2023-12-29 07:52:01
+ * @LastEditTime: 2024-01-04 06:56:42
  */
 const path = require('path');
 const replace = require('replace');
@@ -14,6 +14,7 @@ const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, GRPC_IMPORT, GRPC_METHOD } = 
 const template = require('../utils/template');
 const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
 const { regex } = require('replace/bin/shared-options');
+const { processVer } = require('../utils/version');
 
 const cwd = process.cwd();
 let templatePath = '';
@@ -58,10 +59,13 @@ module.exports = async function (name, type, opt) {
     log.error(`Please execute "koatty ${type} ${name}Name" after enter Koatty project root directory.`);
     return;
   }
+
+  // process ver
+  const templateGit = processVer(CLI_TEMPLATE_URL);
   // template dir
-  templatePath = await template.loadAndUpdateTemplate(CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME);
+  templatePath = await template.loadAndUpdateTemplate(templateGit, CLI_TEMPLATE_NAME);
   if (!templatePath) {
-    log.error(`Create module fail, can't find template [${CLI_TEMPLATE_URL}], please check network!`);
+    log.error(`Create module fail, can't find template [${templateGit}], please check network!`);
     return;
   }
   // add prefix
@@ -430,7 +434,7 @@ function createModel(name, type, opt) {
   }
   const orm = opt.orm || 'typeorm';
   if (orm === 'typeorm') {
-    const sourcePath = path.resolve(templatePath, `model.${orm}.new.template`);
+    const sourcePath = path.resolve(templatePath, `model.${orm}.template`);
     args.destMap[sourcePath] = args.destMap[args.sourcePath];
     args.destMap[args.sourcePath] = "";
 
@@ -490,19 +494,18 @@ function createService(name, type, opt) {
 
   const sourcePath = path.resolve(templatePath, `service.template`);
   const serviceName = `${args.newName}.ts`;
-  const serviceDest = path.resolve(`${args.destPath}/impl`, serviceName);
+  const serviceDest = path.resolve(`${args.destPath}`, serviceName);
   if (!ufs.isExist(serviceDest)) {
     args.destMap[sourcePath] = serviceDest;
   }
   // args.destMap[args.sourcePath] = "";
 
-  const tplPath = path.resolve(templatePath, `service.interface.template`);
-  const newName = `I${args.newName}.ts`;
-  const destPath = path.resolve(args.destPath, newName);
-  if (!ufs.isExist(destPath)) {
-    args.destMap[tplPath] = destPath;
-  }
-
+  // const tplPath = path.resolve(templatePath, `service.interface.template`);
+  // const newName = `I${args.newName}.ts`;
+  // const destPath = path.resolve(args.destPath, newName);
+  // if (!ufs.isExist(destPath)) {
+  //   args.destMap[tplPath] = destPath;
+  // }
 
   return args;
 }

@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2023-01-13 16:57:20
+ * @LastEditTime: 2024-01-04 05:41:47
  */
 
 const path = require('path');
@@ -12,6 +12,7 @@ const string = require('../utils/sting');
 const log = require('../utils/log');
 const ufs = require('../utils/fs');
 const template = require('../utils/template');
+
 const {
   TEMPLATE_URL,
   TEMPLATE_NAME,
@@ -19,6 +20,7 @@ const {
   COM_TEMPLATE_URL,
   LOGO,
 } = require('./config');
+const { processVer } = require('../utils/version');
 
 const defaultOptions = {
   template: 'project',
@@ -40,6 +42,7 @@ const supportMap = {
 };
 
 
+
 const create = async (projectName, options) => {
   log.info('\n Welcome to use Koatty!');
   log.info(LOGO);
@@ -59,6 +62,8 @@ const create = async (projectName, options) => {
     log.error(`Can't find template [${opts.template}], please check the template name, [project]、[middleware] and [plugin] is supported currently.`);
     return;
   }
+  // process ver
+  temp.url = processVer(temp.url);
   const templateDir = await template.loadAndUpdateTemplate(temp.url, temp.fullName);
 
   if (!templateDir) {
