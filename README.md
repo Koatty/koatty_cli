@@ -14,7 +14,6 @@ yarn install  // or npm i
 
 npm start
 ```
-
 ## Create a module in the koatty project
 
 * 1.Create a Controller
@@ -70,7 +69,7 @@ kt aspect test
 ```js
 @Controller()
 @BeforeEach("TestAspect")  //类的每一个方法执行之前执行
-export class TestController extends BaseController {
+export class TestController {
     app: App;
 
     @RequestMapping("/test", RequestMethod.ALL)
@@ -79,7 +78,6 @@ export class TestController extends BaseController {
         const info = await this.testService.test();
         return this.body(info);
     }
-
 }
 
 ```
@@ -110,7 +108,7 @@ export class TestDTO {
 
 ```js
 @Controller()
-export class TestController extends BaseController {
+export class TestController {
     app: App;
 
     @RequestMapping("/test", RequestMethod.ALL)
@@ -119,7 +117,6 @@ export class TestController extends BaseController {
         const info = await this.testService.test();
         return this.body(info);
     }
-
 }
 
 ```
