@@ -59,8 +59,12 @@ program
 program
   .command('service <serviceName>')
   .description('create service class')
-  .action((serviceName) => {
-    create_module(serviceName, 'service', undefined);
+  .option(
+    '-i, --interface',
+    'create service\'s and service interface, default false.'
+  )
+  .action((serviceName, cmdObj) => {
+    create_module(serviceName, 'service', cleanArgs(cmdObj));
   });
 
 // create plugin

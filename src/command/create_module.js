@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2024-01-04 06:56:42
+ * @LastEditTime: 2024-01-07 14:28:09
  */
 const path = require('path');
 const replace = require('replace');
@@ -182,10 +182,6 @@ function parseArgs(name, type) {
     '_CLASS_NAME': newName,
     '_CAMEL_NAME': camelName
   };
-  if (type == "service") {
-    replaceMap['_SUB_PATH'] = subModule ? '../../..' : '../..';
-  }
-
 
   //if target file is exist, ignore it
   if (ufs.isExist(destFile) && type != "controller") {
@@ -492,20 +488,26 @@ function createService(name, type, opt) {
     process.exit(0);
   }
 
-  const sourcePath = path.resolve(templatePath, `service.template`);
+  let sourcePath = path.resolve(templatePath, `service.template`);
   const serviceName = `${args.newName}.ts`;
-  const serviceDest = path.resolve(`${args.destPath}`, serviceName);
+  let serviceDest = path.resolve(`${args.destPath}`, serviceName);
+
+  if (opt.interface == true) {
+    args.replaceMap['_SUB_PATH'] = args.subModule ? '../../..' : '../..';
+    serviceDest = path.resolve(`${args.destPath}/impl`, serviceName);
+    sourcePath = path.resolve(templatePath, `service.impl.template`);
+
+    args.destMap[args.sourcePath] = "";
+    const tplPath = path.resolve(templatePath, `service.interface.template`);
+    const newName = `I${args.newName}.ts`;
+    const destPath = path.resolve(args.destPath, newName);
+    if (!ufs.isExist(destPath)) {
+      args.destMap[tplPath] = destPath;
+    }
+  }
   if (!ufs.isExist(serviceDest)) {
     args.destMap[sourcePath] = serviceDest;
   }
-  // args.destMap[args.sourcePath] = "";
-
-  // const tplPath = path.resolve(templatePath, `service.interface.template`);
-  // const newName = `I${args.newName}.ts`;
-  // const destPath = path.resolve(args.destPath, newName);
-  // if (!ufs.isExist(destPath)) {
-  //   args.destMap[tplPath] = destPath;
-  // }
 
   return args;
 }
