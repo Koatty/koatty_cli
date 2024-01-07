@@ -19,21 +19,31 @@ npm start
 
 * 1.Create a Controller
 ```shell
-koatty controller test
+// http controller
+kt controller test
+
+// grpc controller
+kt controller -t grpc test
+
+// websocket controller
+kt controller -t websocket test
 
 ```
 
 * 2.Create a Service
 
 ```shell
-koatty service test
+kt service test
+
+// service with interface
+kt service -i test
 
 ```
 
 * 3.Create a Middleware
 
 ```shell
-koatty middleware test
+kt middleware test
 
 ```
 
@@ -41,12 +51,8 @@ koatty middleware test
 
 ```shell
 
-//default use thinkorm
-koatty model test
-
-
-//use typeorm
-koatty model -o typeorm test
+//default use typeorm
+kt model test
 
 ```
 
@@ -56,7 +62,7 @@ koatty model -o typeorm test
 
 ```shell
 
-koatty aspect test
+kt aspect test
 
 ```
 使用切面：
@@ -84,7 +90,7 @@ export class TestController extends BaseController {
 
 ```shell
 
-koatty dto test
+kt dto test
 
 ```
 修改数据验证类:
@@ -123,7 +129,7 @@ export class TestController extends BaseController {
 * 1、Create a Middleware Project
 
 ```shell
-koatty new projectName -t middleware
+kt new projectName -t middleware
 
 cd ./projectName
 
@@ -135,7 +141,7 @@ npm start
 * 2、Create a Plugin Project
 
 ```shell
-koatty new projectName -t plugin
+kt new projectName -t plugin
 
 cd ./projectName
 
