@@ -4,10 +4,12 @@
   "description": "Koatty command line tool.",
   "scripts": {
     "eslint": "eslint --ext .js ./src",
-    "prepublishOnly": "npm test",
-    "release": "npm run prepublishOnly && standard-version",
+    "prepublishOnly": "npm test && npm run build && git push --follow-tags origin",
+    "prerelease": "npm test && npm run build",
+    "release": "standard-version",
+    "release:pre": "npm run release -- --prerelease",
+    "release:major": "npm run release -- --release-as major",
     "release:minor": "npm run release -- --release-as minor",
-    "pub": "git push --follow-tags origin && npm publish",
     "test": "npm run eslint && jest --rootDir ./test --passWithNoTests"
   },
   "bin": {
