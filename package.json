@@ -1,11 +1,11 @@
 {
   "name": "koatty_cli",
-  "version": "3.11.0",
+  "version": "3.12.0",
   "description": "Koatty command line tool.",
   "scripts": {
     "eslint": "eslint --ext .js ./src",
-    "prepublishOnly": "npm test && npm run build && git push --follow-tags origin",
-    "prerelease": "npm test && npm run build",
+    "prepublishOnly": "npm test && git push --follow-tags origin",
+    "prerelease": "npm test",
     "release": "standard-version",
     "release:pre": "npm run release -- --prerelease",
     "release:major": "npm run release -- --release-as major",
