@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2024-01-07 14:28:09
+ * @LastEditTime: 2024-01-10 13:59:31
  */
 const path = require('path');
 const replace = require('replace');
@@ -64,7 +64,7 @@ module.exports = async function (name, type, opt) {
   const templateGit = processVer(CLI_TEMPLATE_URL);
   // template dir
   templatePath = await template.loadAndUpdateTemplate(templateGit, CLI_TEMPLATE_NAME);
-  if (!templatePath) {
+  if (!templatePath || !ufs.isExist(templatePath)) {
     log.error(`Create module fail, can't find template [${templateGit}], please check network!`);
     return;
   }
