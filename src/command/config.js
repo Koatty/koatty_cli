@@ -13,6 +13,10 @@ module.exports = {
   CLI_TEMPLATE_URL: 'https://github.com/Koatty/koatty_template_cli.git#main',
   COM_TEMPLATE_NAME: 'koatty_template_component',
   COM_TEMPLATE_URL: 'https://github.com/Koatty/koatty_template_component.git#main',
+  ORM_PLUGIN_REPO: 'https://github.com/Koatty/koatty_typeorm',
+
+  REPLACE_SOURCE: 'github.com/Koatty',
+  REPLACE_TARGET: 'gitee.com/richenlin', // 替换为国内源,防止下载失败
 
   GRPC_IMPORT: "//_IMPORT_LIST Important! Do not delete this line",
   GRPC_METHOD: "//_METHOD_LIST Important! Do not delete this line",

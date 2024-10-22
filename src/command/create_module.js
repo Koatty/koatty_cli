@@ -10,7 +10,7 @@ const replace = require('replace');
 const string = require('../utils/sting');
 const log = require('../utils/log');
 const ufs = require('../utils/fs');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, GRPC_IMPORT, GRPC_METHOD } = require('./config');
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, GRPC_IMPORT, GRPC_METHOD, ORM_PLUGIN_REPO } = require('./config');
 const template = require('../utils/template');
 const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
 const { regex } = require('replace/bin/shared-options');
@@ -455,7 +455,7 @@ function createModel(name, type, opt) {
       log.log();
       log.warning('to used the koatty_typeorm plugin:');
       log.log();
-      log.log('https://github.com/Koatty/koatty_typeorm');
+      log.log(ORM_PLUGIN_REPO);
       log.log();
       log.log('please modify /app/config/plugin.ts file:');
       log.log();
