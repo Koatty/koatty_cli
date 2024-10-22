@@ -16,6 +16,7 @@ const http = require('isomorphic-git/http/node');
 const log = require('./log');
 const loading = require('./loading');
 const { isExist } = require('./fs');
+const { REPLACE_SOURCE, REPLACE_TARGET } = require('../command/config');
 
 // os temp dir
 const osTempDir = os.tmpdir();
@@ -82,29 +83,21 @@ const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = ""
   log.log(`Start download template [${templateName}]`);
   try {
     loading.start();
-    let flag = false;
     // check local template
-    if (isExist(templateDir)) {
+    if (isExist(templateDir) && !isExist(path.join(templateDir, '.git'))) {
       // update local template
       // execSync(`rm -rf ${templateDir}`);
       // execSync(`mv ${newTemplateDir} ${templateDir}`);
-      if (!isExist(path.join(templateDir, '.git'))) {
-        await del(templateDir, { force: true });
-      } else {
-        await pullTemplate(templateUrl, branchName, templateDir).then(() => {
-          log.info(`Update template [${templateName}] success!`);
-        }).catch(err => {
-          flag = true;
-          // log.error(`Update template [${templateName}] fail: ${err.stack}`);
-        });
-        if (!flag) {
-          return templateDir;
-        }
-      }
+      const deletedDirectoryPaths = await del(templateDir, { force: true });
+      log.info(`Deleted directories:\n[${deletedDirectoryPaths.join('\n')}`);
     }
 
     // clone template
-    await cloneTemplate(templateUrl, branchName, templateDir);
+    await retry(pullTemplate, function (tUrl, tDir) {
+      // 下载失败则替换为国内源
+      let nUrl = replaceInUrl(tUrl, REPLACE_SOURCE, REPLACE_TARGET);
+      return [nUrl, tDir];
+    }, [templateUrl, templateDir]);
     log.info(`Download template [${templateName}] success!`);
     return templateDir;
   } catch (error) {
@@ -113,6 +106,51 @@ const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = ""
     loading.stop();
   }
 };
+
+/**
+ * 查找特定字符串并替换原 URL 中的匹配部分。
+ * 
+ * @param {string} url - 原始 URL。
+ * @param {string} target - 要查找的字符串。
+ * @param {string} replacement - 用于替换的字符串。
+ * @returns {string} - 返回替换后的 URL。
+ */
+function replaceInUrl(url, target, replacement) {
+  // 使用正则表达式进行全局替换
+  const regex = new RegExp(target, 'g');
+  return url.replace(regex, replacement);
+}
+
+/**
+ * 尝试执行一个异步操作，如果失败则进行重试。
+ * 
+ * @param {function} operation - 一个返回 Promise 的异步函数。
+ * @param {function} callback - 失败后的回调函数。
+ * @param {array} args - 函数参数。
+ * @param {number} maxRetries - 最大重试次数（默认为 2）。
+ * @returns {Promise<any>} - 返回异步操作的结果。
+ * @throws {Error} - 如果在达到最大重试次数后仍然失败，则抛出错误。
+ */
+async function retry(operation, callback, args = [], maxRetries = 2) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      // 尝试执行异步操作
+      const result = await operation(...args);
+      return result; // 如果成功，返回结果
+    } catch (error) {
+      // 如果达到最大重试次数，抛出错误
+      if (attempt === maxRetries) {
+        throw new Error(`Operation failed after ${maxRetries} attempts: ${error.message}`);
+      }
+      // 回调函数
+      if (callback) {
+        args = callback(...args);
+      }
+      // 打印重试信息
+      log.warning(`Attempt ${attempt} failed. Retrying...`);
+    }
+  }
+}
 
 module.exports = {
   pullTemplate,
