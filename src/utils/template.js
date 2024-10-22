@@ -93,11 +93,11 @@ const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = ""
     }
 
     // clone template
-    await retry(pullTemplate, function (tUrl, tDir) {
+    await retry(pullTemplate, function (tUrl, tName, tDir) {
       // 下载失败则替换为国内源
       let nUrl = replaceInUrl(tUrl, REPLACE_SOURCE, REPLACE_TARGET);
-      return [nUrl, tDir];
-    }, [templateUrl, templateDir]);
+      return [nUrl, tName, tDir];
+    }, [templateUrl, branchName, templateDir]);
     log.info(`Download template [${templateName}] success!`);
     return templateDir;
   } catch (error) {
