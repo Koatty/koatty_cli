@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2024-01-04 05:26:15
- * @LastEditTime: 2024-01-07 12:24:25
+ * @LastEditTime: 2025-02-10 14:18:39
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -13,7 +13,7 @@ const { version } = require("../../package.json");
 const processVer = function (url) {
   const currentVer = version.slice(0, version.lastIndexOf('.'));
   // 从3.11.x版本开始，用分支管理
-  if (lib.toNumber(currentVer) >= 3.11) {
+  if (lib.toNumber(currentVer) >= 3.11 && !url.includes("component")) {
     return url.replace("#main", "#" + currentVer + ".x")
   }
   return url;

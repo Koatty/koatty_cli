@@ -1,0 +1,8 @@
+import { Controller } from '@koatty/core';
+import { Query, Mutation, Args } from '@koatty/graphql';
+// _IMPORTS
+
+export class _CLASS_NAMEController extends Controller {
+    
+    // _METHODS
+}

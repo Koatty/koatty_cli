@@ -1,0 +1,6 @@
+import { ObjectType, Field, InputType } from '@koatty/graphql';
+
+_DECORATOR
+export class _CLASS_NAME {
+    // _FIELDS
+}

@@ -1,0 +1,4 @@
+@_OPERATION_TYPE(() => _RETURN_TYPE)
+    async _METHOD_NAME(@Args() args: { _ARGS }): Promise<_RETURN_TYPE> {
+        return this.ctx.service._SERVICE_NAME._METHOD_NAME(args);
+    }
