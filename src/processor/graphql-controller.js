@@ -3,12 +3,13 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-02-27 14:15:39
+ * @LastEditTime: 2025-02-28 17:50:04
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
 import { parseGraphQLSDL } from '@graphql-tools/utils';
+import { mustache } from "mustache";
 import path from 'path';
 import { getAppPath, string, ufs } from '../../utils';
 
@@ -93,11 +94,48 @@ function generateResolverClass(args, operations, types, templatePath) {
   // 处理各类型操作
   Object.entries(operations).forEach(([opType, methods]) => {
     methods.forEach(method => {
-      const methodCode = methodTemplate
-        .replace(/_METHOD_NAME/g, method.name)
-        .replace(/_OPERATION_TYPE/g, opType)
-        .replace(/_ARGS/g, method.args.map(arg => `${arg.name}: ${arg.type}`).join(', '))
-        .replace(/_RETURN_TYPE/g, method.returnType);
+      // 处理参数类型，添加InputDto后缀并处理数组类型
+      const processedArgs = method.args.map(arg => {
+        let typeName = arg.type;
+        // 精确匹配基础类型（包括数组形式）
+        const baseTypes = ['string', 'number', 'boolean', 'ID'];
+        const isArray = typeName.endsWith('[]');
+        const baseType = isArray ? typeName.replace('[]', '') : typeName;
+
+        // 仅对非基础类型添加InputDto后缀
+        if (!baseTypes.includes(baseType)) {
+          typeName = isArray ? `${baseType}InputDto[]` : `${baseType}InputDto`;
+        }
+        return `@${opType}() ${arg.name}: ${typeName}`;
+      });
+
+      // 处理返回类型，保留数组标记
+      const returnBaseTypes = ['string', 'number', 'boolean', 'ID'];
+      let returnType = method.returnType;
+      const isReturnArray = returnType.endsWith('[]');
+      const returnBaseType = isReturnArray ? returnType.replace('[]', '') : returnType;
+
+      if (!returnBaseTypes.includes(returnBaseType)) {
+        returnType = isReturnArray ? `${returnBaseType}Dto[]` : `${returnBaseType}Dto`;
+      }
+
+      const methodContext = {
+        method: opType === 'Mutation' ? 'PostMapping' : 'GetMapping', // 修正HTTP方法映射
+        name: method.name,
+        args: processedArgs.map(argStr => {
+          // 保持原始装饰器格式
+          const [decorator, typeDef] = argStr.split(': ');
+          return {
+            decorator: decorator.replace('@', ''),
+            name: typeDef.split(': ')[0].trim(),
+            type: typeDef.split(': ')[1].trim()
+          };
+        }),
+        returnType: returnType,
+        hasInputParam: processedArgs.some(arg => arg.includes('InputDto'))
+      };
+
+      const methodCode = mustache.render(methodTemplate, methodContext);
 
       methodArr.push(methodCode);
       typeRefs.add(method.returnType);
@@ -118,7 +156,7 @@ function generateResolverClass(args, operations, types, templatePath) {
   if (importArr.length > 0) {
     resolverContent = resolverContent.replace('// _IMPORTS', importArr.join('\n'));
   }
-  resolverContent = resolverContent.replace('// _METHODS', methodArr.join('\n\n'));
+  resolverContent = resolverContent.replace('// _METHOD_LIST', methodArr.join('\n\n'));
   args.createMap[args.destFile] = resolverContent;
 }
 
@@ -143,12 +181,20 @@ function parseTypeDefinitions(document) {
 // 处理GraphQL类型名称
 function getTypeName(type) {
   if (type.kind === 'NonNullType') {
-    return `${getTypeName(type.type)}!`;
+    return `${getTypeName(type.type)}`;
   }
   if (type.kind === 'ListType') {
-    return `[${getTypeName(type.type)}]`;
+    return `${getTypeName(type.type)}[]`;
   }
-  return type.name.value;
+  // 类型映射转换
+  const typeMap = {
+    'ID': 'string',
+    'String': 'string',
+    'Int': 'number',
+    'Float': 'number',
+    'Boolean': 'boolean'
+  };
+  return typeMap[type.name.value] || type.name.value;
 }
 
 function generateTypeClasses(args, types, templatePath) {
