@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-02-28 17:50:04
+ * @LastEditTime: 2025-03-03 18:01:47
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -120,7 +120,7 @@ function generateResolverClass(args, operations, types, templatePath) {
       }
 
       const methodContext = {
-        method: opType === 'Mutation' ? 'PostMapping' : 'GetMapping', // 修正HTTP方法映射
+        method: opType === 'Mutation' ? 'PutMapping' : 'PostMapping', // 修正HTTP方法映射
         name: method.name,
         args: processedArgs.map(argStr => {
           // 保持原始装饰器格式
@@ -199,19 +199,18 @@ function getTypeName(type) {
 
 function generateTypeClasses(args, types, templatePath) {
   const destPath = path.resolve(`${getAppPath()}/types/`);
-  const typeTemplate = ufs.readFile(path.resolve(templatePath, `graphql_type.template`));
+  const typeTemplate = ufs.readFile(path.resolve(templatePath, `dto_graphql.template`));
 
   Object.entries(types).forEach(([typeName, definition]) => {
     if (definition.kind === 'ObjectTypeDefinition' || definition.kind === 'InputObjectTypeDefinition') {
       const props = definition.fields.map(field => {
-        return `  @Field(() => ${getTypeName(field.type)})
+        return `  @IsDefined()
   ${field.name.value}: ${getTypeName(field.type)};`;
       });
 
       const typeFile = `${destPath}/${typeName}.ts`;
       const typeContent = typeTemplate
         .replace(/_CLASS_NAME/g, typeName)
-        .replace(/_DECORATOR/g, definition.kind === 'InputObjectTypeDefinition' ? '@InputType()' : '@ObjectType()')
         .replace('// _FIELDS', props.join('\n\n'));
 
       if (!ufs.isExist(typeFile)) {
