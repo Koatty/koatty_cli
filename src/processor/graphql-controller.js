@@ -3,15 +3,15 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-03 18:01:47
+ * @LastEditTime: 2025-03-08 14:43:15
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
-import { parseGraphQLSDL } from '@graphql-tools/utils';
-import { mustache } from "mustache";
-import path from 'path';
-import { getAppPath, string, ufs } from '../../utils';
+const { parseGraphQLSDL } = require('@graphql-tools/utils');
+const { mustache } = require('mustache');
+const path = require('path');
+const { getAppPath, string, ufs } = require('../../utils');
 
 /**
  * GraphQL处理器入口
@@ -120,7 +120,7 @@ function generateResolverClass(args, operations, types, templatePath) {
       }
 
       const methodContext = {
-        method: opType === 'Mutation' ? 'PutMapping' : 'PostMapping', // 修正HTTP方法映射
+        method: opType === 'Mutation' ? 'PostMapping' : 'GetMapping', // 修正HTTP方法映射
         name: method.name,
         args: processedArgs.map(argStr => {
           // 保持原始装饰器格式

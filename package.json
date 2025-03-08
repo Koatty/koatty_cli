@@ -45,6 +45,8 @@
     "standard-version": "^9.x.x"
   },
   "dependencies": {
+    "@graphql-tools/utils": "^10.8.4",
+    "chai": "^5.2.0",
     "chalk": "^4.1.2",
     "cli-spinner": "^0.2.10",
     "commander": "^3.0.2",
