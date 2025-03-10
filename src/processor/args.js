@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 13:57:19
- * @LastEditTime: 2025-03-10 13:53:32
+ * @LastEditTime: 2025-03-10 15:48:36
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -65,6 +65,7 @@ module.exports = {
     const destMap = {
       [sourcePath]: destFile,
     };
-    return { sourceName, sourcePath, newName, subModule, destMap, replaceMap, destPath, destFile };
+    const createMap = {};
+    return { sourceName, sourcePath, newName, subModule, destMap, createMap, replaceMap, destPath, destFile };
   }
 }

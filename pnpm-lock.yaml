@@ -29,6 +29,9 @@ importers:
       ncp:
         specifier: ^2.0.0
         version: 2.0.0
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
       replace:
         specifier: ^1.2.2
         version: 1.2.2
@@ -2415,6 +2418,11 @@ packages:
   prepend-http@2.0.0:
     resolution: {integrity: sha512-ravE6m9Atw9Z/jjttRUZ+clIXogdghyZAuWJ3qEzjT+jI/dL1ifAqhZeC5VHzQp1MSt1+jxKkFNemj/iO7tVUA==}
     engines: {node: '>=4'}
+
+  prettier@3.5.3:
+    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   pretty-format@29.7.0:
     resolution: {integrity: sha512-Pdlw/oPxN+aXdmM9R00JVC9WVFoCLTKJvDVLgmJ+qAffBMxsV85l/Lu7sNx4zSzPyoL2euImuEwHhOXdEgNFZQ==}
@@ -5837,6 +5845,8 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prepend-http@2.0.0: {}
+
+  prettier@3.5.3: {}
 
   pretty-format@29.7.0:
     dependencies:

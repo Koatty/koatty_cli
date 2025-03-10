@@ -12,7 +12,7 @@ describe('GraphQL Controller Transpilation', () => {
     it('should generate UserController.ts', () => {
       const filePath = path.join(outputDir, 'UserController.ts');
 
-      graphqlProcessor(args);
+      graphqlProcessor(args, templatePath);
       // expect(fs.existsSync(filePath)).toBe(true);
 
       // const content = fs.readFileSync(filePath, 'utf8');

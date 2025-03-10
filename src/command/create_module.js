@@ -3,14 +3,15 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2025-02-27 14:09:40
+ * @LastEditTime: 2025-03-10 16:20:32
  */
 const path = require('path');
 const replace = require('replace');
 const string = require('../utils/sting');
 const log = require('../utils/log');
 const ufs = require('../utils/fs');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, GRPC_IMPORT, GRPC_METHOD } = require('./config');
+const { writeAndFormatFile } = require('../utils/format');
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('./config');
 const template = require('../utils/template');
 const { regex } = require('replace/bin/shared-options');
 const { processVer } = require('../utils/version');
@@ -99,7 +100,7 @@ module.exports = async function (name, type, opt) {
             await ufs.mkDir(dir);
           }
           targetDir.push(dir);
-          await ufs.writeFile(key, element);
+          await writeAndFormatFile(key, element);
         }
       }
     }

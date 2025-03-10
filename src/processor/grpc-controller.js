@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 11:43:22
- * @LastEditTime: 2025-02-27 11:44:50
+ * @LastEditTime: 2025-03-10 15:49:24
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -12,7 +12,7 @@ const ufs = require('../utils/fs');
 const string = require('../utils/sting');
 const { isKoattyApp, getAppPath } = require("../utils/path");
 const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, GRPC_IMPORT, GRPC_METHOD } = require('./config');
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../command/config');
 
 /**
  * @description: 
@@ -54,8 +54,8 @@ export function parseGrpcArgs(args, templatePath) {
   const methodArr = [];
   const dtoArr = [];
   const importArr = [];
-  let methodStr = ufs.readFile(path.resolve(templatePath, `controller_grpc_method.template`));
-  let importStr = ufs.readFile(path.resolve(templatePath, `controller_grpc_import.template`));
+  let methodStr = ufs.readFile(path.resolve(templatePath, `controller_CTL_METHOD.template`));
+  let importStr = ufs.readFile(path.resolve(templatePath, `controller_CTL_IMPORT.template`));
   let exCtlContent = "";
   if (ufs.isExist(args.destFile)) {
     exCtlContent = ufs.readFile(args.destFile);
@@ -93,18 +93,17 @@ export function parseGrpcArgs(args, templatePath) {
     importArr.push(importStr.replace(/_DTO_NAME/g, it).replace(/_SUB_PATH/g, args.subModule ? '../..' : '..'))
   }
 
-  args.createMap = {};
   if (exCtlContent.length == 0) {
     exCtlContent = ufs.readFile(path.resolve(templatePath, `controller_grpc.template`));
   }
 
   if (importArr.length > 0) {
-    importArr.push(GRPC_IMPORT);
-    exCtlContent = exCtlContent.replace(new RegExp(GRPC_IMPORT, "g"), importArr.join("\n"));
+    importArr.push(CTL_IMPORT);
+    exCtlContent = exCtlContent.replace(new RegExp(CTL_IMPORT, "g"), importArr.join("\n"));
   }
   if (methodArr.length > 0) {
-    methodArr.push(GRPC_METHOD);
-    exCtlContent = exCtlContent.replace(new RegExp(GRPC_METHOD, "g"), methodArr.join("\n"));
+    methodArr.push(CTL_METHOD);
+    exCtlContent = exCtlContent.replace(new RegExp(CTL_METHOD, "g"), methodArr.join("\n"));
   }
 
   args.createMap[args.destFile] = exCtlContent;

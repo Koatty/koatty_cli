@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2024-01-04 05:41:47
+ * @LastEditTime: 2025-03-10 16:20:56
  */
 
 const path = require('path');
@@ -11,6 +11,7 @@ const replace = require('replace');
 const string = require('../utils/sting');
 const log = require('../utils/log');
 const ufs = require('../utils/fs');
+const { writeAndFormatFile } = require('../utils/format');
 const template = require('../utils/template');
 
 const {
@@ -96,7 +97,7 @@ const create = async (projectName, options) => {
       });
     }
 
-    ufs.writeFile(`${projectDir}/.koattysrc`, JSON.stringify({
+    writeAndFormatFile(`${projectDir}/.koattysrc`, JSON.stringify({
       projectName,
     }));
     console.log(`${projectDir}/.git`);

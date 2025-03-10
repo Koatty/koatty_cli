@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-10 14:36:58
+ * @LastEditTime: 2025-03-10 16:24:42
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -14,14 +14,18 @@ const path = require('path');
 const ufs = require('../utils/fs');
 const string = require('../utils/sting');
 const { isKoattyApp, getAppPath } = require("../utils/path");
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../command/config');
 
+const baseTypes = ['string', 'number', 'boolean', 'ID'];
+const operationTypes = ['Query', 'Mutation', 'Subscription'];
 /**
  * GraphQL处理器入口
  * @param {object} args 
+ * @param {object} templatePath 
  * @returns {object}
  */
-function graphqlProcessor(args) {
-  parseGraphqlArgs(args);
+function graphqlProcessor(args, templatePath) {
+  parseGraphqlArgs(args, templatePath);
   args.destMap = {};
   args.replaceMap['_NEW'] = args.subModule
     ? `/${string.toPascal(args.subModule)}/${string.toPascal(args.sourceName)}`
@@ -47,51 +51,10 @@ function parseGraphqlArgs(args, templatePath) {
   const operations = parseOperations(document);
   const types = parseTypeDefinitions(document); // 添加类型定义解析函数
 
-  generateResolverClass(args, operations, types);
+  generateResolverClass(args, operations, types, templatePath);
   generateTypeClasses(args, types, templatePath);
 
   return args;
-}
-
-function parseGraphQLSDL(content) {
-  try {
-    const schemaDoc = parse(content);
-
-    // 确保解析到有效文档
-    if (!schemaDoc || !schemaDoc.definitions) {
-      throw new Error('Invalid GraphQL document');
-    }
-
-    // 获取 Query 类型定义
-    const queryType = schemaDoc.definitions.find(
-      d => d.kind === Kind.OBJECT_TYPE_DEFINITION && d.name.value === 'Query'
-    );
-
-    // 提取操作字段
-    const queryFields = queryType?.fields.map(f => ({
-      name: f.name.value,
-      args: f.arguments.map(a => ({
-        name: a.name.value,
-        type: a.type?.type?.name?.value
-      }))
-    }));
-
-    // 检查是否找到操作
-    if (queryFields.length === 0) {
-      console.warn('No operations found in GraphQL document');
-      console.debug('Available definitions:', document.definitions.map(d => d.kind));
-    }
-
-    return {
-      document,
-      queryFields
-    };
-
-  } catch (error) {
-    console.error('GraphQL parsing error:');
-    console.error(error.locations ? error.locations[0] : '');
-    throw error;
-  }
 }
 
 /**
@@ -104,7 +67,7 @@ function parseOperations(document) {
 
   document.definitions.forEach(def => {
     if (def.kind === Kind.OBJECT_TYPE_DEFINITION &&
-      (def.name.value === 'Query' || def.name.value === 'Mutation' || def.name.value === 'Subscription')) {
+      !operationTypes.includes(def.name.value)) {
       const operationType = def.name.value;
       def?.fields.forEach(selection => {
         const fieldName = selection.name.value;
@@ -142,48 +105,37 @@ function generateResolverClass(args, operations, types, templatePath) {
       const processedArgs = method.args.map(arg => {
         let typeName = arg.type;
         // 精确匹配基础类型（包括数组形式）
-        const baseTypes = ['string', 'number', 'boolean', 'ID'];
         const isArray = typeName.endsWith('[]');
-        const baseType = isArray ? typeName.replace('[]', '') : typeName;
-
-        // 仅对非基础类型添加InputDto后缀
-        if (!baseTypes.includes(baseType)) {
-          typeName = isArray ? `${baseType}InputDto[]` : `${baseType}InputDto`;
+        const baseTypeName = isArray ? typeName.replace('[]', '') : typeName;
+        // 仅非基础类型
+        if (!baseTypes.includes(baseTypeName)) {
+          typeRefs.add(baseTypeName);
         }
-        return `@${opType}() ${arg.name}: ${typeName}`;
+
+        return `@${opType === 'Query' ? 'Get' : 'Post'}() ${arg.name}: ${typeName}`;
       });
 
       // 处理返回类型，保留数组标记
-      const returnBaseTypes = ['string', 'number', 'boolean', 'ID'];
       let returnType = method.returnType;
-      const isReturnArray = returnType.endsWith('[]');
-      const returnBaseType = isReturnArray ? returnType.replace('[]', '') : returnType;
-
-      if (!returnBaseTypes.includes(returnBaseType)) {
-        returnType = isReturnArray ? `${returnBaseType}Dto[]` : `${returnBaseType}Dto`;
+      const isArray = returnType.endsWith('[]');
+      const baseReturnTypeName = isArray ? returnType.replace('[]', '') : returnType;
+      // 仅非基础类型
+      if (!baseTypes.includes(baseReturnTypeName)) {
+        typeRefs.add(baseReturnTypeName);
       }
-
       const methodContext = {
         method: opType === 'Mutation' ? 'PostMapping' : 'GetMapping', // 修正HTTP方法映射
         name: method.name,
-        args: processedArgs.map(argStr => {
-          // 保持原始装饰器格式
-          const [decorator, typeDef] = argStr.split(': ');
-          return {
-            decorator: decorator.replace('@', ''),
-            name: typeDef.split(': ')[0].trim(),
-            type: typeDef.split(': ')[1].trim()
-          };
-        }),
-        returnType: returnType,
-        hasInputParam: processedArgs.some(arg => arg.includes('InputDto'))
+        args: processedArgs,
+        returnType: returnType
       };
 
-      const methodCode = mustache.render(methodTemplate, methodContext);
-
-      methodArr.push(methodCode);
-      typeRefs.add(method.returnType);
-      method.args.forEach(arg => typeRefs.add(arg.type));
+      let methodStr = methodTemplate.replace(/_METHOD_DECORATOR/g, methodContext.method);
+      methodStr = methodStr.replace(/_METHOD_NAME/g, methodContext.name);
+      methodStr = methodStr.replace(/_ARGS/g, methodContext.args.join(','));
+      methodStr = methodStr.replace(/_RETURN_TYPE/g, methodContext.returnType);
+      methodStr = methodStr.replace(/_RESULT_TYPE/g, isArray ? `Array.of(new ${returnType}())` : `new ${returnType}()`);
+      methodArr.push(methodStr);
     });
   });
 
@@ -198,9 +150,9 @@ function generateResolverClass(args, operations, types, templatePath) {
 
   // 合并模板内容
   if (importArr.length > 0) {
-    resolverContent = resolverContent.replace('// _IMPORTS', importArr.join('\n'));
+    resolverContent = resolverContent.replace(new RegExp(CTL_IMPORT, "g"), importArr.join("\n"));
   }
-  resolverContent = resolverContent.replace('// _METHOD_LIST', methodArr.join('\n\n'));
+  resolverContent = resolverContent.replace(new RegExp(CTL_METHOD, "g"), methodArr.join("\n"));
   args.createMap[args.destFile] = resolverContent;
 }
 
@@ -242,20 +194,22 @@ function getTypeName(type) {
 }
 
 function generateTypeClasses(args, types, templatePath) {
-  const destPath = path.resolve(`${getAppPath()}/types/`);
+  const destPath = path.resolve(`${getAppPath()}/dto/`);
   const typeTemplate = ufs.readFile(path.resolve(templatePath, `dto_graphql.template`));
 
   Object.entries(types).forEach(([typeName, definition]) => {
-    if (definition.kind === 'ObjectTypeDefinition' || definition.kind === 'InputObjectTypeDefinition') {
+    if (!operationTypes.includes(definition.name) &&
+      (definition.kind === 'ObjectTypeDefinition' || definition.kind === 'InputObjectTypeDefinition')) {
       const props = definition.fields.map(field => {
-        return `  @IsDefined()
-  ${field.name.value}: ${getTypeName(field.type)};`;
+        return ` @IsDefined()
+  ${field.name.value}: ${getTypeName(field.type)};
+  `;
       });
 
       const typeFile = `${destPath}/${typeName}.ts`;
       const typeContent = typeTemplate
         .replace(/_CLASS_NAME/g, typeName)
-        .replace('// _FIELDS', props.join('\n\n'));
+        .replace('//_FIELDS', props.join('\n\n'));
 
       if (!ufs.isExist(typeFile)) {
         args.createMap[typeFile] = typeContent;

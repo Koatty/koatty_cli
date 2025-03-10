@@ -60,6 +60,7 @@
     "koatty_proto": "^1.1.12",
     "mustache": "^4.2.0",
     "ncp": "^2.0.0",
+    "prettier": "^3.5.3",
     "replace": "^1.2.2",
     "update-notifier": "^5.1.0"
   }
