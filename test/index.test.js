@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const fs = require('fs');
 const path = require('path');
 const { graphqlProcessor } = require('../src/processor/graphql-controller.js');

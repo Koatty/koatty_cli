@@ -3,22 +3,24 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-08 14:43:15
+ * @LastEditTime: 2025-03-10 14:36:58
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 
-const { parseGraphQLSDL } = require('@graphql-tools/utils');
+const { parse, Kind } = require('graphql');
 const { mustache } = require('mustache');
 const path = require('path');
-const { getAppPath, string, ufs } = require('../../utils');
+const ufs = require('../utils/fs');
+const string = require('../utils/sting');
+const { isKoattyApp, getAppPath } = require("../utils/path");
 
 /**
  * GraphQL处理器入口
  * @param {object} args 
  * @returns {object}
  */
-export function graphqlProcessor(args) {
+function graphqlProcessor(args) {
   parseGraphqlArgs(args);
   args.destMap = {};
   args.replaceMap['_NEW'] = args.subModule
@@ -32,7 +34,7 @@ export function graphqlProcessor(args) {
  * @param {object} args 
  * @returns {object}
  */
-export function parseGraphqlArgs(args, templatePath) {
+function parseGraphqlArgs(args, templatePath) {
   const pascalName = string.toPascal(args.sourceName);
   const schemaFile = `${getAppPath()}/schema/${pascalName}.graphql`;
 
@@ -41,7 +43,7 @@ export function parseGraphqlArgs(args, templatePath) {
   }
 
   const source = ufs.readFile(schemaFile);
-  const document = parseGraphQLSDL('', source).document;
+  const document = parse(source);
   const operations = parseOperations(document);
   const types = parseTypeDefinitions(document); // 添加类型定义解析函数
 
@@ -49,6 +51,47 @@ export function parseGraphqlArgs(args, templatePath) {
   generateTypeClasses(args, types, templatePath);
 
   return args;
+}
+
+function parseGraphQLSDL(content) {
+  try {
+    const schemaDoc = parse(content);
+
+    // 确保解析到有效文档
+    if (!schemaDoc || !schemaDoc.definitions) {
+      throw new Error('Invalid GraphQL document');
+    }
+
+    // 获取 Query 类型定义
+    const queryType = schemaDoc.definitions.find(
+      d => d.kind === Kind.OBJECT_TYPE_DEFINITION && d.name.value === 'Query'
+    );
+
+    // 提取操作字段
+    const queryFields = queryType?.fields.map(f => ({
+      name: f.name.value,
+      args: f.arguments.map(a => ({
+        name: a.name.value,
+        type: a.type?.type?.name?.value
+      }))
+    }));
+
+    // 检查是否找到操作
+    if (queryFields.length === 0) {
+      console.warn('No operations found in GraphQL document');
+      console.debug('Available definitions:', document.definitions.map(d => d.kind));
+    }
+
+    return {
+      document,
+      queryFields
+    };
+
+  } catch (error) {
+    console.error('GraphQL parsing error:');
+    console.error(error.locations ? error.locations[0] : '');
+    throw error;
+  }
 }
 
 /**
@@ -60,13 +103,14 @@ function parseOperations(document) {
   const operations = { Query: [], Mutation: [], Subscription: [] };
 
   document.definitions.forEach(def => {
-    if (def.kind === 'OperationDefinition') {
-      const operationType = def.operation;
-      def.selectionSet.selections.forEach(selection => {
+    if (def.kind === Kind.OBJECT_TYPE_DEFINITION &&
+      (def.name.value === 'Query' || def.name.value === 'Mutation' || def.name.value === 'Subscription')) {
+      const operationType = def.name.value;
+      def?.fields.forEach(selection => {
         const fieldName = selection.name.value;
         operations[operationType].push({
           name: fieldName,
-          args: selection.arguments.map(arg => ({
+          args: selection?.arguments.map(arg => ({
             name: arg.name.value,
             type: getTypeName(arg.type)
           })),
@@ -218,4 +262,9 @@ function generateTypeClasses(args, types, templatePath) {
       }
     }
   });
+}
+
+module.exports = {
+  graphqlProcessor,
+  parseGraphqlArgs
 }

@@ -1,10 +1,11 @@
 .idea
 .DS_Store
-.koattysrc
 node_modules
 coverage
 dist
-demo
+temp
+logs
 npm-debug.log
 yarn-error.log
-test/src
+jest_html_reporters.html
+jest-html-reporters-attach
