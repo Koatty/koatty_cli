@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-10 16:24:42
+ * @LastEditTime: 2025-03-10 17:11:09
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -67,7 +67,7 @@ function parseOperations(document) {
 
   document.definitions.forEach(def => {
     if (def.kind === Kind.OBJECT_TYPE_DEFINITION &&
-      !operationTypes.includes(def.name.value)) {
+      operationTypes.includes(def.name.value)) {
       const operationType = def.name.value;
       def?.fields.forEach(selection => {
         const fieldName = selection.name.value;
