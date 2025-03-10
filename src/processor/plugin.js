@@ -18,7 +18,7 @@ const { parseArgs } = require("./args");
  * @param {*} templatePath 
  * @returns 
  */
-export function createPlugin(name, type, opt, templatePath) {
+function createPlugin(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);
   if (!args) {
     process.exit(0);
@@ -36,3 +36,5 @@ export function createPlugin(name, type, opt, templatePath) {
   };
   return args;
 }
+
+module.exports = createPlugin;

@@ -3,20 +3,17 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2025-03-10 16:20:32
+ * @LastEditTime: 2025-03-10 20:54:01
  */
 const path = require('path');
 const replace = require('replace');
-const string = require('../utils/sting');
 const log = require('../utils/log');
 const ufs = require('../utils/fs');
 const { writeAndFormatFile } = require('../utils/format');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('./config');
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME } = require('./config');
 const template = require('../utils/template');
-const { regex } = require('replace/bin/shared-options');
 const { processVer } = require('../utils/version');
-const { grpcProcessor } = require("../processor/grpc-controller");
-const { isKoattyApp, getAppPath } = require("../utils/path");
+const { isKoattyApp } = require("../utils/path");
 const { createController } = require("../processor/controller");
 const { createMiddleware } = require("../processor/middleware");
 const { createModel } = require("../processor/model");

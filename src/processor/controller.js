@@ -3,14 +3,11 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 11:40:59
- * @LastEditTime: 2025-02-27 14:05:33
+ * @LastEditTime: 2025-03-10 20:55:07
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 const path = require('path');
-const ufs = require('../utils/fs');
-const log = require('../utils/log');
-const string = require('../utils/sting');
 const { parseArgs } = require("./args");
 const { grpcProcessor } = require("./grpc-controller");
 
@@ -22,7 +19,7 @@ const { grpcProcessor } = require("./grpc-controller");
  * @param {*} templatePath 
  * @returns 
  */
-export function createController(name, type, opt, templatePath) {
+function createController(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);
   if (!args) {
     process.exit(0);
@@ -45,3 +42,7 @@ export function createController(name, type, opt, templatePath) {
 
   return args;
 }
+
+module.exports = {
+  createController
+};

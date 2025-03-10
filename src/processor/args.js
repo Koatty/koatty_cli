@@ -11,7 +11,7 @@ const path = require('path');
 const ufs = require('../utils/fs');
 const log = require('../utils/log');
 const string = require('../utils/sting');
-const { isKoattyApp, getAppPath } = require("../utils/path");
+const { getAppPath } = require("../utils/path");
 
 /**
  * 路径参数处理

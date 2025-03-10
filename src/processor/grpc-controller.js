@@ -3,23 +3,23 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 11:43:22
- * @LastEditTime: 2025-03-10 15:49:24
+ * @LastEditTime: 2025-03-10 21:05:57
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 const path = require('path');
 const ufs = require('../utils/fs');
 const string = require('../utils/sting');
-const { isKoattyApp, getAppPath } = require("../utils/path");
+const { getAppPath } = require("../utils/path");
 const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../command/config');
+const { CTL_IMPORT, CTL_METHOD } = require('../command/config');
 
 /**
  * @description: 
  * @param {*} args
  * @return {*}
  */
-export function grpcProcessor(args, templatePath) {
+function grpcProcessor(args, templatePath) {
   parseGrpcArgs(args, templatePath);
   args.destMap = {};
   if (args.subModule) {
@@ -37,7 +37,7 @@ export function grpcProcessor(args, templatePath) {
  * @param {*} args
  * @returns {*}  
  */
-export function parseGrpcArgs(args, templatePath) {
+function parseGrpcArgs(args, templatePath) {
   // 根据控制器名自动寻找proto文件
   const pascalName = string.toPascal(args.sourceName);
   const protoFile = `${getAppPath()}/proto/${pascalName}.proto`
@@ -54,13 +54,13 @@ export function parseGrpcArgs(args, templatePath) {
   const methodArr = [];
   const dtoArr = [];
   const importArr = [];
-  let methodStr = ufs.readFile(path.resolve(templatePath, `controller_CTL_METHOD.template`));
-  let importStr = ufs.readFile(path.resolve(templatePath, `controller_CTL_IMPORT.template`));
+  let methodStr = ufs.readFile(path.resolve(templatePath, `controller_grpc_method.template`));
+  let importStr = ufs.readFile(path.resolve(templatePath, `controller_grpc_import.template`));
   let exCtlContent = "";
   if (ufs.isExist(args.destFile)) {
     exCtlContent = ufs.readFile(args.destFile);
   }
-  Object.keys(service).map(key => {
+  Object.keys(service).map((key) => {
     if (Object.hasOwnProperty.call(service, key)) {
       const it = service[key];
       if (it && !exCtlContent.includes(`${it.name}(`)) {
@@ -113,7 +113,7 @@ export function parseGrpcArgs(args, templatePath) {
   const values = parseValues(res);
   const enumContent = ufs.readFile(path.resolve(templatePath, `enum.template`));
   let enumImports = "";
-  Object.keys(values).map(key => {
+  Object.keys(values).map((key) => {
     if (Object.hasOwnProperty.call(values, key)) {
       const it = values[key];
       if (it) {
@@ -129,13 +129,13 @@ export function parseGrpcArgs(args, templatePath) {
   // request & reply
   const fields = parseFields(res);
   const dtoContent = ufs.readFile(path.resolve(templatePath, `dto.template`));
-  Object.keys(fields).map(key => {
+  Object.keys(fields).map((key) => {
     if (Object.hasOwnProperty.call(fields, key)) {
       const it = fields[key];
       if (it) {
         const name = `${destPath}/${it.name}Dto.ts`;
         let props = [...(it.fields || [])];
-        props = props.map(elem => {
+        props = props.map((elem) => {
           if (elem != '') {
             return `    @IsDefined()\n  ${elem}`;
           }
@@ -151,4 +151,10 @@ export function parseGrpcArgs(args, templatePath) {
   });
 
   return args;
+}
+
+
+module.exports = {
+  grpcProcessor,
+  parseGrpcArgs
 }

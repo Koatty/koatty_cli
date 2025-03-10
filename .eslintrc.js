@@ -1,44 +1,27 @@
-/**
- * 
- */
 module.exports = {
-  root: true,
-  parser: '@typescript-eslint/parser',
-  extends: [
-    'plugin:@typescript-eslint/recommended', // 使用@typescript-eslint/eslint-plugin的推荐规则
-    'plugin:jest/recommended',
-  ],
-  plugins: [
-    '@typescript-eslint',
-    'jest',
-  ],
-  parserOptions: {
-    project: './tsconfig.json',
+  "env": {
+    "commonjs": true,
+    "es2021": true,
+    "node": true
   },
-  env: {
-    node: true,
-    mongo: true,
-    jest: true,
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 13
   },
-  rules: {
-    "@typescript-eslint/no-explicit-any": "off",
-    // "@typescript-eslint/no-require-imports": "off",
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/member-ordering": "off",
-    "@typescript-eslint/consistent-type-assertions": "off",
-    "@typescript-eslint/no-param-reassign": "off",
-    "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
-    "@typescript-eslint/ban-types": ["error",
-      {
-        "types": {
-          "Object": false,
-          "Function": false,
-        },
-        "extendDefaults": true
-      }
-    ],
-  },
+  "rules": {
+    // 禁止未声明变量
+    "no-undef": "error",
+
+    // 强制使用 ===
+    "eqeqeq": ["warn", "always"],
+
+    // 强制箭头函数参数使用括号
+    "arrow-parens": ["warn", "always"],
+
+    // 禁止未使用的变量
+    "no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }]
+  }
 };
