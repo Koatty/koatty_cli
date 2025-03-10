@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-10 21:18:07
+ * @LastEditTime: 2025-03-10 22:07:14
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -45,8 +45,7 @@ function parseGraphqlArgs(args, templatePath) {
     throw Error(`GraphQL schema文件不存在: ${schemaFile}`);
   }
 
-  const source = ufs.readFile(schemaFile);
-  const document = parseGraphqlDocument(source);
+  const document = parseGraphqlDocument(schemaFile);
   const operations = parseOperations(document);
   const types = parseTypeDefinitions(document); // 添加类型定义解析函数
 
@@ -80,6 +79,7 @@ function generateResolverClass(args, operations, types, templatePath) {
         // 仅非基础类型
         if (!baseTypes.includes(baseTypeName)) {
           typeRefs.add(baseTypeName);
+          return `@${opType === 'Query' ? 'Get' : 'Post'}() ${arg.name}: ${typeName}Dto`;
         }
 
         return `@${opType === 'Query' ? 'Get' : 'Post'}() ${arg.name}: ${typeName}`;
@@ -89,10 +89,7 @@ function generateResolverClass(args, operations, types, templatePath) {
       let returnType = method.returnType;
       const isArray = returnType.endsWith('[]');
       const baseReturnTypeName = isArray ? returnType.replace('[]', '') : returnType;
-      // 仅非基础类型
-      if (!baseTypes.includes(baseReturnTypeName)) {
-        typeRefs.add(baseReturnTypeName);
-      }
+
       const methodContext = {
         method: opType === 'Mutation' ? 'PostMapping' : 'GetMapping', // 修正HTTP方法映射
         validated: opType === 'Mutation' ? 'true' : 'false',
@@ -100,13 +97,18 @@ function generateResolverClass(args, operations, types, templatePath) {
         args: processedArgs,
         returnType: returnType
       };
+      // 仅非基础类型
+      if (!baseTypes.includes(baseReturnTypeName)) {
+        typeRefs.add(baseReturnTypeName);
+        methodContext.returnType = isArray ? returnType.replace('[]', 'Dto[]') : `${returnType}Dto`;
+      }
 
       let methodStr = methodTemplate.replace(/_METHOD_DECORATOR/g, methodContext.method);
       methodStr = methodStr.replace(/_VALIDATED/g, methodContext.validated ? '\n@Validated()\n' : '');
       methodStr = methodStr.replace(/_METHOD_NAME/g, methodContext.name);
       methodStr = methodStr.replace(/_ARGS/g, methodContext.args.join(','));
       methodStr = methodStr.replace(/_RETURN_TYPE/g, methodContext.returnType);
-      methodStr = methodStr.replace(/_RESULT_TYPE/g, isArray ? `Array.of(new ${returnType}())` : `new ${returnType}()`);
+      methodStr = methodStr.replace(/_RESULT_TYPE/g, isArray ? `Array.of(new ${methodContext.returnType.replace('[]', '')}())` : `new ${methodContext.returnType}()`);
       methodArr.push(methodStr);
     });
   });
@@ -115,7 +117,7 @@ function generateResolverClass(args, operations, types, templatePath) {
   Array.from(typeRefs).forEach((typeName) => {
     if (types[typeName] && types[typeName].kind !== 'ScalarTypeDefinition') {
       importArr.push(importTemplate
-        .replace(/_TYPE_NAME/g, typeName)
+        .replace(/_TYPE_NAME/g, `${typeName}Dto`)
         .replace(/_SUB_PATH/g, args.subModule ? '../..' : '..'));
     }
   });
@@ -142,9 +144,9 @@ function generateTypeClasses(args, types, templatePath) {
   `;
       });
 
-      const typeFile = `${destPath}/${typeName}.ts`;
+      const typeFile = `${destPath}/${typeName}Dto.ts`;
       const typeContent = typeTemplate
-        .replace(/_CLASS_NAME/g, typeName)
+        .replace(/_CLASS_NAME/g, `${typeName}Dto`)
         .replace('//_FIELDS', props.join('\n\n'));
 
       if (!ufs.isExist(typeFile)) {

@@ -10,6 +10,7 @@
 const path = require('path');
 const { parseArgs } = require("./args");
 const { grpcProcessor } = require("./grpc-controller");
+const { graphqlProcessor } = require("./graphql-controller");
 
 /**
  * 
@@ -28,6 +29,8 @@ function createController(name, type, opt, templatePath) {
   const protocol = opt.type || 'http';
   if (protocol === "grpc") {
     return grpcProcessor(args, templatePath);
+  } else if (protocol === "graphql") {
+    return graphqlProcessor(args, templatePath);
   } else if (protocol === "websocket") {
     const sourcePath = path.resolve(templatePath, `controller_ws.template`);
     args.destMap[sourcePath] = args.destMap[args.sourcePath];

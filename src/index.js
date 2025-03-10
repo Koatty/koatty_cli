@@ -8,7 +8,7 @@ const create_module = require('./command/create_module');
 
 updateNotifier({ pkg }).notify();
 
-const camelias = str => str.replace(/-(\w)/g, (_, c) => (c ? c.toUpperCase() : ''));
+const camelias = (str) => str.replace(/-(\w)/g, (_, c) => (c ? c.toUpperCase() : ''));
 
 // commander passes the Command object itself as options,
 // extract only actual options into a fresh object.
@@ -41,7 +41,7 @@ program
 program
   .command('controller <controllerName>')
   .description('create controller class')
-  .option('-t, --type <type>', 'create controller\'s type, http|grpc|websocket, default is http controller.')
+  .option('-t, --type <type>', 'create controller\'s type, http|grpc|websocket|graphql, default is http controller.')
   .action((controllerName, cmdObj) => {
     create_module(controllerName, 'controller', cleanArgs(cmdObj));
   });
