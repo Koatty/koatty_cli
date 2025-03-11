@@ -24,7 +24,7 @@ exports.toPascal = (str) => {
   if (typeof str !== 'string') {
     return str;
   }
-  return this.toCamelCase(str).replace(/\w/i, $0 => $0.toUpperCase());
+  return this.toCamelCase(str).replace(/\w/i, ($0) => $0.toUpperCase());
 };
 
 /**
@@ -36,5 +36,5 @@ exports.toHyphens = (str) => {
   if (typeof str !== 'string') {
     return str;
   }
-  return str.replace(/[A-Z]/g, $0 => `-${$0.toLowerCase()}`);
+  return str.replace(/[A-Z]/g, ($0) => `-${$0.toLowerCase()}`);
 };

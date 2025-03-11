@@ -3,11 +3,12 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-03-10 16:16:01
- * @LastEditTime: 2025-03-10 16:17:23
+ * @LastEditTime: 2025-03-11 14:09:40
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-const { format } = require('prettier');
+const path = require('path');
+const prettier = require('prettier');
 const fs = require('fs-extra');
 
 async function writeAndFormatFile(filePath, content) {

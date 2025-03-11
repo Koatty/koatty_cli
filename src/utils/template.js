@@ -93,7 +93,7 @@ const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = ""
       } else {
         await pullTemplate(templateUrl, branchName, templateDir).then(() => {
           log.info(`Update template [${templateName}] success!`);
-        }).catch(err => {
+        }).catch(() => {
           flag = true;
           // log.error(`Update template [${templateName}] fail: ${err.stack}`);
         });
