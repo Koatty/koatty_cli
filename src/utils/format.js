@@ -3,34 +3,39 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-03-10 16:16:01
- * @LastEditTime: 2025-03-11 14:09:40
+ * @LastEditTime: 2025-03-11 16:10:49
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 const path = require('path');
 const prettier = require('prettier');
-const fs = require('fs-extra');
+const fs = require('fs').promises;
 
 async function writeAndFormatFile(filePath, content) {
   try {
     // 第一步：写入原始内容
     await fs.writeFile(filePath, content);
+    // 自定义类型判断
+    const parser = getParser(filePath);
+    if (parser) {
+      // 第二步：读取文件内容进行格式化
+      const rawCode = await fs.readFile(filePath, 'utf-8');
 
-    // 第二步：读取文件内容进行格式化
-    const rawCode = await fs.readFile(filePath, 'utf-8');
+      // 第三步：获取项目配置（优先使用项目本地prettier配置）
+      const config = await prettier.resolveConfig(filePath);
 
-    // 第三步：获取项目配置（优先使用项目本地prettier配置）
-    const config = await prettier.resolveConfig(filePath);
+      // 第四步：格式化代码
 
-    // 第四步：格式化代码
-    const formatted = await prettier.format(rawCode, {
-      ...config,
-      filepath: filePath, // 自动识别文件类型
-      parser: getParser(filePath) // 自定义类型判断
-    });
+      const formatted = await prettier.format(rawCode, {
+        ...config,
+        filepath: filePath, // 自动识别文件类型
+        parser: parser
+      });
 
-    // 第五步：回写格式化后的内容
-    await fs.writeFile(filePath, formatted);
+      // 第五步：回写格式化后的内容
+      await fs.writeFile(filePath, formatted);
+    }
+
 
   } catch (error) {
     console.error(`Formatting failed for ${filePath}:`, error);
@@ -49,7 +54,7 @@ function getParser(filePath) {
     '.graphql': 'graphql',
     '.proto': 'proto'
   };
-  return map[ext] || 'babel';
+  return map[ext] || '';
 }
 
-module.exports = writeAndFormatFile;
+module.exports = { writeAndFormatFile };

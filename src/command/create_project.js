@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2025-03-10 16:20:56
+ * @LastEditTime: 2025-03-11 16:07:32
  */
 
 const path = require('path');
@@ -97,7 +97,7 @@ const create = async (projectName, options) => {
       });
     }
 
-    writeAndFormatFile(`${projectDir}/.koattysrc`, JSON.stringify({
+    await writeAndFormatFile(`${projectDir}/.koattysrc`, JSON.stringify({
       projectName,
     }));
     console.log(`${projectDir}/.git`);

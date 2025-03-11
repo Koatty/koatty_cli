@@ -2,14 +2,13 @@
  * @Author: richen
  * @Date: 2020-12-08 10:42:52
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-11-04 14:48:30
+ * @LastEditTime: 2025-03-11 16:12:50
  * @License: BSD (3-Clause)
  * @Copyright (c) - <richenlin(at)gmail.com>
  */
 const fs = require('fs');
 const { COPYFILE_EXCL } = fs.constants;
 const path = require('path');
-const log = require('../utils/log');
 const lib = require('koatty_lib');
 
 /**
