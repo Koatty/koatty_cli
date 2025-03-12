@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:29:34
- * @LastEditTime: 2024-03-14 10:59:09
+ * @LastEditTime: 2025-03-12 17:59:58
  */
 
 module.exports = {
@@ -16,6 +16,16 @@ module.exports = {
 
   CTL_IMPORT: "//_IMPORT_LIST Important! Do not delete this line",
   CTL_METHOD: "//_METHOD_LIST Important! Do not delete this line",
+
+  staticMap: new Map(Object.entries({
+    proto: "/resource/proto",
+    graphql: "/resource/graphql",
+  })),
+
+  subfixMap: new Map(Object.entries({
+    proto: ".proto",
+    graphql: ".graphql",
+  })),
 
   LOGO: `
 

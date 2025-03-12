@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-12 13:50:18
+ * @LastEditTime: 2025-03-12 17:45:27
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -13,7 +13,7 @@ const path = require('path');
 const ufs = require('../utils/fs');
 const string = require('../utils/sting');
 const { getAppPath } = require("../utils/path");
-const { CTL_IMPORT, CTL_METHOD } = require('../command/config');
+const { CTL_IMPORT, CTL_METHOD, staticMap, subfixMap } = require('../command/config');
 
 const baseTypes = ['string', 'number', 'boolean', 'ID'];
 const operationTypes = ['Query', 'Mutation', 'Subscription'];
@@ -39,7 +39,7 @@ function graphqlProcessor(args, templatePath) {
  */
 function parseGraphqlArgs(args, templatePath) {
   const pascalName = string.toPascal(args.sourceName);
-  const schemaFile = `${getAppPath()}/graphql/${pascalName}.graphql`;
+  const schemaFile = `${getAppPath()}${staticMap.get("proto")}/${pascalName}${subfixMap.get("proto")}`;
 
   if (!ufs.isExist(schemaFile)) {
     throw Error(`GraphQL schema文件不存在: ${schemaFile}`);

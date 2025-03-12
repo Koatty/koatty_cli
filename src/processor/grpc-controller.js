@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 11:43:22
- * @LastEditTime: 2025-03-10 21:05:57
+ * @LastEditTime: 2025-03-12 18:01:30
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -12,7 +12,7 @@ const ufs = require('../utils/fs');
 const string = require('../utils/sting');
 const { getAppPath } = require("../utils/path");
 const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
-const { CTL_IMPORT, CTL_METHOD } = require('../command/config');
+const { CTL_IMPORT, CTL_METHOD, staticMap, subfixMap } = require('../command/config');
 
 /**
  * @description: 
@@ -40,7 +40,7 @@ function grpcProcessor(args, templatePath) {
 function parseGrpcArgs(args, templatePath) {
   // 根据控制器名自动寻找proto文件
   const pascalName = string.toPascal(args.sourceName);
-  const protoFile = `${getAppPath()}/proto/${pascalName}.proto`
+  const protoFile = `${getAppPath()}${staticMap.get("proto")}/${pascalName}${subfixMap.get("proto")}`
   if (!ufs.isExist(protoFile)) {
     throw Error(`proto file : ${protoFile} does not exist. Please use the 'koatty proto ${args.sourceName}' command to create.`);
   }

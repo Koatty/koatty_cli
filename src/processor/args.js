@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 13:57:19
- * @LastEditTime: 2025-03-12 11:27:20
+ * @LastEditTime: 2025-03-12 18:09:05
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -12,6 +12,7 @@ const ufs = require('../utils/fs');
 const log = require('../utils/log');
 const string = require('../utils/sting');
 const { getAppPath } = require("../utils/path");
+const { staticMap, subfixMap } = require("../command/config");
 
 /**
  * 路径参数处理
@@ -23,6 +24,9 @@ const { getAppPath } = require("../utils/path");
 module.exports = {
   parseArgs(name, type, templatePath) {
     let destPath = path.resolve(`${getAppPath()}/${type}/`);
+    if (staticMap.has(type)) {
+      destPath = path.resolve(`${getAppPath()}/${staticMap.get(type)}/`);
+    }
 
     const sourcePath = path.resolve(templatePath, `${type}.template`);
     if (!ufs.isExist(sourcePath)) {
@@ -41,15 +45,13 @@ module.exports = {
     let subFix = ".ts"
     let newName = `${string.toPascal(sourceName)}${string.toPascal(type)}`;
     let camelName = `${sourceName}${string.toPascal(type)}`;
-    if (type == "proto") {
-      subFix = ".proto"
-      newName = `${string.toPascal(sourceName)}`;
-      camelName = `${string.toPascal(sourceName)}`;
-    } else if (type == "graphql") {
-      subFix = ".graphql"
+
+    if (subfixMap.has(type)) {
+      subFix = subfixMap.get(type);
       newName = `${string.toPascal(sourceName)}`;
       camelName = `${string.toPascal(sourceName)}`;
     }
+
     const destFile = path.resolve(destPath, `${newName}${subFix}`);
 
     // replace map
