@@ -24,4 +24,4 @@ function createDefault(name, type, opt, templatePath) {
   }
   return args;
 }
-module.exports = createDefault;
+module.exports = { createDefault };

@@ -9,7 +9,7 @@ const replace = require('replace');
 const string = require('../src/utils/sting');
 const log = require('../src/utils/log');
 const ufs = require('../src/utils/fs');
-const { TEMPLATE_URL } = require('../src/command/config');
+const { TEMPLATE_URL, COM_TEMPLATE_URL } = require('../src/command/config');
 const { writeAndFormatFile } = require('../src/utils/format');
 const template = require('../src/utils/template');
 const { processVer } = require('../src/utils/version');
@@ -168,7 +168,7 @@ describe('create_project 命令测试', () => {
     ufs.isExist.mockReturnValue(false);
 
     // 模拟处理版本
-    processVer.mockReturnValue('https://github.com/Koatty/koatty_template_component.git#main');
+    processVer.mockReturnValue(COM_TEMPLATE_URL);
 
     // 模拟模板加载成功
     const templateDir = '/tmp/koatty_template_component';
@@ -222,7 +222,7 @@ describe('create_project 命令测试', () => {
     ufs.isExist.mockReturnValue(false);
 
     // 模拟处理版本
-    processVer.mockReturnValue('https://github.com/Koatty/koatty_template_component.git#main');
+    processVer.mockReturnValue(COM_TEMPLATE_URL);
 
     // 模拟模板加载成功
     const templateDir = '/tmp/koatty_template_component';

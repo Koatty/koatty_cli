@@ -108,6 +108,14 @@ program
     create_module(protoName, 'proto', undefined);
   });
 
+// create graphql schema
+program
+  .command('graphql <protoName>')
+  .description('create graphql schema')
+  .action((protoName) => {
+    create_module(protoName, 'graphql', undefined);
+  });
+
 
 // create model
 program

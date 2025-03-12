@@ -37,4 +37,4 @@ function createPlugin(name, type, opt, templatePath) {
   return args;
 }
 
-module.exports = createPlugin;
+module.exports = { createPlugin };

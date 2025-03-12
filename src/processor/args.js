@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 13:57:19
- * @LastEditTime: 2025-03-10 15:48:36
+ * @LastEditTime: 2025-03-12 11:27:20
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -43,6 +43,10 @@ module.exports = {
     let camelName = `${sourceName}${string.toPascal(type)}`;
     if (type == "proto") {
       subFix = ".proto"
+      newName = `${string.toPascal(sourceName)}`;
+      camelName = `${string.toPascal(sourceName)}`;
+    } else if (type == "graphql") {
+      subFix = ".graphql"
       newName = `${string.toPascal(sourceName)}`;
       camelName = `${string.toPascal(sourceName)}`;
     }

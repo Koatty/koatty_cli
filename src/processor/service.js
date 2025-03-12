@@ -49,4 +49,4 @@ function createService(name, type, opt, templatePath) {
   return args;
 }
 
-module.exports = createService;
+module.exports = { createService };

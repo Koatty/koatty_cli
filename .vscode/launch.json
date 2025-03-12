@@ -7,7 +7,13 @@
       "name": "Debug CLI",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/src/index.js",
-      "args": ["new", "test-project"]
+      // "args": ["new", "test-project"],
+      // "args": ["controller", "user"],
+      // "args": ["controller", "-t", "websocket", "user1"],
+      // "args": ["proto", "user2"],
+      // "args": ["controller", "-t", "grpc", "user2"],
+      // "args": ["graphql", "user3"],
+      "args": ["controller", "-t", "graphql", "user3"],
     }
   ]
 }

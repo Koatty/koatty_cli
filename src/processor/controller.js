@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 11:40:59
- * @LastEditTime: 2025-03-10 20:55:07
+ * @LastEditTime: 2025-03-12 11:09:59
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -35,6 +35,10 @@ function createController(name, type, opt, templatePath) {
     const sourcePath = path.resolve(templatePath, `controller_ws.template`);
     args.destMap[sourcePath] = args.destMap[args.sourcePath];
     args.destMap[args.sourcePath] = "";
+  } else {
+    // 处理HTTP协议默认情况
+    const sourcePath = path.resolve(templatePath, `controller.template`);
+    args.destMap[sourcePath] = args.destMap[args.sourcePath];
   }
 
   if (args.subModule) {

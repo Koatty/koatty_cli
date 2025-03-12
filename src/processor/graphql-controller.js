@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-10 22:07:14
+ * @LastEditTime: 2025-03-12 13:50:18
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -39,7 +39,7 @@ function graphqlProcessor(args, templatePath) {
  */
 function parseGraphqlArgs(args, templatePath) {
   const pascalName = string.toPascal(args.sourceName);
-  const schemaFile = `${getAppPath()}/schema/${pascalName}.graphql`;
+  const schemaFile = `${getAppPath()}/graphql/${pascalName}.graphql`;
 
   if (!ufs.isExist(schemaFile)) {
     throw Error(`GraphQL schema文件不存在: ${schemaFile}`);
@@ -92,7 +92,7 @@ function generateResolverClass(args, operations, types, templatePath) {
 
       const methodContext = {
         method: opType === 'Mutation' ? 'PostMapping' : 'GetMapping', // 修正HTTP方法映射
-        validated: opType === 'Mutation' ? 'true' : 'false',
+        validated: opType === 'Mutation' ? true : false,
         name: method.name,
         args: processedArgs,
         returnType: returnType

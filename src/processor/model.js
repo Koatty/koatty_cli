@@ -73,4 +73,4 @@ function createModel(name, type, opt, templatePath) {
   return args;
 }
 
-module.exports = createModel;
+module.exports = { createModel };
