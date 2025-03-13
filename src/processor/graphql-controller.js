@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-12 17:45:27
+ * @LastEditTime: 2025-03-13 11:28:12
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -39,7 +39,7 @@ function graphqlProcessor(args, templatePath) {
  */
 function parseGraphqlArgs(args, templatePath) {
   const pascalName = string.toPascal(args.sourceName);
-  const schemaFile = `${getAppPath()}${staticMap.get("proto")}/${pascalName}${subfixMap.get("proto")}`;
+  const schemaFile = `${getAppPath()}${staticMap.get("graphql")}/${pascalName}${subfixMap.get("graphql")}`;
 
   if (!ufs.isExist(schemaFile)) {
     throw Error(`GraphQL schema文件不存在: ${schemaFile}`);
@@ -103,8 +103,8 @@ function generateResolverClass(args, operations, types, templatePath) {
         methodContext.returnType = isArray ? returnType.replace('[]', 'Dto[]') : `${returnType}Dto`;
       }
 
-      let methodStr = methodTemplate.replace(/_METHOD_DECORATOR/g, methodContext.method);
-      methodStr = methodStr.replace(/_VALIDATED/g, methodContext.validated ? '\n@Validated()\n' : '');
+      // let methodStr = methodTemplate.replace(/_METHOD_DECORATOR/g, methodContext.method);
+      let methodStr = methodTemplate.replace(/_VALIDATED/g, methodContext.validated ? '\n@Validated()\n' : '');
       methodStr = methodStr.replace(/_METHOD_NAME/g, methodContext.name);
       methodStr = methodStr.replace(/_ARGS/g, methodContext.args.join(','));
       methodStr = methodStr.replace(/_RETURN_TYPE/g, methodContext.returnType);
