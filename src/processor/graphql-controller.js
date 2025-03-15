@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-13 11:28:12
+ * @LastEditTime: 2025-03-15 16:54:06
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -82,7 +82,7 @@ function generateResolverClass(args, operations, types, templatePath) {
           return `@${opType === 'Query' ? 'Get' : 'Post'}() ${arg.name}: ${typeName}Dto`;
         }
 
-        return `@${opType === 'Query' ? 'Get' : 'Post'}() ${arg.name}: ${typeName}`;
+        return `@RequestParam() ${arg.name}: ${typeName}`;
       });
 
       // 处理返回类型，保留数组标记
@@ -91,7 +91,7 @@ function generateResolverClass(args, operations, types, templatePath) {
       const baseReturnTypeName = isArray ? returnType.replace('[]', '') : returnType;
 
       const methodContext = {
-        method: opType === 'Mutation' ? 'PostMapping' : 'GetMapping', // 修正HTTP方法映射
+        method: processedArgs.length > 1 ? 'GetMapping' : 'PostMapping', // 修正HTTP方法映射
         validated: opType === 'Mutation' ? true : false,
         name: method.name,
         args: processedArgs,
@@ -103,8 +103,8 @@ function generateResolverClass(args, operations, types, templatePath) {
         methodContext.returnType = isArray ? returnType.replace('[]', 'Dto[]') : `${returnType}Dto`;
       }
 
-      // let methodStr = methodTemplate.replace(/_METHOD_DECORATOR/g, methodContext.method);
-      let methodStr = methodTemplate.replace(/_VALIDATED/g, methodContext.validated ? '\n@Validated()\n' : '');
+      let methodStr = methodTemplate.replace(/_METHOD_DECORATOR/g, methodContext.method);
+      methodStr = methodStr.replace(/_VALIDATED/g, methodContext.validated ? '\n@Validated()\n' : '');
       methodStr = methodStr.replace(/_METHOD_NAME/g, methodContext.name);
       methodStr = methodStr.replace(/_ARGS/g, methodContext.args.join(','));
       methodStr = methodStr.replace(/_RETURN_TYPE/g, methodContext.returnType);
