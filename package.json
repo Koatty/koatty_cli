@@ -53,6 +53,7 @@
     "supertest": "^7.0.0"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
     "cli-spinner": "^0.2.10",
     "commander": "^3.0.2",
     "del": "^6.0.0",
