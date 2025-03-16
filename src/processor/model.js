@@ -15,12 +15,18 @@ const { parseArgs } = require("./args");
 const { getAppPath } = require("../utils/path");
 
 /**
+ * Create model files based on template.
  * 
- * @param {*} name 
- * @param {*} type 
- * @param {*} opt 
- * @param {*} templatePath 
- * @returns 
+ * @param {string} name - The model name
+ * @param {string} type - The model type
+ * @param {object} opt - Options for model creation, including orm type
+ * @param {string} templatePath - Path to template files
+ * @returns {object} args - Object containing destination paths and replacement mappings
+ * 
+ * @description
+ * Creates model files from templates with proper naming and paths.
+ * For typeorm, generates model, entity and plugin files.
+ * Provides guidance for plugin configuration.
  */
 function createModel(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);

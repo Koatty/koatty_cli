@@ -9,13 +9,14 @@
  */
 const log = require('../utils/log');
 const { parseArgs } = require("./args");
+
 /**
- * 
- * @param {*} name 
- * @param {*} type 
- * @param {*} opt 
- * @param {*} templatePath 
- * @returns 
+ * Create middleware configuration and return parsed arguments
+ * @param {string} name - The name of the middleware
+ * @param {string} type - The type of middleware
+ * @param {object} opt - Options for middleware
+ * @param {string} templatePath - Path to middleware template
+ * @returns {object} Parsed arguments with callback for middleware configuration
  */
 function createMiddleware(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);

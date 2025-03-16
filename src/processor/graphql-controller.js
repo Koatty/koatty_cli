@@ -3,7 +3,7 @@
  * @Usage: 解析GraphQL Schema生成TypeScript解析器
  * @Author: richen
  * @Date: 2025-02-27 12:00:00
- * @LastEditTime: 2025-03-15 16:54:06
+ * @LastEditTime: 2025-03-16 11:20:10
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -17,11 +17,12 @@ const { CTL_IMPORT, CTL_METHOD, staticMap, subfixMap } = require('../command/con
 
 const baseTypes = ['string', 'number', 'boolean', 'ID'];
 const operationTypes = ['Query', 'Mutation', 'Subscription'];
+
 /**
- * GraphQL处理器入口
- * @param {object} args 
- * @param {object} templatePath 
- * @returns {object}
+ * Process GraphQL controller template arguments
+ * @param {Object} args - Template arguments object
+ * @param {string} templatePath - Path to template files
+ * @returns {Object} Processed template arguments with destination and replacement maps
  */
 function graphqlProcessor(args, templatePath) {
   parseGraphqlArgs(args, templatePath);
@@ -33,9 +34,11 @@ function graphqlProcessor(args, templatePath) {
 }
 
 /**
- * 解析GraphQL Schema参数
- * @param {object} args 
- * @returns {object}
+ * 解析 GraphQL 参数并生成相应的解析器和类型类
+ * @param {Object} args - 包含源名称等参数的对象
+ * @param {string} templatePath - 模板文件路径
+ * @returns {Object} 返回处理后的参数对象
+ * @throws {Error} 当 GraphQL schema 文件不存在时抛出错误
  */
 function parseGraphqlArgs(args, templatePath) {
   const pascalName = string.toPascal(args.sourceName);
@@ -56,7 +59,18 @@ function parseGraphqlArgs(args, templatePath) {
 }
 
 /**
- * 生成解析器类
+ * Generates a GraphQL resolver class based on provided operations and types.
+ * 
+ * @param {Object} args - Configuration arguments including destination file and module info
+ * @param {Object} operations - GraphQL operations (Query/Mutation) with their methods
+ * @param {Object} types - GraphQL type definitions
+ * @param {string} templatePath - Path to template files directory
+ * 
+ * @description
+ * This function processes GraphQL operations and types to generate a resolver class.
+ * It handles parameter types, return types, and generates appropriate method decorators.
+ * The function also manages imports for referenced DTOs and merges everything into
+ * a final resolver class content.
  */
 function generateResolverClass(args, operations, types, templatePath) {
   let resolverContent = ufs.readFile(path.resolve(templatePath, `controller_graphql.template`));
@@ -130,7 +144,15 @@ function generateResolverClass(args, operations, types, templatePath) {
   args.createMap[args.destFile] = resolverContent;
 }
 
-
+/**
+ * Generate DTO classes from GraphQL type definitions.
+ * @param {Object} args - Arguments object containing createMap for file generation
+ * @param {Object} types - GraphQL type definitions object
+ * @param {string} templatePath - Path to template directory
+ * @description Creates DTO (Data Transfer Object) classes based on GraphQL type definitions.
+ * Generates TypeScript classes with validation decorators for each object type.
+ * Skips operation types (Query, Mutation, etc.) and only processes Object and Input types.
+ */
 function generateTypeClasses(args, types, templatePath) {
   const destPath = path.resolve(`${getAppPath()}/dto/`);
   const typeTemplate = ufs.readFile(path.resolve(templatePath, `dto_graphql.template`));

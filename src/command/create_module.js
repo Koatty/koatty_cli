@@ -3,7 +3,7 @@
  * @Usage:
  * @Author: richen
  * @Date: 2020-12-22 17:51:07
- * @LastEditTime: 2025-03-10 20:54:01
+ * @LastEditTime: 2025-03-16 11:31:06
  */
 const path = require('path');
 const replace = require('replace');
@@ -22,13 +22,22 @@ const { createService } = require("../processor/service");
 const { createDefault } = require("../processor/default");
 
 let templatePath = '';
+
 /**
- * create module
- *
- * @param {*} name
- * @param {*} type
- * @param {*} opt
- * @returns {Promise<any>}  
+ * Create a new module in Koatty project.
+ * 
+ * @param {string} name - The name of the module to create
+ * @param {string} type - Module type ('controller', 'middleware', 'model', 'plugin', 'service')
+ * @param {Object} opt - Additional options for module creation
+ * @returns {Promise<void>}
+ * 
+ * @description
+ * This function creates a new module in a Koatty project based on templates.
+ * It validates the project directory, loads templates, and creates the module files.
+ * Supports different module types including controllers, middlewares, models,
+ * plugins and services.
+ * 
+ * @throws {Error} If template loading fails or module creation encounters an error
  */
 module.exports = async function (name, type, opt) {
   log.info('\n Welcome to use Koatty!');

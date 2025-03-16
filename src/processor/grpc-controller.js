@@ -15,9 +15,12 @@ const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_p
 const { CTL_IMPORT, CTL_METHOD, staticMap, subfixMap } = require('../command/config');
 
 /**
- * @description: 
- * @param {*} args
- * @return {*}
+ * Process gRPC controller template arguments
+ * @param {Object} args - Template arguments object
+ * @param {string} templatePath - Path to template files
+ * @returns {Object} Processed template arguments
+ * @description Processes and transforms template arguments for gRPC controller generation,
+ * including path mapping and module naming conventions
  */
 function grpcProcessor(args, templatePath) {
   parseGrpcArgs(args, templatePath);
@@ -32,10 +35,19 @@ function grpcProcessor(args, templatePath) {
 }
 
 /**
- * 处理gRPC控制器
- *
- * @param {*} args
- * @returns {*}  
+ * Parse gRPC controller arguments and generate corresponding files.
+ * 
+ * @param {Object} args - The arguments object containing source and destination information
+ * @param {string} templatePath - Path to the template files
+ * @returns {Object} Modified args object with created files mapping
+ * @throws {Error} When proto file doesn't exist or service not found in proto
+ * 
+ * This function:
+ * - Locates and parses the proto file for the controller
+ * - Generates controller methods from proto service definitions
+ * - Creates DTO (Data Transfer Object) classes for request/response types
+ * - Generates enum files from proto enums
+ * - Handles imports and template replacements
  */
 function parseGrpcArgs(args, templatePath) {
   // 根据控制器名自动寻找proto文件

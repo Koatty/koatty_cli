@@ -11,12 +11,13 @@ const log = require('../utils/log');
 const { parseArgs } = require("./args");
 
 /**
- * 
- * @param {*} name 
- * @param {*} type 
- * @param {*} opt 
- * @param {*} templatePath 
- * @returns 
+ * Creates a plugin configuration with the given parameters
+ * @param {string} name - The name of the plugin
+ * @param {string} type - The type of plugin
+ * @param {Object} opt - Plugin options
+ * @param {string} templatePath - Path to the plugin template
+ * @returns {Object} Plugin configuration arguments
+ * @description Generates plugin configuration and provides callback instructions for modifying plugin.ts file
  */
 function createPlugin(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);

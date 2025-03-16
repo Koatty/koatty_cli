@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2025-02-27 11:40:59
- * @LastEditTime: 2025-03-12 11:09:59
+ * @LastEditTime: 2025-03-16 11:40:04
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
@@ -12,13 +12,16 @@ const { parseArgs } = require("./args");
 const { grpcProcessor } = require("./grpc-controller");
 const { graphqlProcessor } = require("./graphql-controller");
 
+
 /**
+ * Create a controller with specified protocol type.
  * 
- * @param {*} name 
- * @param {*} type 
- * @param {*} opt 
- * @param {*} templatePath 
- * @returns 
+ * @param {string} name - The name of the controller
+ * @param {string} type - The type of the controller
+ * @param {Object} opt - Options object containing protocol type
+ * @param {string} opt.type - Protocol type ('http'|'grpc'|'graphql'|'websocket')
+ * @param {string} templatePath - Path to template files
+ * @returns {Object} args - Processed arguments with destination and replacement mappings
  */
 function createController(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);

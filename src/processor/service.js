@@ -12,12 +12,12 @@ const ufs = require('../utils/fs');
 const { parseArgs } = require("./args");
 
 /**
- * 
- * @param {*} name 
- * @param {*} type 
- * @param {*} opt 
- * @param {*} templatePath 
- * @returns 
+ * Creates a service file with optional interface implementation
+ * @param {string} name - The name of the service
+ * @param {string} type - The type of service
+ * @param {Object} opt - Options object containing interface flag
+ * @param {string} templatePath - Path to template files
+ * @returns {Object} args - Processed arguments containing file paths and replacement mappings
  */
 function createService(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);

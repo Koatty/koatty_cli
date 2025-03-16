@@ -3,7 +3,7 @@
  * @Usage: 
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
- * @LastEditTime: 2025-03-11 16:07:32
+ * @LastEditTime: 2025-03-16 11:27:09
  */
 
 const path = require('path');
@@ -44,7 +44,26 @@ const supportMap = {
 
 
 
-const create = async (projectName, options) => {
+/**
+ * Create a new Koatty project with specified template.
+ * 
+ * @param {string} projectName - The name of the project to create
+ * @param {object} options - Project creation options
+ * @param {string} options.template - Template type ('project'|'middleware'|'plugin')
+ * @returns {Promise<void>} 
+ * 
+ * @description
+ * Creates a new project by:
+ * 1. Checking if project name already exists
+ * 2. Loading template from remote repository
+ * 3. Copying template files to project directory
+ * 4. Replacing placeholder values with project specific values
+ * 5. Creating project configuration file
+ * 6. Removing git directory
+ * 
+ * After creation, displays instructions for project setup and running.
+ */
+module.exports = async (projectName, options) => {
   log.info('\n Welcome to use Koatty!');
   log.info(LOGO);
   log.info('Start create project...');
@@ -127,4 +146,3 @@ const create = async (projectName, options) => {
   log.log();
 };
 
-module.exports = create;

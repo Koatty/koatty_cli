@@ -9,13 +9,14 @@
  */
 const { parseArgs } = require("./args");
 
+
 /**
- * 
- * @param {*} name 
- * @param {*} type 
- * @param {*} opt 
- * @param {*} templatePath 
- * @returns 
+ * Create default arguments for template generation
+ * @param {string} name - The name of the template to create
+ * @param {string} type - The type of template
+ * @param {object} opt - Options for template creation
+ * @param {string} templatePath - Path to template directory
+ * @returns {object|null} Parsed arguments object or null if parsing fails
  */
 function createDefault(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);
