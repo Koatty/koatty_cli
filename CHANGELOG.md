@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.12.2](https://github.com/koatty/koatty_cli/compare/v3.12.1...v3.12.2) (2025-03-16)
+
+
+### Bug Fixes
+
+* add GitHub mirrors support and retry mechanism for template pulling and cloning ([07ba001](https://github.com/koatty/koatty_cli/commit/07ba0012e8e03de95101172a227b3b55ed60736c))
+* update GraphQL resolver argument annotations to use @RequestParam consistently ([589a0fb](https://github.com/koatty/koatty_cli/commit/589a0fb7b0e7770a2d5b39ca8f4a3a3815819cb9))
+
 ### [3.12.1](https://github.com/koatty/koatty_cli/compare/v3.11.3...v3.12.1) (2025-03-16)
 
 ### [3.11.3](https://github.com/koatty/koatty_cli/compare/v3.11.2...v3.11.3) (2025-03-16)
