@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [](https://github.com/koatty/koatty_cli/compare/v3.11.3...v) (2025-03-16)
+### [3.12.1](https://github.com/koatty/koatty_cli/compare/v3.11.3...v3.12.1) (2025-03-16)
 
 ### [3.11.3](https://github.com/koatty/koatty_cli/compare/v3.11.2...v3.11.3) (2025-03-16)
 
