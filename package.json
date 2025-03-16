@@ -1,6 +1,6 @@
 {
   "name": "koatty_cli",
-  "version": "3.11.3",
+  "version": null,
   "description": "Koatty command line tool.",
   "scripts": {
     "eslint": "eslint --ext .js ./src",
