@@ -93,7 +93,8 @@ function generateResolverClass(args, operations, types, templatePath) {
         // 仅非基础类型
         if (!baseTypes.includes(baseTypeName)) {
           typeRefs.add(baseTypeName);
-          return `@${opType === 'Query' ? 'Get' : 'Post'}() ${arg.name}: ${typeName}Dto`;
+          // return `@${opType === 'Query' ? 'Get' : 'Post'}() ${arg.name}: ${typeName}Dto`;
+          return `@RequestParam() ${arg.name}: ${typeName}Dto`;
         }
 
         return `@RequestParam() ${arg.name}: ${typeName}`;
@@ -105,7 +106,7 @@ function generateResolverClass(args, operations, types, templatePath) {
       const baseReturnTypeName = isArray ? returnType.replace('[]', '') : returnType;
 
       const methodContext = {
-        method: processedArgs.length > 1 ? 'GetMapping' : 'PostMapping', // 修正HTTP方法映射
+        method: 'PostMapping', // 修正HTTP方法映射
         validated: opType === 'Mutation' ? true : false,
         name: method.name,
         args: processedArgs,
