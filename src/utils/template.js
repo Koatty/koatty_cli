@@ -16,9 +16,21 @@ const http = require('isomorphic-git/http/node');
 const log = require('./log');
 const loading = require('./loading');
 const { isExist } = require('./fs');
+const { GITHUB_MIRRORS } = require('../command/config');
 
 // os temp dir
 const osTempDir = os.tmpdir();
+
+/**
+ * get mirrors
+ */
+function getMirrors(url) {
+  const mirrors = GITHUB_MIRRORS.map(mirror => {
+    return url.replace(mirror.key, mirror.val);
+  });
+  mirrors.unshift(url);
+  return mirrors;
+}
 
 /**
  * pull template from remote repository
@@ -26,11 +38,25 @@ const osTempDir = os.tmpdir();
  * @param {string} dir repository save path
  * @returns {promise}
  */
-const pullTemplate = (url, ref, dir) => git.fastForward({
-  fs, http, url, dir, ref,
-  gitdir: path.join(dir, '.git'),
-  singleBranch: true,
-});
+const pullTemplate = async (url, ref, dir) => {
+  const mirrors = getMirrors(url);
+
+  for (let attempt = 1; attempt <= mirrors.length; attempt++) {
+    try {
+      return await git.fastForward({
+        fs, http,
+        url: mirrors[attempt - 1],
+        dir, ref,
+        gitdir: path.join(dir, '.git'),
+        singleBranch: true,
+      });
+    } catch (error) {
+      log.warning(`Attempt ${attempt} failed: ${error.message}`);
+      if (attempt === 3) throw error;
+      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+    }
+  }
+}
 
 /**
  * clone template from remote repository
@@ -39,10 +65,25 @@ const pullTemplate = (url, ref, dir) => git.fastForward({
  * @param {string} dir repository save path
  * @returns {promise}
  */
-const cloneTemplate = (url, ref, dir) => git.clone({
-  fs, http, url, dir, ref,
-  singleBranch: true,
-});
+const cloneTemplate = async (url, ref, dir) => {
+  const mirrors = getMirrors(url);
+
+  for (let attempt = 1; attempt <= mirrors.length; attempt++) {
+    try {
+      return await git.clone({
+        fs, http,
+        url: mirrors[attempt - 1],
+        dir, ref,
+        gitdir: path.join(dir, '.git'),
+        singleBranch: true,
+      });
+    } catch (error) {
+      log.warning(`Attempt ${attempt} failed: ${error.message}`);
+      if (attempt === 3) throw error;
+      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+    }
+  }
+};
 
 /**
  * copy template directory

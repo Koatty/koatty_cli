@@ -14,6 +14,11 @@ module.exports = {
   COM_TEMPLATE_NAME: 'koatty_template_component',
   COM_TEMPLATE_URL: 'https://github.com/Koatty/koatty_template_component.git#main',
 
+  GITHUB_MIRRORS: [
+    { key: 'github.com', val: 'gitclone.com/github.com' },
+    { key: 'github.com/Koatty', val: 'gitee.com/richenlin' },
+  ],
+
   CTL_IMPORT: "//_IMPORT_LIST Important! Do not delete this line",
   CTL_METHOD: "//_METHOD_LIST Important! Do not delete this line",
 
