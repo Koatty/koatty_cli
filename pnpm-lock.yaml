@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      cli-spinner:
+        specifier: ^0.2.10
+        version: 0.2.10
       commander:
         specifier: ^3.0.2
         version: 3.0.2
@@ -26,6 +29,9 @@ importers:
       koatty_proto:
         specifier: ^1.1.12
         version: 1.2.0(koatty_lib@1.4.0)
+      ncp:
+        specifier: ^2.0.0
+        version: 2.0.0
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
@@ -1308,6 +1314,10 @@ packages:
   cli-boxes@2.2.1:
     resolution: {integrity: sha512-y4coMcylgSCdVinjiDBuR8PCC2bLjyGTwEmPb9NHR/QaNU6EUOXcTY/s6VjGMD6ENSEaeQYHCY0GNGS5jfMwPw==}
     engines: {node: '>=6'}
+
+  cli-spinner@0.2.10:
+    resolution: {integrity: sha512-U0sSQ+JJvSLi1pAYuJykwiA8Dsr15uHEy85iCJ6A+0DjVxivr3d+N2Wjvodeg89uP5K6TswFkKBfAD7B3YSn/Q==}
+    engines: {node: '>=0.10'}
 
   cliui@6.0.0:
     resolution: {integrity: sha512-t6wbgtoCXvAzst7QgXxJYqPt0usEfbgQdftEPbLL/cvv6HPE5VgvqCuAIDR0NgU52ds6rFwqrgakNLrHEjCbrQ==}
@@ -2665,6 +2675,10 @@ packages:
 
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+
+  ncp@2.0.0:
+    resolution: {integrity: sha512-zIdGUrPRFTUELUvr3Gmc7KZ2Sw/h1PiVM0Af/oHB6zgnV1ikqSfRk+TOufi79aHYCW3NiOXmr1BP5nWbzojLaA==}
+    hasBin: true
 
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
@@ -5161,6 +5175,8 @@ snapshots:
 
   cli-boxes@2.2.1: {}
 
+  cli-spinner@0.2.10: {}
+
   cliui@6.0.0:
     dependencies:
       string-width: 4.2.3
@@ -6739,6 +6755,8 @@ snapshots:
   murmurhash@2.0.1: {}
 
   natural-compare@1.4.0: {}
+
+  ncp@2.0.0: {}
 
   neo-async@2.6.2: {}
 
