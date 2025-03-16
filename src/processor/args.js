@@ -14,14 +14,25 @@ const string = require('../utils/sting');
 const { getAppPath } = require("../utils/path");
 const { staticMap, subfixMap } = require("../command/config");
 
-/**
- * 路径参数处理
- * @param {*} name 
- * @param {*} type 
- * @param {*} templatePath 
- * @returns 
- */
+
 module.exports = {
+  /**
+   * Parse command line arguments and generate file paths for code generation.
+   * 
+   * @param {string} name - The name of the module to create (can include submodule path)
+   * @param {string} type - The type of module to create (controller, service, etc.)
+   * @param {string} templatePath - Path to the template directory
+   * @returns {Object|undefined} Object containing parsed paths and replacement values, or undefined if validation fails
+   *   - sourceName: Base name of the source
+   *   - sourcePath: Path to template file
+   *   - newName: Generated class name
+   *   - subModule: Submodule name if provided
+   *   - destMap: Map of source to destination paths
+   *   - createMap: Map for additional file creation
+   *   - replaceMap: Map of placeholder values to replace
+   *   - destPath: Destination directory path
+   *   - destFile: Full path to destination file
+   */
   parseArgs(name, type, templatePath) {
     let destPath = path.resolve(`${getAppPath()}/${type}/`);
     if (staticMap.has(type)) {
