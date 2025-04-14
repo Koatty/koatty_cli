@@ -8,7 +8,7 @@
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 const { parseGraphqlDocument, parseOperations,
-  parseTypeDefinitions, getTypeName } = require('koatty_graphql');
+  parseTypeDefinitions, getTypeName, buildSchema } = require('koatty_graphql');
 const path = require('path');
 const ufs = require('../utils/fs');
 const string = require('../utils/sting');
@@ -51,6 +51,8 @@ function parseGraphqlArgs(args, templatePath) {
   const document = parseGraphqlDocument(schemaFile);
   const operations = parseOperations(document);
   const types = parseTypeDefinitions(document); // 添加类型定义解析函数
+
+  buildSchema(schemaFile);
 
   generateResolverClass(args, operations, types, templatePath);
   generateTypeClasses(args, types, templatePath);
