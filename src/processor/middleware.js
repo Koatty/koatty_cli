@@ -8,7 +8,7 @@
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 const log = require('../utils/log');
-const { parseArgs } = require("./args");
+const { parseArgs } = require('./args');
 /**
  * 
  * @param {*} name 
@@ -17,16 +17,16 @@ const { parseArgs } = require("./args");
  * @param {*} templatePath 
  * @returns 
  */
-export function createMiddleware(name, type, opt, templatePath) {
+function createMiddleware(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);
   if (!args) {
     process.exit(0);
   }
   args.callBack = function () {
     log.log();
-    log.log('please modify /app/config/middlewate.ts file:');
+    log.log('please modify /app/config/middleware.ts file:');
     log.log();
-    log.log(`list: [..., "${args.newName}"] //加载中间件`);
+    log.log(`list: [..., "${args.newName}"] //加载的中间件列表,执行顺序按照数组元素顺序`);
     log.log('config: { //中间件配置 ');
     log.log(`   "${args.newName}":{ //todo }`);
     log.log('}');
@@ -35,3 +35,5 @@ export function createMiddleware(name, type, opt, templatePath) {
   };
   return args;
 }
+
+module.exports = { createMiddleware };

@@ -62,56 +62,104 @@ const copyTemplate = (templatePath, destPath) => new Promise((resolve, reject) =
  * @param {string} templateUrl template git address
  * @param {string} templateName template name
  * @param {string} [templateDir] template directory
+ * @param {string} [giteeUrl] gitee backup url
  * @returns {Promise<any>} local template path
  */
-const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = "") => {
-  if (templateDir == "") {
+const loadAndUpdateTemplate = async (templateUrl, templateName, templateDir = '', giteeUrl = null) => {
+  if (templateDir == '') {
     templateDir = path.join(osTempDir, templateName);
   }
 
-  let branchName = "main";
-  if (templateUrl.includes("#")) {
+  let branchName = 'main';
+  let originalUrl = templateUrl;
+  if (templateUrl.includes('#')) {
     const urlArr = templateUrl.split('#');
     if (urlArr.length == 2) {
-      templateUrl = urlArr[0] || "";
-      branchName = urlArr[1] || "main";
+      templateUrl = urlArr[0] || '';
+      branchName = urlArr[1] || 'main';
     }
+  }
+
+  // 构建要尝试的URL列表
+  const urlsToTry = [templateUrl];
+  if (giteeUrl) {
+    // 处理giteeUrl的分支信息
+    let giteeUrlProcessed = giteeUrl;
+    if (giteeUrl.includes('#')) {
+      const giteeUrlArr = giteeUrl.split('#');
+      giteeUrlProcessed = giteeUrlArr[0] || '';
+      // 使用原始URL的分支名称，如果gitee URL没有指定分支的话
+      if (!giteeUrlArr[1]) {
+        giteeUrlProcessed = `${giteeUrlProcessed}#${branchName}`;
+      }
+    } else {
+      giteeUrlProcessed = `${giteeUrl}#${branchName}`;
+    }
+    urlsToTry.push(giteeUrlProcessed);
   }
 
   // download template
   log.log(`Start download template [${templateName}]`);
-  try {
-    loading.start();
-    let flag = false;
-    // check local template
-    if (isExist(templateDir)) {
-      // update local template
-      // execSync(`rm -rf ${templateDir}`);
-      // execSync(`mv ${newTemplateDir} ${templateDir}`);
-      if (!isExist(path.join(templateDir, '.git'))) {
-        await del(templateDir, { force: true });
-      } else {
-        await pullTemplate(templateUrl, branchName, templateDir).then(() => {
-          log.info(`Update template [${templateName}] success!`);
-        }).catch(err => {
-          flag = true;
-          // log.error(`Update template [${templateName}] fail: ${err.stack}`);
-        });
-        if (!flag) {
-          return templateDir;
+  
+  for (let i = 0; i < urlsToTry.length; i++) {
+    const currentUrl = urlsToTry[i];
+    const isGiteeUrl = currentUrl.includes('gitee.com');
+    
+    // 处理当前URL的分支信息
+    let currentUrlProcessed = currentUrl;
+    let currentBranch = branchName;
+    if (currentUrl.includes('#')) {
+      const urlArr = currentUrl.split('#');
+      currentUrlProcessed = urlArr[0] || '';
+      currentBranch = urlArr[1] || branchName;
+    }
+    
+    if (isGiteeUrl) {
+      log.log(`Trying Gitee mirror for template [${templateName}]`);
+    }
+    
+    try {
+      loading.start();
+      let flag = false;
+      // check local template
+      if (isExist(templateDir)) {
+        // update local template
+        if (!isExist(path.join(templateDir, '.git'))) {
+          await del(templateDir, { force: true });
+        } else {
+          await pullTemplate(currentUrlProcessed, currentBranch, templateDir).then(() => {
+            log.info(`Update template [${templateName}] success!`);
+          }).catch(err => {
+            flag = true;
+            // log.error(`Update template [${templateName}] fail: ${err.stack}`);
+          });
+          if (!flag) {
+            return templateDir;
+          }
         }
       }
-    }
 
-    // clone template
-    await cloneTemplate(templateUrl, branchName, templateDir);
-    log.info(`Download template [${templateName}] success!`);
-    return templateDir;
-  } catch (error) {
-    log.error(`Download template [${templateName}] fail: ${error.stack}`);
-  } finally {
-    loading.stop();
+      // clone template
+      await cloneTemplate(currentUrlProcessed, currentBranch, templateDir);
+      log.info(`Download template [${templateName}] success!`);
+      return templateDir;
+    } catch (error) {
+      const errorMsg = `Download template [${templateName}] fail from ${isGiteeUrl ? 'Gitee' : 'GitHub'}: ${error.message}`;
+      
+      if (i === urlsToTry.length - 1) {
+        // 最后一个URL也失败了
+        log.error(errorMsg);
+      } else {
+        // 还有备用URL可以尝试
+        log.warning(errorMsg);
+        log.log('Trying alternative source...');
+      }
+    } finally {
+      loading.stop();
+    }
   }
+  
+  return null;
 };
 
 module.exports = {

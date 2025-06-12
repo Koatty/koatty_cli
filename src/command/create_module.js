@@ -11,18 +11,18 @@ const string = require('../utils/sting');
 const log = require('../utils/log');
 const ufs = require('../utils/fs');
 const { writeAndFormatFile } = require('../utils/format');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('./config');
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CLI_TEMPLATE_URL_GITEE, CTL_IMPORT, CTL_METHOD } = require('./config');
 const template = require('../utils/template');
 const { regex } = require('replace/bin/shared-options');
 const { processVer } = require('../utils/version');
-const { grpcProcessor } = require("../processor/grpc-controller");
-const { isKoattyApp, getAppPath } = require("../utils/path");
-const { createController } = require("../processor/controller");
-const { createMiddleware } = require("../processor/middleware");
-const { createModel } = require("../processor/model");
-const { createPlugin } = require("../processor/model");
-const { createService } = require("../processor/service");
-const { createDefault } = require("../processor/default");
+const { grpcProcessor } = require('../processor/grpc-controller');
+const { isKoattyApp, getAppPath } = require('../utils/path');
+const { createController } = require('../processor/controller');
+const { createMiddleware } = require('../processor/middleware');
+const { createModel } = require('../processor/model');
+const { createPlugin } = require('../processor/plugin');
+const { createService } = require('../processor/service');
+const { createDefault } = require('../processor/default');
 
 let templatePath = '';
 /**
@@ -48,35 +48,35 @@ module.exports = async function (name, type, opt) {
   // process ver
   const templateGit = processVer(CLI_TEMPLATE_URL);
   // template dir
-  templatePath = await template.loadAndUpdateTemplate(templateGit, CLI_TEMPLATE_NAME);
+  templatePath = await template.loadAndUpdateTemplate(templateGit, CLI_TEMPLATE_NAME, '', CLI_TEMPLATE_URL_GITEE);
   if (!templatePath || !ufs.isExist(templatePath)) {
     log.error(`Create module fail, can't find template [${templateGit}], please check network!`);
     return;
   }
   // add prefix
-  templatePath = path.resolve(templatePath, "src");
+  templatePath = path.resolve(templatePath, 'src');
 
   let args = {};
   try {
     switch (type) {
-      case 'controller':
-        args = createController(name, type, opt, templatePath);
-        break;
-      case 'middleware':
-        args = createMiddleware(name, type, opt, templatePath);
-        break;
-      case 'model':
-        args = createModel(name, type, opt, templatePath);
-        break;
-      case 'plugin':
-        args = createPlugin(name, type, opt, templatePath);
-        break;
-      case 'service':
-        args = createService(name, type, opt, templatePath);
-        break;
-      default:
-        args = createDefault(name, type, opt, templatePath);
-        break;
+    case 'controller':
+      args = createController(name, type, opt, templatePath);
+      break;
+    case 'middleware':
+      args = createMiddleware(name, type, opt, templatePath);
+      break;
+    case 'model':
+      args = createModel(name, type, opt, templatePath);
+      break;
+    case 'plugin':
+      args = createPlugin(name, type, opt, templatePath);
+      break;
+    case 'service':
+      args = createService(name, type, opt, templatePath);
+      break;
+    default:
+      args = createDefault(name, type, opt, templatePath);
+      break;
     }
 
     const { newName, destMap, createMap, replaceMap, callBack } = args;

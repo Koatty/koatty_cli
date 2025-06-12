@@ -7,7 +7,8 @@
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-const { format } = require('prettier');
+const { format, resolveConfig } = require('prettier');
+const path = require('path');
 const fs = require('fs-extra');
 
 async function writeAndFormatFile(filePath, content) {
@@ -19,10 +20,10 @@ async function writeAndFormatFile(filePath, content) {
     const rawCode = await fs.readFile(filePath, 'utf-8');
 
     // 第三步：获取项目配置（优先使用项目本地prettier配置）
-    const config = await prettier.resolveConfig(filePath);
+    const config = await resolveConfig(filePath);
 
     // 第四步：格式化代码
-    const formatted = await prettier.format(rawCode, {
+    const formatted = await format(rawCode, {
       ...config,
       filepath: filePath, // 自动识别文件类型
       parser: getParser(filePath) // 自定义类型判断
@@ -33,6 +34,7 @@ async function writeAndFormatFile(filePath, content) {
 
   } catch (error) {
     console.error(`Formatting failed for ${filePath}:`, error);
+    // 格式化失败时不应该阻断流程，保持原始内容
   }
 }
 
@@ -51,4 +53,4 @@ function getParser(filePath) {
   return map[ext] || 'babel';
 }
 
-module.exports = writeAndFormatFile;
+module.exports = { writeAndFormatFile };

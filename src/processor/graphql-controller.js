@@ -9,11 +9,10 @@
  */
 
 const { parse, Kind } = require('graphql');
-const { mustache } = require('mustache');
 const path = require('path');
 const ufs = require('../utils/fs');
 const string = require('../utils/sting');
-const { isKoattyApp, getAppPath } = require("../utils/path");
+const { isKoattyApp, getAppPath } = require('../utils/path');
 const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../command/config');
 
 const baseTypes = ['string', 'number', 'boolean', 'ID'];
@@ -90,9 +89,9 @@ function parseOperations(document) {
  * 生成解析器类
  */
 function generateResolverClass(args, operations, types, templatePath) {
-  let resolverContent = ufs.readFile(path.resolve(templatePath, `controller_graphql.template`));
-  const methodTemplate = ufs.readFile(path.resolve(templatePath, `controller_graphql_method.template`));
-  const importTemplate = ufs.readFile(path.resolve(templatePath, `controller_graphql_import.template`));
+  let resolverContent = ufs.readFile(path.resolve(templatePath, 'controller_graphql.template'));
+  const methodTemplate = ufs.readFile(path.resolve(templatePath, 'controller_graphql_method.template'));
+  const importTemplate = ufs.readFile(path.resolve(templatePath, 'controller_graphql_import.template'));
 
   const methodArr = [];
   const importArr = [];
@@ -150,9 +149,9 @@ function generateResolverClass(args, operations, types, templatePath) {
 
   // 合并模板内容
   if (importArr.length > 0) {
-    resolverContent = resolverContent.replace(new RegExp(CTL_IMPORT, "g"), importArr.join("\n"));
+    resolverContent = resolverContent.replace(new RegExp(CTL_IMPORT, 'g'), importArr.join('\n'));
   }
-  resolverContent = resolverContent.replace(new RegExp(CTL_METHOD, "g"), methodArr.join("\n"));
+  resolverContent = resolverContent.replace(new RegExp(CTL_METHOD, 'g'), methodArr.join('\n'));
   args.createMap[args.destFile] = resolverContent;
 }
 
@@ -195,7 +194,7 @@ function getTypeName(type) {
 
 function generateTypeClasses(args, types, templatePath) {
   const destPath = path.resolve(`${getAppPath()}/dto/`);
-  const typeTemplate = ufs.readFile(path.resolve(templatePath, `dto_graphql.template`));
+  const typeTemplate = ufs.readFile(path.resolve(templatePath, 'dto_graphql.template'));
 
   Object.entries(types).forEach(([typeName, definition]) => {
     if (!operationTypes.includes(definition.name) &&
@@ -221,4 +220,4 @@ function generateTypeClasses(args, types, templatePath) {
 module.exports = {
   graphqlProcessor,
   parseGraphqlArgs
-}
+};

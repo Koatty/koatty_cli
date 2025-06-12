@@ -7,7 +7,7 @@
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-const { parseArgs } = require("./args");
+const { parseArgs } = require('./args');
 
 /**
  * 
@@ -17,10 +17,13 @@ const { parseArgs } = require("./args");
  * @param {*} templatePath 
  * @returns 
  */
-export function createDefault(name, type, opt, templatePath) {
+function createDefault(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);
   if (!args) {
     process.exit(0);
   }
+
   return args;
 }
+
+module.exports = { createDefault };

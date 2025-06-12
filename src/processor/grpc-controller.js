@@ -10,7 +10,7 @@
 const path = require('path');
 const ufs = require('../utils/fs');
 const string = require('../utils/sting');
-const { isKoattyApp, getAppPath } = require("../utils/path");
+const { isKoattyApp, getAppPath } = require('../utils/path');
 const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
 const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../command/config');
 
@@ -19,7 +19,7 @@ const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = re
  * @param {*} args
  * @return {*}
  */
-export function grpcProcessor(args, templatePath) {
+function grpcProcessor(args, templatePath) {
   parseGrpcArgs(args, templatePath);
   args.destMap = {};
   if (args.subModule) {
@@ -37,14 +37,14 @@ export function grpcProcessor(args, templatePath) {
  * @param {*} args
  * @returns {*}  
  */
-export function parseGrpcArgs(args, templatePath) {
+function parseGrpcArgs(args, templatePath) {
   // 根据控制器名自动寻找proto文件
   const pascalName = string.toPascal(args.sourceName);
-  const protoFile = `${getAppPath()}/proto/${pascalName}.proto`
+  const protoFile = `${getAppPath()}/proto/${pascalName}.proto`;
   if (!ufs.isExist(protoFile)) {
     throw Error(`proto file : ${protoFile} does not exist. Please use the 'koatty proto ${args.sourceName}' command to create.`);
   }
-  const source = ufs.readFile(protoFile)
+  const source = ufs.readFile(protoFile);
   const res = parseProto(source);
   const methods = parseMethods(res);
   if (!Object.hasOwnProperty.call(methods, pascalName)) {
@@ -54,9 +54,9 @@ export function parseGrpcArgs(args, templatePath) {
   const methodArr = [];
   const dtoArr = [];
   const importArr = [];
-  let methodStr = ufs.readFile(path.resolve(templatePath, `controller_CTL_METHOD.template`));
-  let importStr = ufs.readFile(path.resolve(templatePath, `controller_CTL_IMPORT.template`));
-  let exCtlContent = "";
+  let methodStr = ufs.readFile(path.resolve(templatePath, 'controller_CTL_METHOD.template'));
+  let importStr = ufs.readFile(path.resolve(templatePath, 'controller_CTL_IMPORT.template'));
+  let exCtlContent = '';
   if (ufs.isExist(args.destFile)) {
     exCtlContent = ufs.readFile(args.destFile);
   }
@@ -66,7 +66,7 @@ export function parseGrpcArgs(args, templatePath) {
       if (it && !exCtlContent.includes(`${it.name}(`)) {
         let method = methodStr.replace(/_METHOD_NAME/g, it.name);
         let requestType = 'any';
-        if (it.requestType != "") {
+        if (it.requestType != '') {
           requestType = `${it.requestType}Dto`;
           if (!exCtlContent.includes(requestType)) {
             dtoArr.push(requestType);
@@ -90,20 +90,20 @@ export function parseGrpcArgs(args, templatePath) {
   });
 
   for (const it of dtoArr) {
-    importArr.push(importStr.replace(/_DTO_NAME/g, it).replace(/_SUB_PATH/g, args.subModule ? '../..' : '..'))
+    importArr.push(importStr.replace(/_DTO_NAME/g, it).replace(/_SUB_PATH/g, args.subModule ? '../..' : '..'));
   }
 
   if (exCtlContent.length == 0) {
-    exCtlContent = ufs.readFile(path.resolve(templatePath, `controller_grpc.template`));
+    exCtlContent = ufs.readFile(path.resolve(templatePath, 'controller_grpc.template'));
   }
 
   if (importArr.length > 0) {
     importArr.push(CTL_IMPORT);
-    exCtlContent = exCtlContent.replace(new RegExp(CTL_IMPORT, "g"), importArr.join("\n"));
+    exCtlContent = exCtlContent.replace(new RegExp(CTL_IMPORT, 'g'), importArr.join('\n'));
   }
   if (methodArr.length > 0) {
     methodArr.push(CTL_METHOD);
-    exCtlContent = exCtlContent.replace(new RegExp(CTL_METHOD, "g"), methodArr.join("\n"));
+    exCtlContent = exCtlContent.replace(new RegExp(CTL_METHOD, 'g'), methodArr.join('\n'));
   }
 
   args.createMap[args.destFile] = exCtlContent;
@@ -111,8 +111,8 @@ export function parseGrpcArgs(args, templatePath) {
   const destPath = path.resolve(`${getAppPath()}/dto/`);
   // enum
   const values = parseValues(res);
-  const enumContent = ufs.readFile(path.resolve(templatePath, `enum.template`));
-  let enumImports = "";
+  const enumContent = ufs.readFile(path.resolve(templatePath, 'enum.template'));
+  let enumImports = '';
   Object.keys(values).map(key => {
     if (Object.hasOwnProperty.call(values, key)) {
       const it = values[key];
@@ -121,14 +121,14 @@ export function parseGrpcArgs(args, templatePath) {
         let props = [...(it.fields || [])];
         enumImports = `${enumImports}import { ${it.name} } from "./${it.name}";\n`;
         if (!ufs.isExist(name)) {
-          args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, props.join("\n\n"));
+          args.createMap[name] = enumContent.replace(/_CLASS_NAME/g, it.name).replace(/\/\/_FIELDS/g, props.join('\n\n'));
         }
       }
     }
   });
   // request & reply
   const fields = parseFields(res);
-  const dtoContent = ufs.readFile(path.resolve(templatePath, `dto.template`));
+  const dtoContent = ufs.readFile(path.resolve(templatePath, 'dto.template'));
   Object.keys(fields).map(key => {
     if (Object.hasOwnProperty.call(fields, key)) {
       const it = fields[key];
@@ -143,7 +143,7 @@ export function parseGrpcArgs(args, templatePath) {
         });
         if (!ufs.isExist(name)) {
           args.createMap[name] = dtoContent.replace(/_CLASS_NAME/g, `${it.name}Dto`)
-            .replace(/\/\/_FIELDS/g, props.join("\n\n")
+            .replace(/\/\/_FIELDS/g, props.join('\n\n')
               .replace(/\/\/_ENUM_IMPORT/g, enumImports));
         }
       }
@@ -152,3 +152,5 @@ export function parseGrpcArgs(args, templatePath) {
 
   return args;
 }
+
+module.exports = { grpcProcessor, parseGrpcArgs };

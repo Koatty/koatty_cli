@@ -11,7 +11,7 @@ const path = require('path');
 const ufs = require('../utils/fs');
 const log = require('../utils/log');
 const string = require('../utils/sting');
-const { isKoattyApp, getAppPath } = require("../utils/path");
+const { isKoattyApp, getAppPath } = require('../utils/path');
 
 /**
  * 路径参数处理
@@ -38,11 +38,11 @@ module.exports = {
     } else {
       sourceName = subNames[0];
     }
-    let subFix = ".ts"
+    let subFix = '.ts';
     let newName = `${string.toPascal(sourceName)}${string.toPascal(type)}`;
     let camelName = `${sourceName}${string.toPascal(type)}`;
-    if (type == "proto") {
-      subFix = ".proto"
+    if (type == 'proto') {
+      subFix = '.proto';
       newName = `${string.toPascal(sourceName)}`;
       camelName = `${string.toPascal(sourceName)}`;
     }
@@ -57,7 +57,7 @@ module.exports = {
     };
 
     //if target file is exist, ignore it
-    if (ufs.isExist(destFile) && type != "controller") {
+    if (ufs.isExist(destFile) && type != 'controller') {
       log.error('Module existed' + ' : ' + destFile);
       return;
     }
@@ -68,4 +68,4 @@ module.exports = {
     const createMap = {};
     return { sourceName, sourcePath, newName, subModule, destMap, createMap, replaceMap, destPath, destFile };
   }
-}
+};

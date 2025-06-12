@@ -8,18 +8,18 @@
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 const lib = require('koatty_lib');
-const { version } = require("../../package.json");
+const { version } = require('../../package.json');
 
 const processVer = function (url) {
   const currentVer = version.slice(0, version.lastIndexOf('.'));
   // 从3.11.x版本开始，用分支管理
-  if (lib.toNumber(currentVer) >= 3.11 && !url.includes("component")) {
-    return url.replace("#main", "#" + currentVer + ".x")
+  if (lib.toNumber(currentVer) >= 3.11 && !url.includes('component')) {
+    return url.replace('#main', '#' + currentVer + '.x');
   }
   return url;
-}
+};
 
 
 module.exports = {
   processVer,
-}
+};

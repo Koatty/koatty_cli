@@ -11,8 +11,8 @@ const path = require('path');
 const ufs = require('../utils/fs');
 const log = require('../utils/log');
 const string = require('../utils/sting');
-const { parseArgs } = require("./args");
-const { isKoattyApp, getAppPath } = require("../utils/path");
+const { parseArgs } = require('./args');
+const { isKoattyApp, getAppPath } = require('../utils/path');
 
 /**
  * 
@@ -22,16 +22,16 @@ const { isKoattyApp, getAppPath } = require("../utils/path");
  * @param {*} templatePath 
  * @returns 
  */
-export function createModel(name, type, opt, templatePath) {
+function createModel(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);
   if (!args) {
     process.exit(0);
   }
-  const orm = opt.orm || 'typeorm';
+  const orm = opt && opt.orm ? opt.orm : 'typeorm';
   if (orm === 'typeorm') {
     const sourcePath = path.resolve(templatePath, `model.${orm}.template`);
     args.destMap[sourcePath] = args.destMap[args.sourcePath];
-    args.destMap[args.sourcePath] = "";
+    args.destMap[args.sourcePath] = '';
 
     const entityPath = path.resolve(templatePath, `entity.${orm}.template`);
     const entityName = `${string.toPascal(args.sourceName)}Entity`;
@@ -58,9 +58,9 @@ export function createModel(name, type, opt, templatePath) {
       log.log();
       log.log('please modify /app/config/plugin.ts file:');
       log.log();
-      log.log(`list: [..., "TypeormPlugin"]`);
+      log.log('list: [..., "TypeormPlugin"]');
       log.log('config: { //插件配置 ');
-      log.log(`   "TypeormPlugin":{ //todo }`);
+      log.log('   "TypeormPlugin":{ //todo }');
       log.log('}');
       log.log();
     };
@@ -72,3 +72,5 @@ export function createModel(name, type, opt, templatePath) {
 
   return args;
 }
+
+module.exports = { createModel };

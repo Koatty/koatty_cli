@@ -7,12 +7,10 @@
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-const path = require('path');
-const ufs = require('../utils/fs');
-const log = require('../utils/log');
-const string = require('../utils/sting');
-const { parseArgs } = require("./args");
-const { grpcProcessor } = require("./grpc-controller");
+const { parseArgs } = require('./args');
+const { grpcProcessor } = require('./grpc-controller');
+const { graphqlProcessor } = require('./graphql-controller');
+const { websocketProcessor } = require('./websocket-controller');
 
 /**
  * 
@@ -22,26 +20,26 @@ const { grpcProcessor } = require("./grpc-controller");
  * @param {*} templatePath 
  * @returns 
  */
-export function createController(name, type, opt, templatePath) {
+function createController(name, type, opt, templatePath) {
   const args = parseArgs(name, type, templatePath);
   if (!args) {
     process.exit(0);
   }
 
-  const protocol = opt.type || 'http';
-  if (protocol === "grpc") {
-    return grpcProcessor(args, templatePath);
-  } else if (protocol === "websocket") {
-    const sourcePath = path.resolve(templatePath, `controller_ws.template`);
-    args.destMap[sourcePath] = args.destMap[args.sourcePath];
-    args.destMap[args.sourcePath] = "";
-  }
-
-  if (args.subModule) {
-    args.replaceMap['_NEW'] = `/${args.subModule}/${args.sourceName}`;
-  } else {
-    args.replaceMap['_NEW'] = `/${args.sourceName}`;
+  if (opt && opt.type) {
+    switch (opt.type) {
+    case 'grpc':
+      return grpcProcessor(args, templatePath);
+    case 'graphql':
+      return graphqlProcessor(args, templatePath);
+    case 'websocket':
+      return websocketProcessor(args, templatePath);
+    default:
+      break;
+    }
   }
 
   return args;
 }
+
+module.exports = { createController };

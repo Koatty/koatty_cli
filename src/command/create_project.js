@@ -17,8 +17,10 @@ const template = require('../utils/template');
 const {
   TEMPLATE_URL,
   TEMPLATE_NAME,
+  TEMPLATE_URL_GITEE,
   COM_TEMPLATE_NAME,
   COM_TEMPLATE_URL,
+  COM_TEMPLATE_URL_GITEE,
   LOGO,
 } = require('./config');
 const { processVer } = require('../utils/version');
@@ -31,14 +33,17 @@ const supportMap = {
   project: {
     fullName: TEMPLATE_NAME,
     url: TEMPLATE_URL,
+    giteeUrl: TEMPLATE_URL_GITEE,
   },
   middleware: {
     fullName: COM_TEMPLATE_NAME,
     url: COM_TEMPLATE_URL,
+    giteeUrl: COM_TEMPLATE_URL_GITEE,
   },
   plugin: {
     fullName: COM_TEMPLATE_NAME,
     url: COM_TEMPLATE_URL,
+    giteeUrl: COM_TEMPLATE_URL_GITEE,
   },
 };
 
@@ -65,7 +70,7 @@ const create = async (projectName, options) => {
   }
   // process ver
   temp.url = processVer(temp.url);
-  const templateDir = await template.loadAndUpdateTemplate(temp.url, temp.fullName);
+  const templateDir = await template.loadAndUpdateTemplate(temp.url, temp.fullName, '', temp.giteeUrl);
 
   if (!templateDir) {
     log.error(`Create project fail, can't find template [${temp.url}], please check network!`);
