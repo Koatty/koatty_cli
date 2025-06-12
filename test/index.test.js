@@ -1,39 +1,45 @@
-const fs = require('fs');
-const path = require('path');
-const { graphqlProcessor } = require('../src/processor/graphql-controller.js');
-const { parseArgs } = require('../src/processor/args.js');
+/*
+ * @Description: Koatty CLI 主测试套件
+ * @Usage: 整合所有测试模块的主测试文件
+ * @Author: richen
+ * @Date: 2025-06-12
+ */
 
-describe('GraphQL Controller Transpilation', () => {
-  const outputDir = path.join(__dirname, 'output');
-  const templatePath = path.join(__dirname, 'template');
-  const args = parseArgs("user", "controller_graphql", templatePath);
+// 导入所有测试模块
+require('./cli-functionality.test.js');
+require('./project-creation.test.js');
+require('./module-creation.test.js');
+require('./websocket-controller.test.js');
+require('./comprehensive.test.js');
 
-  describe('File generation', () => {
-    it('should generate UserController.ts', () => {
-      const filePath = path.join(outputDir, 'UserController.ts');
+describe('Koatty CLI Test Suite', () => {
+  test('测试套件初始化', () => {
+    expect(true).toBe(true);
+  });
 
-      graphqlProcessor(args, templatePath);
-      // expect(fs.existsSync(filePath)).toBe(true);
+  test('检查Node.js版本', () => {
+    const nodeVersion = process.version;
+    console.log(`当前Node.js版本: ${nodeVersion}`);
+    
+    // 检查Node.js版本是否满足要求（假设需要Node.js 14+）
+    const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0]);
+    expect(majorVersion).toBeGreaterThanOrEqual(14);
+  });
 
-      // const content = fs.readFileSync(filePath, 'utf8');
-      // expect(content).toContain('class UserController');
-      // expect(content).toContain('@Controller()');
+  test('检查测试环境', () => {
+    const fs = require('fs');
+    const path = require('path');
+    
+    // 检查关键文件是否存在
+    const keyFiles = [
+      'package.json',
+      'src/index.js',
+      'src/command/create_project.js',
+      'src/command/create_module.js'
+    ];
+    
+    keyFiles.forEach(file => {
+      expect(fs.existsSync(file)).toBe(true);
     });
-
-    // it('should generate UserDto.ts', () => {
-    //   const filePath = path.join(outputDir, 'UserDto.ts');
-    //   expect(fs.existsSync(filePath)).toBe(true);
-
-    //   const content = fs.readFileSync(filePath, 'utf8');
-    //   expect(content).toContain('class UserDto extends BaseDto');
-    // });
-
-    // it('should generate UserInputDto.ts', () => {
-    //   const filePath = path.join(outputDir, 'UserInputDto.ts');
-    //   expect(fs.existsSync(filePath)).toBe(true);
-
-    //   const content = fs.readFileSync(filePath, 'utf8');
-    //   expect(content).toContain('class UserInputDto extends BaseDto');
-    // });
   });
 });
