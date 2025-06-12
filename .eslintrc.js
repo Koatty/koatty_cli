@@ -1,44 +1,31 @@
 /**
- * 
+ * ESLint configuration for JavaScript project
  */
 module.exports = {
   root: true,
-  parser: '@typescript-eslint/parser',
+  env: {
+    node: true,
+    es2021: true,
+    jest: true,
+  },
   extends: [
-    'plugin:@typescript-eslint/recommended', // 使用@typescript-eslint/eslint-plugin的推荐规则
+    'eslint:recommended',
     'plugin:jest/recommended',
   ],
   plugins: [
-    '@typescript-eslint',
     'jest',
   ],
   parserOptions: {
-    project: './tsconfig.json',
-  },
-  env: {
-    node: true,
-    mongo: true,
-    jest: true,
+    ecmaVersion: 2021,
+    sourceType: 'module',
   },
   rules: {
-    "@typescript-eslint/no-explicit-any": "off",
-    // "@typescript-eslint/no-require-imports": "off",
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/member-ordering": "off",
-    "@typescript-eslint/consistent-type-assertions": "off",
-    "@typescript-eslint/no-param-reassign": "off",
-    "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
-    "@typescript-eslint/ban-types": ["error",
-      {
-        "types": {
-          "Object": false,
-          "Function": false,
-        },
-        "extendDefaults": true
-      }
-    ],
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "no-empty": "warn",
+    "no-undef": "error",
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "indent": ["error", 2],
   },
 };
