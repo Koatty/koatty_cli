@@ -3,14 +3,25 @@
   "version": "3.11.2",
   "description": "Koatty command line tool.",
   "scripts": {
-    "eslint": "eslint --ext .js ./src",
-    "prepublishOnly": "npm test && git push --follow-tags origin",
+    "build": "tsc",
+    "eslint": "eslint --ext .ts,.js ./src",
+    "eslint-fix": "eslint --ext .ts,.js ./src --fix",
+    "prepublishOnly": "npm run build",
     "prerelease": "npm test",
     "release": "standard-version --release-as patch",
     "release:pre": "npm run release -- --prerelease",
     "release:major": "npm run release -- --release-as major",
     "release:minor": "npm run release -- --release-as minor",
-    "test": "npm run eslint && jest --rootDir ./test --passWithNoTests"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "test:cli": "node test/run-tests.js",
+    "test:unit": "jest test/cli-functionality.test.js",
+    "test:integration": "jest test/project-creation.test.js test/module-creation.test.js",
+    "test:websocket": "jest test/websocket-controller.test.js",
+    "test:comprehensive": "jest test/comprehensive.test.js",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:websocket && npm run test:comprehensive"
   },
   "bin": {
     "kt": "./src/index.js",
