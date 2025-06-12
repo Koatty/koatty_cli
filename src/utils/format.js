@@ -41,6 +41,13 @@ async function writeAndFormatFile(filePath, content) {
 // 文件类型判断逻辑
 function getParser(filePath) {
   const ext = path.extname(filePath);
+  const basename = path.basename(filePath);
+  
+  // 特殊文件名处理
+  if (basename === '.koattysrc' || basename.endsWith('.koattysrc')) {
+    return 'json';
+  }
+  
   const map = {
     '.js': 'babel',
     '.ts': 'typescript',

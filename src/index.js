@@ -37,6 +37,15 @@ program
     create_project(projectName, cleanArgs(cmdObj));
   });
 
+// create project (alias)
+program
+  .command('project <projectName>')
+  .description('create project')
+  .option('-t, --template <template>', 'create project use custom template: project|middleware|plugin')
+  .action((projectName, cmdObj) => {
+    create_project(projectName, cleanArgs(cmdObj));
+  });
+
 // create controller
 program
   .command('controller <controllerName>')
@@ -122,3 +131,19 @@ program
 
 
 program.parse(process.argv);
+
+// 处理无效命令和缺少参数
+if (!process.argv.slice(2).length) {
+  program.outputHelp();
+  process.exit(1);
+}
+
+// 检查是否有未知命令
+const validCommands = ['new', 'project', 'controller', 'middleware', 'service', 'plugin', 'aspect', 'dto', 'exception', 'proto', 'model'];
+const command = process.argv[2];
+
+if (command && !command.startsWith('-') && !validCommands.includes(command)) {
+  console.error(`Unknown command: ${command}`);
+  console.error('Run "koatty --help" for available commands.');
+  process.exit(1);
+}

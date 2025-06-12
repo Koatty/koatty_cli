@@ -54,8 +54,8 @@ function parseGrpcArgs(args, templatePath) {
   const methodArr = [];
   const dtoArr = [];
   const importArr = [];
-  let methodStr = ufs.readFile(path.resolve(templatePath, 'controller_CTL_METHOD.template'));
-  let importStr = ufs.readFile(path.resolve(templatePath, 'controller_CTL_IMPORT.template'));
+  let methodStr = ufs.readFile(path.resolve(templatePath, 'controller_grpc_method.template'));
+  let importStr = ufs.readFile(path.resolve(templatePath, 'controller_grpc_import.template'));
   let exCtlContent = '';
   if (ufs.isExist(args.destFile)) {
     exCtlContent = ufs.readFile(args.destFile);
