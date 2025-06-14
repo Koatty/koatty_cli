@@ -8,11 +8,11 @@
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 const path = require('path');
-const ufs = require('../utils/fs');
-const string = require('../utils/sting');
-const { isKoattyApp, getAppPath } = require('../utils/path');
+const ufs = require('../../utils/fs');
+const string = require('../../utils/sting');
+const { isKoattyApp, getAppPath } = require('../../utils/path');
 const { parseProto, parseMethods, parseFields, parseValues } = require('koatty_proto');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../command/config');
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../../command/config');
 
 /**
  * @description: 

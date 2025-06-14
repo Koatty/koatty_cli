@@ -15,9 +15,9 @@ const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CLI_TEMPLATE_URL_GITEE, CTL_I
 const template = require('../utils/template');
 const { regex } = require('replace/bin/shared-options');
 const { processVer } = require('../utils/version');
-const { grpcProcessor } = require('../processor/grpc-controller');
+const { grpcProcessor } = require('../processor/controller/grpc');
 const { isKoattyApp, getAppPath } = require('../utils/path');
-const { createController } = require('../processor/controller');
+const { createController } = require('../processor/controller/http');
 const { createMiddleware } = require('../processor/middleware');
 const { createModel } = require('../processor/model');
 const { createPlugin } = require('../processor/plugin');

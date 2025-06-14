@@ -7,10 +7,10 @@
  * @License: BSD (3-Clause)
  * @Copyright (c): <richenlin(at)gmail.com>
  */
-const { parseArgs } = require('./args');
-const { grpcProcessor } = require('./grpc-controller');
-const { graphqlProcessor } = require('./graphql-controller');
-const { websocketProcessor } = require('./websocket-controller');
+const { parseArgs } = require('../args');
+const { grpcProcessor } = require('./grpc');
+const { graphqlProcessor } = require('./graphql');
+const { websocketProcessor } = require('./websocket');
 
 /**
  * 

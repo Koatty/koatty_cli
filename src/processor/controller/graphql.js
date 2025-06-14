@@ -10,10 +10,10 @@
 
 const { parse, Kind } = require('graphql');
 const path = require('path');
-const ufs = require('../utils/fs');
-const string = require('../utils/sting');
-const { isKoattyApp, getAppPath } = require('../utils/path');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../command/config');
+const ufs = require('../../utils/fs');
+const string = require('../../utils/sting');
+const { isKoattyApp, getAppPath } = require('../../utils/path');
+const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CTL_IMPORT, CTL_METHOD } = require('../../command/config');
 
 const baseTypes = ['string', 'number', 'boolean', 'ID'];
 const operationTypes = ['Query', 'Mutation', 'Subscription'];
@@ -58,7 +58,7 @@ function parseGraphqlArgs(args, templatePath) {
 
 /**
  * 解析SDL中的操作定义
- * @param {DocumentNode} document 
+ * @param {*} document 
  * @returns {object}
  */
 function parseOperations(document) {

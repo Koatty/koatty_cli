@@ -8,8 +8,8 @@
  * @Copyright (c): <richenlin(at)gmail.com>
  */
 const path = require('path');
-const ufs = require('../utils/fs');
-const string = require('../utils/sting');
+const ufs = require('../../utils/fs');
+const string = require('../../utils/sting');
 
 /**
  * WebSocket处理器
