@@ -27,5 +27,32 @@ module.exports = {
 ┴ ┴└─┘┴ ┴ ┴  ┴  ┴ 
 -------------------------------------------
 https://github.com/koatty
-    `
+    `,
+
+  TYPEORM_PLUGIN_CONFIG: {
+    TypeormPlugin: {
+      type: 'mysql',
+      replication: {
+        master: {
+          host: '127.0.0.1',
+          port: 3306,
+          username: 'test',
+          password: 'test',
+          database: 'test',
+        },
+        slaves: [
+          {
+            host: '127.0.0.1',
+            port: 3306,
+            username: 'test',
+            password: 'test',
+            database: 'test',
+          },
+        ],
+      },
+      synchronize: false,
+      logging: true,
+      entities: [`${process.env.APP_PATH || '${process.env.APP_PATH}'}/model/*`],
+    },
+  }
 };

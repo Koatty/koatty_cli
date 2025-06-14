@@ -13,6 +13,9 @@ const log = require('../utils/log');
 const string = require('../utils/sting');
 const { parseArgs } = require('./args');
 const { isKoattyApp, getAppPath } = require('../utils/path');
+const fs = require('fs');
+const JSON5 = require('json5');
+const { TYPEORM_PLUGIN_CONFIG } = require('../command/config');
 
 /**
  * 
@@ -51,17 +54,12 @@ function createModel(name, type, opt, templatePath) {
     }
 
     args.callBack = function () {
+      addTypeormPluginConfig();
       log.log();
       log.warning('to used the koatty_typeorm plugin:');
       log.log();
       log.log('https://github.com/Koatty/koatty_typeorm');
       log.log();
-      log.log('please modify /app/config/plugin.ts file:');
-      log.log();
-      log.log('list: [..., "TypeormPlugin"]');
-      log.log('config: { //插件配置 ');
-      log.log('   "TypeormPlugin":{ //todo }');
-      log.log('}');
       log.log();
     };
   }
@@ -71,6 +69,43 @@ function createModel(name, type, opt, templatePath) {
   }
 
   return args;
+}
+
+// 自动追加TypeormPlugin到src/config/plugin.ts
+function addTypeormPluginConfig() {
+  const configDir = path.resolve(process.cwd(), 'src/config');
+  const configFile = path.resolve(configDir, 'plugin.ts');
+  if (!ufs.isExist(configFile)) {
+    log.warning('未检测到 src/config/plugin.ts，请手动添加 TypeormPlugin 配置。');
+    log.warning('建议内容：');
+    log.warning('list: [\'TypeormPlugin\']');
+    log.warning('config: { TypeormPlugin: ... }');
+    return;
+  }
+  let content = fs.readFileSync(configFile, 'utf-8');
+  // 检查 list
+  const listMatch = content.match(/list:\s*\[([\s\S]*?)\]/);
+  let hasList = false;
+  if (listMatch) {
+    hasList = /['"]TypeormPlugin['"]/.test(listMatch[1]);
+  }
+  // 检查 config
+  const configMatch = content.match(/config:\s*\{([\s\S]*?)\n\s*\}/);
+  let hasConfig = false;
+  if (configMatch) {
+    hasConfig = /TypeormPlugin/.test(configMatch[1]);
+  }
+  if (!hasList) {
+    log.warning('plugin.ts 的 list 未包含 TypeormPlugin，请手动追加：');
+    log.warning('list: [..., \'TypeormPlugin\']');
+  }
+  if (!hasConfig) {
+    log.warning('plugin.ts 的 config 未包含 TypeormPlugin，请手动追加：');
+    log.warning('config: { ... , TypeormPlugin: ' + JSON.stringify(TYPEORM_PLUGIN_CONFIG.TypeormPlugin, null, 2) + ' }');
+  }
+  if (hasList && hasConfig) {
+    log.success('plugin.ts 已包含 TypeormPlugin，无需手动追加。');
+  }
 }
 
 module.exports = { createModel };

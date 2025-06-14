@@ -5,6 +5,7 @@ const updateNotifier = require('update-notifier');
 const pkg = require('../package.json');
 const create_project = require('./command/create_project');
 const create_module = require('./command/create_module');
+const create_all = require('./command/create_all');
 
 updateNotifier({ pkg }).notify();
 
@@ -127,8 +128,14 @@ program
     create_module(modelName, 'model', cleanArgs(cmdObj));
   });
 
-
-
+// create all (综合批量生成)
+program
+  .command('all <moduleName>')
+  .description('create all: entity, model, service, controller, dto')
+  .option('-t, --type <type>', 'controller type: http|grpc|graphql|websocket, default is http')
+  .action((moduleName, cmdObj) => {
+    create_all(moduleName, cleanArgs(cmdObj));
+  });
 
 program.parse(process.argv);
 
@@ -139,7 +146,7 @@ if (!process.argv.slice(2).length) {
 }
 
 // 检查是否有未知命令
-const validCommands = ['new', 'project', 'controller', 'middleware', 'service', 'plugin', 'aspect', 'dto', 'exception', 'proto', 'model'];
+const validCommands = ['new', 'project', 'controller', 'middleware', 'service', 'plugin', 'aspect', 'dto', 'exception', 'proto', 'model', 'all'];
 const command = process.argv[2];
 
 if (command && !command.startsWith('-') && !validCommands.includes(command)) {
