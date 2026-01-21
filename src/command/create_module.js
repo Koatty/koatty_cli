@@ -5,78 +5,109 @@
  * @Date: 2020-12-22 17:51:07
  * @LastEditTime: 2025-03-10 16:20:32
  */
-const path = require('path');
-const replace = require('replace');
-const string = require('../utils/sting');
-const log = require('../utils/log');
-const ufs = require('../utils/fs');
-const { writeAndFormatFile } = require('../utils/format');
-const { LOGO, CLI_TEMPLATE_URL, CLI_TEMPLATE_NAME, CLI_TEMPLATE_URL_GITEE, CTL_IMPORT, CTL_METHOD } = require('./config');
-const template = require('../utils/template');
-const { regex } = require('replace/bin/shared-options');
-const { processVer } = require('../utils/version');
-const { grpcProcessor } = require('../processor/controller/grpc');
-const { isKoattyApp, getAppPath } = require('../utils/path');
-const { createController } = require('../processor/controller/http');
-const { createMiddleware } = require('../processor/middleware');
-const { createModel } = require('../processor/model');
-const { createPlugin } = require('../processor/plugin');
-const { createService } = require('../processor/service');
-const { createDefault } = require('../processor/default');
+const path = require("path");
+const replace = require("replace");
+const string = require("../utils/sting");
+const log = require("../utils/log");
+const ufs = require("../utils/fs");
+const { writeAndFormatFile } = require("../utils/format");
+const {
+  LOGO,
+  CLI_TEMPLATE_URL,
+  CLI_TEMPLATE_NAME,
+  CLI_TEMPLATE_URL_GITEE,
+  CTL_IMPORT,
+  CTL_METHOD,
+} = require("./config");
+const template = require("../utils/template");
+const { regex } = require("replace/bin/shared-options");
+const { processVer } = require("../utils/version");
+const { grpcProcessor } = require("../processor/controller/grpc");
+const { isKoattyApp, getAppPath } = require("../utils/path");
+const { createController } = require("../processor/controller/http");
+const { createMiddleware } = require("../processor/middleware");
+const { createModel } = require("../processor/model");
+const { createPlugin } = require("../processor/plugin");
+const { createService } = require("../processor/service");
+const { createDefault } = require("../processor/default");
+const { promptInput, promptSelect } = require("../utils/interactive");
 
-let templatePath = '';
+let templatePath = "";
 /**
  * create module
  *
  * @param {*} name
  * @param {*} type
  * @param {*} opt
- * @returns {Promise<any>}  
+ * @returns {Promise<any>}
  */
 module.exports = async function (name, type, opt) {
-  log.info('\n Welcome to use Koatty!');
+  if (type === "controller") {
+    if (!name) {
+      name = await promptInput("Enter controller name:");
+    }
+    if (!opt || !opt.type) {
+      opt = opt || {};
+      opt.type = await promptSelect(
+        "Select controller type:",
+        ["http", "grpc", "websocket", "graphql"],
+        "http",
+      );
+    }
+  }
+
+  log.info("\n Welcome to use Koatty!");
   log.info(LOGO);
-  log.info('Start create module...');
+  log.info("Start create module...");
 
   // check is TKoatty project root directory
-  if (!isKoattyApp('./')) {
-    log.error('Current project is not a Koatty project.');
-    log.error(`Please execute "koatty ${type} ${name}Name" after enter Koatty project root directory.`);
+  if (!isKoattyApp("./")) {
+    log.error("Current project is not a Koatty project.");
+    log.error(
+      `Please execute "koatty ${type} ${name}Name" after enter Koatty project root directory.`,
+    );
     return;
   }
 
   // process ver
   const templateGit = processVer(CLI_TEMPLATE_URL);
   // template dir
-  templatePath = await template.loadAndUpdateTemplate(templateGit, CLI_TEMPLATE_NAME, '', CLI_TEMPLATE_URL_GITEE);
+  templatePath = await template.loadAndUpdateTemplate(
+    templateGit,
+    CLI_TEMPLATE_NAME,
+    "",
+    CLI_TEMPLATE_URL_GITEE,
+  );
   if (!templatePath || !ufs.isExist(templatePath)) {
-    log.error(`Create module fail, can't find template [${templateGit}], please check network!`);
+    log.error(
+      `Create module fail, can't find template [${templateGit}], please check network!`,
+    );
     return;
   }
   // add prefix
-  templatePath = path.resolve(templatePath, 'src');
+  templatePath = path.resolve(templatePath, "src");
 
   let args = {};
   try {
     switch (type) {
-    case 'controller':
-      args = createController(name, type, opt, templatePath);
-      break;
-    case 'middleware':
-      args = createMiddleware(name, type, opt, templatePath);
-      break;
-    case 'model':
-      args = createModel(name, type, opt, templatePath);
-      break;
-    case 'plugin':
-      args = createPlugin(name, type, opt, templatePath);
-      break;
-    case 'service':
-      args = createService(name, type, opt, templatePath);
-      break;
-    default:
-      args = createDefault(name, type, opt, templatePath);
-      break;
+      case "controller":
+        args = createController(name, type, opt, templatePath);
+        break;
+      case "middleware":
+        args = createMiddleware(name, type, opt, templatePath);
+        break;
+      case "model":
+        args = createModel(name, type, opt, templatePath);
+        break;
+      case "plugin":
+        args = createPlugin(name, type, opt, templatePath);
+        break;
+      case "service":
+        args = createService(name, type, opt, templatePath);
+        break;
+      default:
+        args = createDefault(name, type, opt, templatePath);
+        break;
     }
 
     const { newName, destMap, createMap, replaceMap, callBack } = args;
@@ -125,4 +156,3 @@ module.exports = async function (name, type, opt) {
     return;
   }
 };
-
