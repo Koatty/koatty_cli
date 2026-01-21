@@ -19,9 +19,11 @@ const {
   TEMPLATE_URL,
   TEMPLATE_NAME,
   TEMPLATE_URL_GITEE,
+  TEMPLATE_PATH,
   COM_TEMPLATE_NAME,
   COM_TEMPLATE_URL,
   COM_TEMPLATE_URL_GITEE,
+  COM_TEMPLATE_PATH,
   LOGO,
 } = require("./config");
 const { processVer } = require("../utils/version");
@@ -35,16 +37,19 @@ const supportMap = {
     fullName: TEMPLATE_NAME,
     url: TEMPLATE_URL,
     giteeUrl: TEMPLATE_URL_GITEE,
+    path: TEMPLATE_PATH,
   },
   middleware: {
     fullName: COM_TEMPLATE_NAME,
     url: COM_TEMPLATE_URL,
     giteeUrl: COM_TEMPLATE_URL_GITEE,
+    path: COM_TEMPLATE_PATH,
   },
   plugin: {
     fullName: COM_TEMPLATE_NAME,
     url: COM_TEMPLATE_URL,
     giteeUrl: COM_TEMPLATE_URL_GITEE,
+    path: COM_TEMPLATE_PATH,
   },
 };
 

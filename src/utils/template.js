@@ -76,6 +76,7 @@ const copyTemplate = (templatePath, destPath) =>
  * @param {string} templateName template name
  * @param {string} [templateDir] template directory
  * @param {string} [giteeUrl] gitee backup url
+ * @param {string} [localPath] local template path
  * @returns {Promise<any>} local template path
  */
 const loadAndUpdateTemplate = async (
@@ -83,6 +84,7 @@ const loadAndUpdateTemplate = async (
   templateName,
   templateDir = "",
   giteeUrl = null,
+  localPath = null,
 ) => {
   const config = loadConfig();
 
@@ -104,6 +106,12 @@ const loadAndUpdateTemplate = async (
       templateUrl = urlArr[0] || "";
       branchName = urlArr[1] || "main";
     }
+  }
+
+  // Check local path first
+  if (localPath && isExist(localPath)) {
+    log.log(`Using local template: ${localPath}`);
+    return localPath;
   }
 
   // 构建要尝试的URL列表

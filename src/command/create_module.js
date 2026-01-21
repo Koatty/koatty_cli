@@ -16,6 +16,7 @@ const {
   CLI_TEMPLATE_URL,
   CLI_TEMPLATE_NAME,
   CLI_TEMPLATE_URL_GITEE,
+  CLI_TEMPLATE_PATH,
   CTL_IMPORT,
   CTL_METHOD,
 } = require("./config");
@@ -77,6 +78,7 @@ module.exports = async function (name, type, opt) {
     CLI_TEMPLATE_NAME,
     "",
     CLI_TEMPLATE_URL_GITEE,
+    CLI_TEMPLATE_PATH,
   );
   if (!templatePath || !ufs.isExist(templatePath)) {
     log.error(
