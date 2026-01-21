@@ -1,0 +1,12 @@
+/*
+ * @Description: 枚举类
+ * @Usage: 
+ * @Author: xxx
+ * @Date: 2020-12-22 15:24:25
+ * @LastEditTime: 2023-12-29 08:56:33
+ */
+
+export enum _CLASS_NAME {
+
+  //_FIELDS
+}

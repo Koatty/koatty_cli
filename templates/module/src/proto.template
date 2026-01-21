@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "github.com/koatty/proto;pb";
+
+// 用于any类型声明
+// import "google/protobuf/any.proto"; 
+
+service _CLASS_NAME {
+  rpc SayHello(SayHelloRequest) returns (SayHelloReply) {}
+}
+
+message SayHelloRequest {
+  uint64 id = 1;
+  string name = 2;
+  PhoneType phone = 3;
+}
+
+message SayHelloReply { string message = 1; }
+
+enum PhoneType {
+  MOBILE = 0; 
+  HOME = 1;
+  WORK = 2;
+}
+
