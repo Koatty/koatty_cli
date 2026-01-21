@@ -1,18 +1,19 @@
 /*
- * @Description: 
- * @Usage: 
+ * @Description:
+ * @Usage:
  * @Author: richen
  * @Date: 2020-12-08 15:08:37
  * @LastEditTime: 2025-03-10 16:20:56
  */
 
-const path = require('path');
-const replace = require('replace');
-const string = require('../utils/sting');
-const log = require('../utils/log');
-const ufs = require('../utils/fs');
-const { writeAndFormatFile } = require('../utils/format');
-const template = require('../utils/template');
+const path = require("path");
+const replace = require("replace");
+const string = require("../utils/sting");
+const log = require("../utils/log");
+const ufs = require("../utils/fs");
+const { writeAndFormatFile } = require("../utils/format");
+const template = require("../utils/template");
+const { promptInput, promptSelect } = require("../utils/interactive");
 
 const {
   TEMPLATE_URL,
@@ -22,11 +23,11 @@ const {
   COM_TEMPLATE_URL,
   COM_TEMPLATE_URL_GITEE,
   LOGO,
-} = require('./config');
-const { processVer } = require('../utils/version');
+} = require("./config");
+const { processVer } = require("../utils/version");
 
 const defaultOptions = {
-  template: 'project',
+  template: "project",
 };
 
 const supportMap = {
@@ -47,49 +48,77 @@ const supportMap = {
   },
 };
 
-
-
 const create = async (projectName, options) => {
-  log.info('\n Welcome to use Koatty!');
-  log.info(LOGO);
-  log.info('Start create project...');
+  if (!projectName) {
+    projectName = await promptInput("Please enter the project name:");
+  }
 
-  const projectDir = path.resolve('./', projectName);
+  if (!options || !options.template) {
+    options = options || {};
+    options.template = await promptSelect(
+      "Select template type:",
+      ["project", "middleware", "plugin"],
+      "project",
+    );
+  }
+
+  log.info("\n Welcome to use Koatty!");
+  log.info(LOGO);
+  log.info("Start create project...");
+
+  const projectDir = path.resolve("./", projectName);
 
   // check project name
   if (ufs.isExist(projectDir)) {
-    log.error(`Project [${projectName}] has existed, please change the project name!`);
+    log.error(
+      `Project [${projectName}] has existed, please change the project name!`,
+    );
     return;
   }
 
   const opts = { ...defaultOptions, ...options };
   const temp = supportMap[opts.template];
   if (!temp) {
-    log.error(`Can't find template [${opts.template}], please check the template name, [project]、[middleware] and [plugin] is supported currently.`);
+    log.error(
+      `Can't find template [${opts.template}], please check the template name, [project]、[middleware] and [plugin] is supported currently.`,
+    );
     return;
   }
   // process ver
   temp.url = processVer(temp.url);
-  const templateDir = await template.loadAndUpdateTemplate(temp.url, temp.fullName, '', temp.giteeUrl);
+  const templateDir = await template.loadAndUpdateTemplate(
+    temp.url,
+    temp.fullName,
+    "",
+    temp.giteeUrl,
+  );
 
   if (!templateDir) {
-    log.error(`Create project fail, can't find template [${temp.url}], please check network!`);
+    log.error(
+      `Create project fail, can't find template [${temp.url}], please check network!`,
+    );
     return;
   }
 
   try {
     await template.copyTemplate(templateDir, projectDir);
 
-    if (opts.template !== 'project') {
-      await ufs.moveFile(`${projectDir}/src/${opts.template}.ts`, `${projectDir}/index.ts`);
+    if (opts.template !== "project") {
+      await ufs.moveFile(
+        `${projectDir}/src/${opts.template}.ts`,
+        `${projectDir}/index.ts`,
+      );
       await ufs.rmDir(`${projectDir}/src`);
-      await ufs.moveFile(`${projectDir}/index.ts`, `${projectDir}/src/index.ts`);
+      await ufs.moveFile(
+        `${projectDir}/index.ts`,
+        `${projectDir}/src/index.ts`,
+      );
     }
 
     const newName = string.toPascal(projectName);
     const replaceMap = {
-      '_PROJECT_NAME': projectName,
-      '_CLASS_NAME': newName
+      _PROJECT_NAME: projectName,
+      _CLASS_NAME: newName,
     };
 
     for (let key in replaceMap) {
@@ -102,9 +131,12 @@ const create = async (projectName, options) => {
       });
     }
 
-    writeAndFormatFile(`${projectDir}/.koattysrc`, JSON.stringify({
-      projectName,
-    }));
+    writeAndFormatFile(
+      `${projectDir}/.koattysrc`,
+      JSON.stringify({
+        projectName,
+      }),
+    );
     console.log(`${projectDir}/.git`);
     await ufs.rmDir(`${projectDir}/.git`);
   } catch (err) {
@@ -116,17 +148,17 @@ const create = async (projectName, options) => {
   log.success(`Create project [${projectName}] success!`);
   log.log();
 
-  log.log('  Enter path:');
-  log.log('  $ cd ' + projectDir);
+  log.log("  Enter path:");
+  log.log("  $ cd " + projectDir);
   log.log();
 
-  log.log('  Install dependencies:');
-  log.log('  $ npm install');
+  log.log("  Install dependencies:");
+  log.log("  $ npm install");
   log.log();
 
-  if (opts.template == 'project') {
-    log.log('  Run the app:');
-    log.log('  $ npm run dev');
+  if (opts.template == "project") {
+    log.log("  Run the app:");
+    log.log("  $ npm run dev");
   }
 
   log.log();
