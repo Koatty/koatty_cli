@@ -1,0 +1,77 @@
+{
+  "project": "Koatty CLI MVP",
+  "features": [
+    {
+      "id": "T001",
+      "name": "安装交互式依赖",
+      "priority": 1,
+      "status": "pending"
+    },
+    {
+      "id": "T002",
+      "name": "创建交互工具模块",
+      "priority": 2,
+      "status": "pending"
+    },
+    {
+      "id": "T003",
+      "name": "改造 CLI 入口命令定义 (Project)",
+      "priority": 3,
+      "status": "pending"
+    },
+    {
+      "id": "T004",
+      "name": "实现项目创建的交互逻辑",
+      "priority": 4,
+      "status": "pending"
+    },
+    {
+      "id": "T005",
+      "name": "改造 CLI 入口命令定义 (Controller)",
+      "priority": 5,
+      "status": "pending"
+    },
+    {
+      "id": "T006",
+      "name": "实现 Controller 的交互逻辑",
+      "priority": 6,
+      "status": "pending"
+    },
+    {
+      "id": "T007",
+      "name": "创建配置加载器",
+      "priority": 7,
+      "status": "pending"
+    },
+    {
+      "id": "T008",
+      "name": "集成配置到模板下载",
+      "priority": 8,
+      "status": "pending"
+    },
+    {
+      "id": "T009",
+      "name": "统一错误提示与帮助",
+      "priority": 9,
+      "status": "pending"
+    },
+    {
+      "id": "T010",
+      "name": "集成模板文件",
+      "priority": 10,
+      "status": "pending"
+    },
+    {
+      "id": "T011",
+      "name": "改造配置支持本地路径",
+      "priority": 11,
+      "status": "pending"
+    },
+    {
+      "id": "T012",
+      "name": "改造模板加载逻辑",
+      "priority": 12,
+      "status": "pending"
+    }
+  ]
+}
