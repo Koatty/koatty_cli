@@ -9,10 +9,11 @@ SESSION: 2025-01-21 初始化
 - [x] Task 2: 创建交互工具模块 (src/utils/interactive.js)
 - [x] Task 3: 改造 CLI 入口命令定义 (Project)
 - [x] Task 4: 实现项目创建的交互逻辑
+- [x] Task 5: 改造 CLI 入口命令定义 (Controller)
 ## 当前状态
-Task 4 完成，准备执行 Task 5
+Task 5 完成，准备执行 Task 6
 ## 下一步
-执行 Task 5: 改造 CLI 入口命令定义 (Controller)
+执行 Task 6: 实现 Controller 的交互逻辑
 ## 遇到的问题
 无
 ================================================================================

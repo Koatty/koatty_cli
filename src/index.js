@@ -55,7 +55,7 @@ program
 
 // create controller
 program
-  .command("controller <controllerName>")
+  .command("controller [controllerName]")
   .description("create controller class")
   .option(
     "-t, --type <type>",
