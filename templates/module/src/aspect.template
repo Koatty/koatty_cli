@@ -3,17 +3,32 @@
  * @Usage: 
  * @Author: xxx
  * @Date: 2020-12-22 15:24:25
- * @LastEditTime: 2023-02-18 15:02:39
+ * @LastEditTime: 2026-01-22 18:08:08
  */
  
 import { Aspect, IAspect } from "koatty";
 import { App } from '_SUB_PATH/App';
 
 @Aspect()
-export class _CLASS_NAME implements IAspect {
+export class AuthAspect implements IAspect {
   app: App;
 
-  run() {
-    console.log('TestAspect');
+  async run(joinPoint: AspectContext): Promise<any> {
+    // 访问元数据
+    console.log('Method:', joinPoint.getMethodName());
+    console.log('Target:', joinPoint.getTarget().constructor.name);
+
+    // 访问参数
+    console.log('Current args:', joinPoint.getArgs());
+    console.log('Original args:', joinPoint.getOriginalArgs());
+
+    // 修改参数
+    // const args = joinPoint.getArgs();
+    // args[0] = args[0].toUpperCase();
+    // joinPoint.setArgs(args);
+
+    // Before、After会自动执行原始方法，Around需手动执行原始方法
+    // if (joinPoint.hasProceed()) {
+    //   return await joinPoint.executeProceed();
+    // }
   }
-}

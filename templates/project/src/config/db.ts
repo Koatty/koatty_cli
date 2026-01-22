@@ -9,13 +9,23 @@
 export default {
   /*database config*/
   "DataBase": { // used koatty_typeorm
-    //默认配置项
-    type: "mysql", //mysql, mariadb, postgres, sqlite, mssql, oracle, mongodb, cordova
-    host: "${mysql_host}",
-    port: "${mysql_port}",
-    username: "${mysql_user}",
-    password: "${mysql_pass}",
-    database: "${mysql_database}",
+    "type": "mysql", //mysql, mariadb, postgres, sqlite, mssql, oracle, mongodb, cordova
+    replication: {
+      master: {
+        host: "${mysql_host}",
+        port: "${mysql_port}",
+        username: "${mysql_user}",
+        password: "${mysql_pass}",
+        database: "${mysql_database}",
+      }, 
+      // slaves: [{
+      //   host: "${mysql_host}",
+      //   port: "${mysql_port}",
+      //   username: "${mysql_user}",
+      //   password: "${mysql_pass}",
+      //   database: "${mysql_database}",
+      // }]
+    },
 
     synchronize: false, //true 每次运行应用程序时实体都将与数据库同步
     logging: true,
